@@ -1,0 +1,224 @@
+package com.example.teamns_arcore.Record;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TableLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+
+import com.example.teamns_arcore.R;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ChartActivity extends AppCompatActivity {
+
+    BarChart barChart;
+    LineChart lineChart;
+    String[] items = {"4월", "5월"};
+    Spinner spinner;
+    TableLayout tableLayout;
+    RecyclerView recycler_view;
+    PaymentAdapter adapter;
+    Button gotoTable;
+    List<PaymentModel> payment_list = new ArrayList<>();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chart);
+
+        gotoTable = findViewById(R.id.gotoTable);
+        findViewById(R.id.gotoTable).setOnClickListener(onClickListener);
+        tableLayout = (TableLayout) findViewById(R.id.tableLayout);
+        recycler_view = findViewById(R.id.recycler_view);
+        setRecyclerView();
+
+
+        lineChart = (LineChart) findViewById(R.id.chart);
+
+
+        spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, items
+        );
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //textView.setText(items[position]);
+                if (items[position].equals("4월")) {
+                    barChart = (BarChart) findViewById(R.id.fragment_bluetooth_chat_barchart);
+                    barChart.setTouchEnabled(false); //확대 방지
+                    graphInitSetting4();       //그래프 기본 세팅
+                } else if (items[position].equals("5월")) {
+                    barChart = (BarChart) findViewById(R.id.fragment_bluetooth_chat_barchart);
+                    barChart.setTouchEnabled(false); //확대 방지
+                    graphInitSetting5();       //그래프 기본 세팅
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
+    }
+
+    public void graphInitSetting4() {
+        ArrayList<String> jsonList = new ArrayList<>(); // ArrayList 선언
+        ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
+        jsonList.add(payment_list.get(0).getPayment());
+        jsonList.add(payment_list.get(1).getPayment());
+        jsonList.add(payment_list.get(2).getPayment());
+
+        labelList.add(payment_list.get(0).getId());
+        labelList.add(payment_list.get(1).getId());
+        labelList.add(payment_list.get(2).getId());
+//        labelList.add("10일");
+//        labelList.add("14일");
+//        labelList.add("17일");
+//        labelList.add("20일");
+
+//        jsonList.add(2);
+//        jsonList.add(3);
+//        jsonList.add(5);
+//        jsonList.add(4);
+
+        BarChartGraph(labelList, jsonList);
+        LineGraph(labelList,jsonList);
+
+    }
+
+    public void graphInitSetting5() {
+        ArrayList<String> jsonList = new ArrayList<>(); // ArrayList 선언
+        ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
+        jsonList.add(payment_list.get(3).getPayment());
+        jsonList.add(payment_list.get(4).getPayment());
+        jsonList.add(payment_list.get(5).getPayment());
+
+        labelList.add(payment_list.get(3).getId());
+        labelList.add(payment_list.get(4).getId());
+        labelList.add(payment_list.get(5).getId());
+        BarChartGraph(labelList, jsonList);
+        LineGraph(labelList,jsonList);
+    }
+
+    /**
+     * 그래프함수
+     */
+    private void BarChartGraph(ArrayList<String> labelList, ArrayList<String> valList) {
+        // BarChart 메소드
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        for (int i = 0; i < valList.size(); i++) {
+            entries.add(new BarEntry(Float.parseFloat(valList.get(i)), i));
+        }
+
+        BarDataSet depenses = new BarDataSet(entries, "맞춘 정답 갯수"); // 변수로 받아서 넣어줘도 됨
+        depenses.setAxisDependency(YAxis.AxisDependency.LEFT);
+        barChart.setDescription(" ");
+
+        ArrayList<String> labels = new ArrayList<String>();
+        for (int i = 0; i < labelList.size(); i++) {
+            labels.add((String) labelList.get(i));
+        }
+
+        BarData data = new BarData(labels, depenses); // 라이브러리 v3.x 사용하면 에러 발생함
+        depenses.setColors(ColorTemplate.LIBERTY_COLORS); //
+
+        barChart.setData(data);
+        barChart.animateXY(1000, 1000);
+        barChart.invalidate();
+
+
+    }
+
+    private void LineGraph(ArrayList<String> labelList, ArrayList<String> valList) {
+        // BarChart 메소드
+        ArrayList<Entry> entries = new ArrayList<>();
+        for (int i = 0; i < valList.size(); i++) {
+            entries.add(new Entry(Float.parseFloat(valList.get(i)), i));
+        }
+        ArrayList<String> labels = new ArrayList<String>();
+        for (int i = 0; i < labelList.size(); i++) {
+            labels.add((String) labelList.get(i));
+        }
+        LineDataSet depenses = new LineDataSet(entries, "맞춘 정답 갯수");
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(depenses);
+
+        LineData data = new LineData(labels, dataSets);
+        lineChart.setData(data);
+        lineChart.animateXY(1000, 1000);
+        lineChart.invalidate();
+    }
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.gotoTable:
+                    //myStartActivity(TableActivity.class);
+                    if (tableLayout.getVisibility() == View.VISIBLE) {
+                        gotoTable.setText("표로 보기");
+                        tableLayout.setVisibility(View.GONE);
+                        barChart.setVisibility(View.VISIBLE);
+                        lineChart.setVisibility(View.VISIBLE);
+                        spinner.setVisibility(View.VISIBLE);
+                    } else {
+                        gotoTable.setText("그래프로 보기");
+                        tableLayout.setVisibility(View.VISIBLE);
+                        barChart.setVisibility(View.GONE);
+                        lineChart.setVisibility(View.GONE);
+                        spinner.setVisibility(View.GONE);
+                    }
+                    break;
+            }
+        }
+    };
+
+    private void myStartActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivity(intent);
+    }
+
+    private void setRecyclerView() {
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new PaymentAdapter(this, getList());
+        recycler_view.setAdapter(adapter);
+    }
+
+    private List<PaymentModel> getList(){
+
+        payment_list.add(new PaymentModel("5일","200초","10"));
+        payment_list.add(new PaymentModel("10일","180초","6"));
+        payment_list.add(new PaymentModel("24일","110초","4"));
+        payment_list.add(new PaymentModel("1일","230초","2"));
+        payment_list.add(new PaymentModel("4일","140초","5"));
+        payment_list.add(new PaymentModel("10","150초","3"));
+
+        return payment_list;
+    }
+}

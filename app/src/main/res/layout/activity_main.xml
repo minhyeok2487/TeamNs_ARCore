@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/currentnickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/StartBtn"
+            android:layout_width="157dp"
+            android:layout_height="90dp"
+            android:text="시작하기"
+            tools:layout_editor_absoluteX="127dp"
+            tools:layout_editor_absoluteY="103dp" />
+
+        <Button
+            android:id="@+id/EndBtn"
+            android:layout_width="158dp"
+            android:layout_height="100dp"
+            android:text="게임종료"
+            tools:layout_editor_absoluteX="134dp"
+            tools:layout_editor_absoluteY="355dp" />
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/edit_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>

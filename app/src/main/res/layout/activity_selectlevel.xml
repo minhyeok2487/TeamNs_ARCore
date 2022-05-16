@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/level1Btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="level1" />
+
+    <Button
+        android:id="@+id/level2Btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="level2" />
+
+    <Button
+        android:id="@+id/level3Btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="level3" />
+
+    <Button
+        android:id="@+id/level4Btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="level4" />
+
+    <Button
+        android:id="@+id/resetdataBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="데이터 초기화" />
+
+</LinearLayout>
