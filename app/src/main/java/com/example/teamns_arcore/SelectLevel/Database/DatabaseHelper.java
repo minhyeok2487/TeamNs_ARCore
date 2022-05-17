@@ -75,9 +75,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             arrayListEng.add(stractEn);
             cursor.moveToNext();
         }
-        for(int i = 0; i<=3; i++){
-            System.out.println("arrayListEng.get(i) : "+arrayListEng.get(i));
-        }
         cursor.close();
         CloseDatabase();
         return arrayListEng;
