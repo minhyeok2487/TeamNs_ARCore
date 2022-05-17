@@ -24,6 +24,6 @@
         <activity android:name=".game.GameActivity"></activity>
         <activity android:name=".Record.ChartActivity"></activity>
         <activity android:name=".Record.TableActivity"></activity>
+        <meta-data android:name="com.google.ar.core" android:value="required"/>
     </application>
-    <meta-data android:name="com.google.ar.core" android:value="required"/>
 </manifest>
