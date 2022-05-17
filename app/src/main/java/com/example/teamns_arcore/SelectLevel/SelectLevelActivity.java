@@ -3,10 +3,13 @@ package com.example.teamns_arcore.SelectLevel;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,11 +35,14 @@ public class SelectLevelActivity extends AppCompatActivity {
     ArrayAdapter adapter;
     ListView englist;
     Button button;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selectlevel_list);
         englist = findViewById(R.id.englist);
+
 
         DatabaseHelper mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "lv_one_quiz");
         File database = getApplicationContext().getDatabasePath(DatabaseHelper.DBNAME);
@@ -141,5 +147,7 @@ public class SelectLevelActivity extends AppCompatActivity {
         Intent intent = new Intent(this, c);
         startActivity(intent);
     }
+
+
 
 }

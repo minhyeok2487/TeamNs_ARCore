@@ -6,6 +6,12 @@
     android:gravity="center"
     android:padding="20dp">
 
+    <include
+        layout="@layout/count_view_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

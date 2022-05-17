@@ -3,6 +3,7 @@ package com.example.teamns_arcore;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import com.example.teamns_arcore.SelectLevel.SelectLevelMain;
 
 public class MainActivity extends AppCompatActivity {
 
+    MediaPlayer mediaPlayer;
     public static String pname ="";
     RelativeLayout editnicknameview;
     EditText editnicknametext;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         currentnickname = (TextView)findViewById(R.id.currentnickname);
+        runMusic();
 
         // 버튼 리스너
         findViewById(R.id.regnicknameBtn).setOnClickListener(onClickListener);
@@ -67,5 +70,11 @@ public class MainActivity extends AppCompatActivity {
     private void myStartActivity(Class c) {
         Intent intent = new Intent(this, c);
         startActivity(intent);
+    }
+
+    private void runMusic(){
+        mediaPlayer = MediaPlayer.create(this, R.raw.music);
+        mediaPlayer.setLooping(true); //무한재생
+        mediaPlayer.start();
     }
 }
