@@ -37,115 +37,73 @@ import java.util.Collection;
 import java.util.List;
 
 public class GameActivity extends AppCompatActivity {
-    TextView myTextView;
-    GLSurfaceView mSurfaceView;
+    final String LOGCAT = "LOG WINDOW";
+
+    GLSurfaceView glSurfaceView;
     MainRenderer mRenderer;
+    TextView myTouchView, answerTxtView;
 
     Session mSession;
     Config mConfig;
 
-    boolean mUserRequestedInstall = true, mTouched = false, isModelSetting = false;
+    boolean mUserRequestedInstall = true, isModelInit = false, mCatched = false, isPlaneDetected = false;
+    float mCatchX, mCatchY;
+    float mCurrentX = 600.0f;
+    float mCurrentY = 600.0f;
+
+    // 제스쳐를 감지해 이동, 회전 이벤트를 처리할 객체
+    GestureDetector mGesture;
+
     float[] modelMatrix = new float[16];
-    Frame frame = null;
-
-    float mCurrentX, mCurrentY;
-    float mRotateFactor = 0f;
-    float mScaleFactor = 1.0f;
-
-    //이동, 회전 이벤트 처리할 객체
-    GestureDetector mGestureDetector;
-
-    //크기조절 이벤트 처리할 객체
-    ScaleGestureDetector mScaleGestureDetector;
+    float[] modelMatrix01 = new float[16];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        hideStatusBarAndTitleBar();
         setContentView(R.layout.activity_game);
-        mSurfaceView = (GLSurfaceView) findViewById(R.id.glsurfaceview);
-        myTextView = (TextView) findViewById(R.id.my_textView);
 
-        //제스처이벤트 콜백함수 객체를 생성자 매개변수로 처리(이벤트핸들러)
-        mGestureDetector = new GestureDetector(GameActivity.this, new GestureDetector.SimpleOnGestureListener() {
-            //따닥 처리(이동)
+        glSurfaceView = findViewById(R.id.glSurfaceView);
+
+        answerTxtView = findViewById(R.id.answerTxtView);
+
+//        myTouchView = findViewById(R.id.myTouchView);
+
+        // 제스쳐 이벤트 콜백함수 객체를 생성자 매개변수로 처리 (이벤트핸들러)
+        mGesture = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+
+            // 한번 터치 (잡기)
             @Override
-            public boolean onDoubleTap(MotionEvent event) {
-                mTouched = true;
-                mCurrentX = event.getX();
-                mCurrentY = event.getY();
-                isModelSetting = false;
-                Log.d("더블 클릭", mCurrentX + "," + mCurrentY);
-                if(mRenderer.what){
-                    mRenderer.what = false;
-                } else {
-                    mRenderer.what = true;
-                }
+            public boolean onSingleTapUp(MotionEvent e) {
+                mCatched = true;
+                mCatchX = e.getX();
+                mCatchY = e.getY();
+                Log.d(LOGCAT + " 클릭", e.getX() + ", " + e.getY());
                 return true;
             }
 
-            //드래그 처리(회전)
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                Log.d("드래그", distanceX + "," + distanceY);
-                if(isModelSetting){
-                    mRotateFactor += -distanceX/5;
-                    if(Math.abs(distanceX) > 1 && Math.abs(distanceY) <1){
-                        Matrix.rotateM(modelMatrix,0,-distanceX/5,0f,1f,0f);
-                    } else if(Math.abs(distanceY) > 1 && Math.abs(distanceX) <1){
-                        Matrix.rotateM(modelMatrix,0,-distanceY/5,1f,0f,0f);
-                    } else if(Math.abs(distanceY) > 1 && Math.abs(distanceX) >1){
-                        if(Math.abs(distanceX) >= Math.abs(distanceY)){
-                            Matrix.rotateM(modelMatrix,0,-distanceX/5,0f,1f,0f);
-                        } else {
-                            Matrix.rotateM(modelMatrix,0,-distanceY/5,1f,0f,0f);
-                        }
-                    }
-
-                }
-                return true;
-            }
-        });
-
-        mScaleGestureDetector = new ScaleGestureDetector(GameActivity.this, new ScaleGestureDetector.SimpleOnScaleGestureListener(){
-            @Override
-            public boolean onScale(ScaleGestureDetector detector) {
-                //두 손가락으로 스케일 시 작동
-                Log.d("스케일", detector.getScaleFactor() + ",");
-                if(isModelSetting){
-                    float size = detector.getScaleFactor();
-                    mScaleFactor *= size;
-                    Matrix.scaleM(modelMatrix,0,size,size,size);
-                }
-                return true;
-            }
         });
 
         DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
         if (displayManager != null) {
-            //화면에 대한 리스너 실행
-            displayManager.registerDisplayListener(
-                    //익명클래스로 정의
-                    new DisplayManager.DisplayListener() {
-                        @Override
-                        public void onDisplayAdded(int i) {
-                        }
+            displayManager.registerDisplayListener(new DisplayManager.DisplayListener() {
+                @Override
+                public void onDisplayAdded(int i) {
+                }
 
-                        @Override
-                        public void onDisplayRemoved(int i) {
-                        }
+                @Override
+                public void onDisplayRemoved(int i) {
+                }
 
-                        //화면이 변경되었다면
-                        @Override
-                        public void onDisplayChanged(int i) {
-                            synchronized (GameActivity.this) {
-                                mRenderer.mViewportChanged = true;
-                            }
-                        }
-                    }, null
-            );
+                @Override
+                public void onDisplayChanged(int i) {
+                    synchronized (this) {
+                        mRenderer.mViewportChanged = true;
+                    }
+                }
+            }, null);
         }
-
-        mRenderer = new MainRenderer(GameActivity.this, new MainRenderer.RenderCallback() {
+        mRenderer = new MainRenderer(this, new MainRenderer.RenderCallBack() {
             @Override
             public void preRender() {
                 if (mRenderer.mViewportChanged) {
@@ -153,10 +111,9 @@ public class GameActivity extends AppCompatActivity {
                     int displayRotation = display.getRotation();
                     mRenderer.updateSession(mSession, displayRotation);
                 }
+                mSession.setCameraTextureName(mRenderer.getTextureID());
 
-                mSession.setCameraTextureName(mRenderer.getTextureId());
-
-
+                Frame frame = null;
                 try {
                     frame = mSession.update();
                 } catch (CameraNotAvailableException e) {
@@ -166,102 +123,135 @@ public class GameActivity extends AppCompatActivity {
                 if (frame.hasDisplayGeometryChanged()) {
                     mRenderer.mCamera.transformDisplayGeometry(frame);
                 }
+
                 PointCloud pointCloud = frame.acquirePointCloud();
                 mRenderer.mPointCloud.update(pointCloud);
                 pointCloud.release();
 
-                //터치하였다면
-                if (mTouched) {
-                    List<HitResult> results = frame.hitTest(mCurrentX, mCurrentY);
-                    for (HitResult result : results) {
-                        Pose pose = result.getHitPose(); // 증강공간에서의 좌표
+                float lightIntensity = frame.getLightEstimate().getPixelIntensity();
+                float[] colorCorrection = new float[]{1.0f, 1.0f, 1.0f, 0.5f};
 
-                        if(!isModelSetting){
-                            pose.toMatrix(modelMatrix, 0); //좌표를 가지고 matrix화 함
-                            isModelSetting = true;
-                            //초기화시 기존의 회전값으로 회전한다.
-                            Matrix.rotateM(modelMatrix,0,-mRotateFactor,0f,1f,0f);
-                            Matrix.scaleM(modelMatrix,0,mScaleFactor,mScaleFactor,mScaleFactor);
+                List<HitResult> results = frame.hitTest(mCurrentX, mCurrentY);
+                for (HitResult result : results) {
+                    Pose pose = result.getHitPose(); // 증강현실에서의 좌표
 
-                        }
-
-                        //증강공간의 좌표에 객체있는지 받아온다.(Plane이 걸려있는가?)
-                        Trackable trackable = result.getTrackable();
-
-
-                        //좌표에 걸린 객체가 Plane 인가?
-                        if (trackable instanceof Plane &&
-                                //Plane 폴리곤(면)안에 좌표가 있는가?
-                                ((Plane) trackable).isPoseInPolygon(pose)) {
-                            mRenderer.mObj.setModelMatrix(modelMatrix);
-                            mRenderer.mObj2.setModelMatrix(modelMatrix);
-                        }
+                    if (!isModelInit) {
+                        isModelInit = true;
+                        pose.toMatrix(modelMatrix, 0); // 좌표를 가지고 matrix화 시킴
+                        pose.toMatrix(modelMatrix01, 0); // 좌표를 가지고 matrix화 시킴
+                        Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, 0.0f);
+                        Matrix.translateM(modelMatrix01, 0, 0.25f, 0.25f, 0.0f);
+//                        Matrix.scaleM(modelMatrix, 0, 1.0f, 1.0f, 1.0f);
+//                        Matrix.scaleM(modelMatrix01, 0, 1.0f, 1.0f, 1.0f);
                     }
-                    //mTouched = false;
+
+                    // 증강현실의 좌표에 객체가 있는지 받아옴 (plane이 걸려있는가)
+                    Trackable trackable = result.getTrackable();
+
+                    if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(pose)) {
+
+                        // 빛의 세기 값을 넘김
+                        mRenderer.mObj.setLightIntensity(lightIntensity);
+
+                        // 빛의 색
+                        mRenderer.mObj.setColorCorrection(colorCorrection);
+                        mRenderer.mCup.setColorCorrection(colorCorrection);
+
+                        mRenderer.mObj.setModelMatrix(modelMatrix);
+                        mRenderer.mCup.setModelMatrix(modelMatrix01);
+                    }
                 }
 
-
-                //Session으로부터 증강현실 속에서의 평면이나 점 객체를 얻을 수 있다.
+                // Session으로부터 증강현실 속에서의 평면이나 점의 객체를 얻을 수 있다.
+                // 점이면 point, 평면이면 flat
                 Collection<Plane> planes = mSession.getAllTrackables(Plane.class);
-                //ARCore 상의 Plane들을 얻는다.
 
-                boolean isPlaneDetected = false;
-
+                // AR Core 상의 Planes를 얻는다
                 for (Plane plane : planes) {
-                    //Plane이 정상이라면
-                    if (plane.getTrackingState() == TrackingState.TRACKING
-                            && plane.getSubsumedBy() == null) { //plane.getSubsumedBy() 다른 평면 존재여부
+                    // plane이 정상이라면
+                    // plane.getSubsumedBy() --> 다른 평면이 존재하는가
+                    if (plane.getTrackingState() == TrackingState.TRACKING && plane.getSubsumedBy() == null) {
                         isPlaneDetected = true;
-                        //렌더링에서 plane 정보를 갱신하여 출력
+                        // 렌더링에서 plane 정보를 갱신하여 출력
                         mRenderer.mPlane.update(plane);
                     }
                 }
 
-                if (isPlaneDetected) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            myTextView.setText("평면입니다");
+//                if (isPlaneDetected) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(getApplicationContext(), "평면~평면~", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//                } else {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(getApplicationContext(), "평면을 인식 못하겠쥐????", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//                }
+
+                if (mCatched) {
+                    mCatched = false;
+                    results = frame.hitTest(mCatchX, mCatchY);
+                    for (HitResult result : results) {
+                        Pose pose = result.getHitPose(); // 증강현실에서의 좌표
+
+                        if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
+                            String msg = "터키터키~";
+                            answerTxtView.setText(msg);
+                            Log.d(LOGCAT + " 잡았다~", pose.tx() + ", " + pose.ty() + ", " + pose.tz());
+                        } else {
+                            String msg = "못잡게쮜??????";
+                            answerTxtView.setText(msg);
                         }
-                    });
-                } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            myTextView.setText("평?면 몰?루");
-                        }
-                    });
+                    }
+
+//                    String finalMsg = msg;
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            myTouchView.setText(finalMsg);
+//                        }
+//                    });
                 }
 
                 Camera camera = frame.getCamera();
                 float[] projMatrix = new float[16];
-                camera.getProjectionMatrix(projMatrix, 0, 0.1f, 100f);
+                camera.getProjectionMatrix(projMatrix, 0, 2.0f, 20.0f);
+
                 float[] viewMatrix = new float[16];
                 camera.getViewMatrix(viewMatrix, 0);
 
                 mRenderer.setProjectionMatrix(projMatrix);
-                mRenderer.setViewMatrix(viewMatrix);
+                mRenderer.updateViewMatrix(viewMatrix);
+
             }
         });
 
-
-        mSurfaceView.setPreserveEGLContextOnPause(true);
-        mSurfaceView.setEGLContextClientVersion(2);
-        mSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        mSurfaceView.setRenderer(mRenderer);
+        glSurfaceView.setPreserveEGLContextOnPause(true);
+        glSurfaceView.setEGLContextClientVersion(2);
+        glSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        glSurfaceView.setRenderer(mRenderer);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         requestCameraPermission();
+
         try {
             if (mSession == null) {
-                switch (ArCoreApk.getInstance().requestInstall(GameActivity.this, mUserRequestedInstall)) {
-                    case INSTALLED: //정상적으로 설치되어있으면 Session을 생성한다
-                        mSession = new Session(GameActivity.this);
+                switch (ArCoreApk.getInstance().requestInstall(this, true)) {
+                    case INSTALLED:
+                        mSession = new Session(this);
+                        Log.d("Main", "AR Core Session 생성");
                         break;
-                    case INSTALL_REQUESTED: // ARCore 설치 필요
+                    case INSTALL_REQUESTED:
+                        mUserRequestedInstall = false;
+                        Log.d("Main", "AR Core 설치가 필요함");
                         break;
                 }
             }
@@ -271,51 +261,62 @@ public class GameActivity extends AppCompatActivity {
 
         mConfig = new Config(mSession);
         mSession.configure(mConfig);
+
         try {
             mSession.resume();
-            Config ar_session_config = mSession.getConfig();
-            ar_session_config.setFocusMode(Config.FocusMode.AUTO);
-            mSession.configure(ar_session_config);
         } catch (CameraNotAvailableException e) {
             e.printStackTrace();
         }
-        mSurfaceView.onResume();
-        mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
+        glSurfaceView.onResume();
+        glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        mSurfaceView.onPause();
+        glSurfaceView.onPause();
         mSession.pause();
     }
 
-
     void hideStatusBarAndTitleBar() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
-    void requestCameraPermission() {
-        if (ContextCompat.checkSelfPermission(GameActivity.this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(GameActivity.this,
-                    new String[]{Manifest.permission.CAMERA}, 0);
+    private void requestCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
         }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        mGestureDetector.onTouchEvent(event); //위임해서 받아옴
-        mScaleGestureDetector.onTouchEvent(event);
+        // 터치이벤트를 위임해서 받아옴
+        mGesture.onTouchEvent(event);
 //        if (event.getAction() == MotionEvent.ACTION_DOWN) {
 //            mTouched = true;
 //            mCurrentX = event.getX();
 //            mCurrentY = event.getY();
 //        }
         return true;
+    }
+
+    boolean catchCheck(float x, float y, float z) {
+
+        float[][] resAll_Andy = mRenderer.mObj.getMinMaxPoint();
+        float[][] resAll_Cup = mRenderer.mCup.getMinMaxPoint();
+        float[] minPoint_Andy = resAll_Andy[0];
+        float[] maxPoint_Andy = resAll_Andy[1];
+        float[] minPoint_Cup = resAll_Cup[0];
+        float[] maxPoint_Cup = resAll_Cup[1];
+
+        if (x >= minPoint_Andy[0] - 2.0f && x <= maxPoint_Andy[0] + 2.0f &&
+                y >= minPoint_Andy[1] - 0.0f && y <= maxPoint_Andy[1] - 0.0f &&
+                z >= minPoint_Andy[2] - 1.0f && z <= maxPoint_Andy[2] + 50.0f) {
+            return true;
+        }
+        return false;
     }
 }
