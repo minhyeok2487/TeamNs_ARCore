@@ -63,7 +63,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // get records
     public ArrayList<StractEn> getEnglish(){
-
         StractEn stractEn = null;
         ArrayList<StractEn> arrayListEng = new ArrayList<StractEn>();
         OpenDatabase();
@@ -75,6 +74,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             arrayListEng.add(stractEn);
             cursor.moveToNext();
         }
+        System.out.println("arrayListEng.get(0) : "+arrayListEng.get(0).getEnglish() + "," + arrayListEng.get(0).getMeans() + "," +arrayListEng.get(0).getFlagtime());
+        // arrayListEng.get(0) : act,행동하다,행동,행위,100 들어옴
         cursor.close();
         CloseDatabase();
         return arrayListEng;
