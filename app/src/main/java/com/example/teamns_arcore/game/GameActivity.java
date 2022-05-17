@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.teamns_arcore.R;
 import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
+import com.example.teamns_arcore.SelectLevel.Model.StractEn;
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
 import com.google.ar.core.Config;
@@ -39,8 +40,10 @@ import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
 import com.google.ar.core.exceptions.CameraNotAvailableException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -62,6 +65,10 @@ public class GameActivity extends AppCompatActivity {
     DatabaseHelper databaseHelper;
 
     Button colorBtn;
+
+    ArrayList<StractEn> seArrList;
+
+    int[] randomNum = new int[100];
 
     float[][] colorCorrections = new float[][]{
             {0.8f, 0.8f, 0.8f, 0.8f},
@@ -331,8 +338,22 @@ public class GameActivity extends AppCompatActivity {
         mSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         mSurfaceView.setRenderer(mRenderer);
 
-        questionTxtView.setText("aaa");
+        Random r = new Random();
 
+        for (int i = 0; i < 10; i++) {
+            randomNum[i] = r.nextInt(20); // 0~20까지의 난수
+            for (int j = 0; j < i; j++) {
+                if (randomNum[i] == randomNum[j]) {
+                    i--;
+                }
+            }
+        }
+
+        DatabaseHelper dh = new DatabaseHelper(getApplicationContext(), "lv_one_quiz");
+        seArrList = dh.getEnglish();
+        questionTxtView.setText(seArrList.get(randomNum[i]).getEnglish());
+
+        Log.d("랜덤랜덤~", randomNum[i] + "");
     }
 
     // 버튼에 의한 조명 색상 변경
@@ -464,6 +485,25 @@ public class GameActivity extends AppCompatActivity {
             }
         }
     }
+
+//    public void rand() {
+//        int count = 10; // 난수 생성 갯수
+//        int a[] = new int[count];
+//        Random r = new Random();
+//
+//        for (int i = 0; i < count; i++) {
+//            a[i] = r.nextInt(100); // 0~20까지의 난수
+//            for (int j = 0; j < i; j++) {
+//                if (a[i] == a[j]) {
+//                    i--;
+//                }
+//            }
+//        }
+//
+//        for (int i = 0; i < 10; i++) {
+//            intRandom[i] = a[i];
+//        }
+//    }
 
     int i = 0;
 
