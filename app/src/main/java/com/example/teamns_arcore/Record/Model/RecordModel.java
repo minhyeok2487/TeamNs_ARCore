@@ -62,4 +62,13 @@ public class RecordModel {
     public void setScore() {
         this.score = (correctNum/timer)*100;
     }
+
+    public String getLevel() {
+        String StringLevel = String.valueOf(Level);
+        return StringLevel;
+    }
+
+    public void setLevel(int level) {
+        Level = level;
+    }
 }

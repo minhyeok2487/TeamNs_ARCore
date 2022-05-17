@@ -40,7 +40,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
             holder.CorrectNum_Textview.setText(model.getCorrectNum());
             holder.Timer_Textview.setText(model.getTimer());
             holder.Score_Textview.setText(model.getScore());
-            holder.Level_Textview.setText(model.getScore());
+            holder.Level_Textview.setText(model.getLevel());
         } else {
             return;
         }
