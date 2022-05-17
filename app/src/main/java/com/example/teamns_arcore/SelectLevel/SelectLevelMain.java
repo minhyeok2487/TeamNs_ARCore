@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.teamns_arcore.R;
+import com.example.teamns_arcore.Record.TimerActivity;
 
 public class SelectLevelMain extends AppCompatActivity {
     TextView count_view;
@@ -46,7 +47,8 @@ public class SelectLevelMain extends AppCompatActivity {
                     myStartActivity(SelectLevelActivity.class);
                     break;
                 case R.id.resetdataBtn:
-                    //데이터 초기화
+                    //데이터 초기화 - 타이머 액티비티 박아둠
+                    myStartActivity(TimerActivity.class);
                     break;
             }
         }
