@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout editnicknameview;
     EditText editnicknametext;
     TextView currentnickname;
-//11123
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
