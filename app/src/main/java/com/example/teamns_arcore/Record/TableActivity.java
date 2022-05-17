@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.teamns_arcore.R;
+import com.example.teamns_arcore.Record.Model.RecordModel;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,15 +33,28 @@ public class TableActivity extends AppCompatActivity {
         recycler_view.setAdapter(adapter);
     }
 
-    private List<PaymentModel> getList(){
-        List<PaymentModel> payment_list = new ArrayList<>();
-        payment_list.add(new PaymentModel("1","Mickey1","10000"));
-        payment_list.add(new PaymentModel("2","Mickey2","20000"));
-        payment_list.add(new PaymentModel("3","Mickey3","30000"));
-        payment_list.add(new PaymentModel("4","Mickey4","40000"));
-        payment_list.add(new PaymentModel("5","Mickey5","50000"));
-        payment_list.add(new PaymentModel("6","Mickey6","60000"));
+    private List<RecordModel> getList(){
+        List<RecordModel> recordModels = new ArrayList<>();
+        RecordModel model1 = new RecordModel("냐옹",Date.valueOf("2022-04-13"),8, 100, 0, 1);
+        model1.setScore();
+        recordModels.add(model1);
 
-        return payment_list;
+        RecordModel model2 = new RecordModel("냐옹",Date.valueOf("2022-04-17"),4, 50, 0,2);
+        model2.setScore();
+        recordModels.add(model2);
+
+        RecordModel model3 = new RecordModel("냐옹",Date.valueOf("2022-05-05"),8, 130, 0,2);
+        model3.setScore();
+        recordModels.add(model3);
+
+        RecordModel model4 = new RecordModel("냐옹",Date.valueOf("2022-05-10"),10, 150, 0,3);
+        model4.setScore();
+        recordModels.add(model4);
+
+        RecordModel model5 = new RecordModel("냐옹",Date.valueOf("2022-05-11"),8, 110, 0,4);
+        model5.setScore();
+        recordModels.add(model5);
+
+        return recordModels;
     }
 }

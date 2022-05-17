@@ -11,16 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.teamns_arcore.R;
+import com.example.teamns_arcore.Record.Model.RecordModel;
 
 import java.util.List;
 
 public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHolder> {
     Context context;
-    List<PaymentModel> payment_list;
+    List<RecordModel> recordModelList;
 
-    public PaymentAdapter(Context context, List<PaymentModel> payment_list){
+    public PaymentAdapter(Context context, List<RecordModel> recordModelList){
         this.context = context;
-        this.payment_list = payment_list;
+        this.recordModelList = recordModelList;
     }
 
 
@@ -33,11 +34,13 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if(payment_list != null && payment_list.size() >0){
-            PaymentModel model = payment_list.get(position);
-            holder.id_tv.setText(model.getId());
-            holder.name_tv.setText(model.getName());
-            holder.payment_tv.setText(model.getPayment());
+        if(recordModelList != null && recordModelList.size() >0){
+            RecordModel model = recordModelList.get(position);
+            holder.Date_Textview.setText(model.getDate());
+            holder.CorrectNum_Textview.setText(model.getCorrectNum());
+            holder.Timer_Textview.setText(model.getTimer());
+            holder.Score_Textview.setText(model.getScore());
+            holder.Level_Textview.setText(model.getScore());
         } else {
             return;
         }
@@ -45,16 +48,18 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return payment_list.size();
+        return recordModelList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView id_tv, name_tv, payment_tv;
+        TextView Date_Textview, CorrectNum_Textview, Timer_Textview, Score_Textview,Level_Textview;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            id_tv = itemView.findViewById(R.id.id_tv);
-            name_tv = itemView.findViewById(R.id.name_tv);
-            payment_tv = itemView.findViewById(R.id.payment_tv);
+            Date_Textview = itemView.findViewById(R.id.Date_Textview);
+            CorrectNum_Textview = itemView.findViewById(R.id.CorrectNum_Textview);
+            Timer_Textview = itemView.findViewById(R.id.Timer_Textview);
+            Score_Textview = itemView.findViewById(R.id.Timer_Textview);
+            Level_Textview = itemView.findViewById(R.id.Level_Textview);
         }
     }
 }

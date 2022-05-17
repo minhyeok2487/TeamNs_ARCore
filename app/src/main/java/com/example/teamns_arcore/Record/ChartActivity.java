@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.example.teamns_arcore.R;
+import com.example.teamns_arcore.Record.Model.RecordModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
@@ -27,6 +27,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,12 +41,12 @@ public class ChartActivity extends AppCompatActivity {
     RecyclerView recycler_view;
     PaymentAdapter adapter;
     Button gotoTable;
-    List<PaymentModel> payment_list = new ArrayList<>();
+    List<RecordModel> recordModels = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
-
         gotoTable = findViewById(R.id.gotoTable);
         findViewById(R.id.gotoTable).setOnClickListener(onClickListener);
         tableLayout = (TableLayout) findViewById(R.id.tableLayout);
@@ -89,22 +90,11 @@ public class ChartActivity extends AppCompatActivity {
     public void graphInitSetting4() {
         ArrayList<String> jsonList = new ArrayList<>(); // ArrayList 선언
         ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
-        jsonList.add(payment_list.get(0).getPayment());
-        jsonList.add(payment_list.get(1).getPayment());
-        jsonList.add(payment_list.get(2).getPayment());
+        jsonList.add(recordModels.get(0).getScore());
+        jsonList.add(recordModels.get(1).getScore());
 
-        labelList.add(payment_list.get(0).getId());
-        labelList.add(payment_list.get(1).getId());
-        labelList.add(payment_list.get(2).getId());
-//        labelList.add("10일");
-//        labelList.add("14일");
-//        labelList.add("17일");
-//        labelList.add("20일");
-
-//        jsonList.add(2);
-//        jsonList.add(3);
-//        jsonList.add(5);
-//        jsonList.add(4);
+        labelList.add(recordModels.get(0).getDate());
+        labelList.add(recordModels.get(1).getDate());
 
         BarChartGraph(labelList, jsonList);
         LineGraph(labelList,jsonList);
@@ -114,13 +104,13 @@ public class ChartActivity extends AppCompatActivity {
     public void graphInitSetting5() {
         ArrayList<String> jsonList = new ArrayList<>(); // ArrayList 선언
         ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
-        jsonList.add(payment_list.get(3).getPayment());
-        jsonList.add(payment_list.get(4).getPayment());
-        jsonList.add(payment_list.get(5).getPayment());
+        jsonList.add(recordModels.get(2).getScore());
+        jsonList.add(recordModels.get(3).getScore());
+        jsonList.add(recordModels.get(4).getScore());
 
-        labelList.add(payment_list.get(3).getId());
-        labelList.add(payment_list.get(4).getId());
-        labelList.add(payment_list.get(5).getId());
+        labelList.add(recordModels.get(2).getDate());
+        labelList.add(recordModels.get(3).getDate());
+        labelList.add(recordModels.get(4).getDate());
         BarChartGraph(labelList, jsonList);
         LineGraph(labelList,jsonList);
     }
@@ -210,15 +200,31 @@ public class ChartActivity extends AppCompatActivity {
         recycler_view.setAdapter(adapter);
     }
 
-    private List<PaymentModel> getList(){
+    //임시 데이터 생성
+    //String id, Date date, int correctNum, float timer, float score
+    private List<RecordModel> getList(){
+        RecordModel model1 = new RecordModel("냐옹",Date.valueOf("2022-04-13"),8, 100, 0, 1);
+        model1.setScore();
+        recordModels.add(model1);
 
-        payment_list.add(new PaymentModel("5일","200초","10"));
-        payment_list.add(new PaymentModel("10일","180초","6"));
-        payment_list.add(new PaymentModel("24일","110초","4"));
-        payment_list.add(new PaymentModel("1일","230초","2"));
-        payment_list.add(new PaymentModel("4일","140초","5"));
-        payment_list.add(new PaymentModel("10","150초","3"));
+        RecordModel model2 = new RecordModel("냐옹",Date.valueOf("2022-04-17"),4, 50, 0,2);
+        model2.setScore();
+        recordModels.add(model2);
 
-        return payment_list;
+        RecordModel model3 = new RecordModel("냐옹",Date.valueOf("2022-05-05"),8, 130, 0,2);
+        model3.setScore();
+        recordModels.add(model3);
+
+        RecordModel model4 = new RecordModel("냐옹",Date.valueOf("2022-05-10"),10, 150, 0,3);
+        model4.setScore();
+        recordModels.add(model4);
+
+        RecordModel model5 = new RecordModel("냐옹",Date.valueOf("2022-05-11"),8, 110, 0,4);
+        model5.setScore();
+        recordModels.add(model5);
+
+        return recordModels;
     }
+
+
 }

@@ -13,28 +13,38 @@
             android:layout_column="1"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
+            android:layout_column="1"/>
+        <TextView
+            android:text="맞춘정답개수"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_column="1"/>
+        <TextView
+            android:text="타이머"
+            android:textSize="16dp"
+            android:textStyle="bold"
             android:padding="10dp"
             android:text="날짜"
             android:textSize="25dp"
             android:textStyle="bold" />
 
         <TextView
-            android:layout_column="1"
-            android:fontFamily="@font/fontstyle"
-            android:gravity="center"
+            android:text="점수"
+            android:textSize="16dp"
+            android:textStyle="bold"
             android:padding="10dp"
-            android:text="타이머"
-            android:textSize="25dp"
-            android:textStyle="bold" />
-
+            android:gravity="center"
+            android:layout_column="1"/>
         <TextView
+            android:text="난이도"
+            android:textSize="16dp"
+            android:textStyle="bold"
             android:layout_column="1"
             android:fontFamily="@font/fontstyle"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="맞춘 정답 개수"
-            android:textSize="25dp"
-            android:textStyle="bold" />
+            android:gravity="center"/>
+
 
     </TableRow>
 
