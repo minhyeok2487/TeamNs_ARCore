@@ -2,33 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="20dp"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/txtfname"
-        android:textColor="#000"
-        android:text="fname"
-        android:textSize="17dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </TextView>
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/fontstyle"
+        android:text="fname"
+        android:textColor="#000"
+        android:textSize="30dp" />
 
     <TextView
         android:id="@+id/txtlname"
-        android:textColor="#ff0000"
-        android:text="lname"
-        android:textSize="17dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </TextView>
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/fontstyle"
+        android:text="lname"
+        android:textColor="#ff0000"
+        android:textSize="30dp" />
 
     <TextView
         android:id="@+id/txtaname"
-        android:textColor="#3F51B5"
-        android:text="aname"
-        android:textSize="17dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </TextView>
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/fontstyle"
+        android:text="aname"
+        android:textColor="#3F51B5"
+        android:textSize="30dp" />
 
 </LinearLayout>
