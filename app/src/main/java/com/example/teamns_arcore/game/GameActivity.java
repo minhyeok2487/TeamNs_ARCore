@@ -60,6 +60,16 @@ public class GameActivity extends AppCompatActivity {
 
     Button colorBtn;
 
+    float [][] colorCorrections = new float[][]{
+            {0.8f,0.8f,0.8f,0.8f},
+            {1.0f,0.0f,0.0f,0.8f},
+            {0.0f,1.0f,0.0f,0.8f},
+            {0.0f,0.0f,1.0f,0.8f}
+
+    };
+
+    float [] colorCorrection = new float[4];
+
     final int MAX = 26;
 
 //    float [] modelMatrix = new float[16];
@@ -226,16 +236,16 @@ public class GameActivity extends AppCompatActivity {
 //                mRenderer.mPointCloud.update(pointCloud);
                 // 자원해제
 //                pointCloud.release();
-                if(flag) {
+//                if(flag) {
 
                     List<HitResult> results = frame.hitTest(500.0f, 800.0f);
                     for (HitResult result : results) {
                         Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
 //                        float [] modelMatrix = new float[16];
 
-                        if (!isModelInit) {
+                        if (!isModelInit && flag) {
                             isModelInit = true;
-//                            flag = false;
+                            flag = false;
                             for (int i = 0; i < MAX; i++) {
 //                            pose.toMatrix(modelMatrix, 0); // 좌표를 가지고 matrix 화 함
                                 pose.toMatrix(modelArrayMatrix[i], 0);
@@ -243,16 +253,17 @@ public class GameActivity extends AppCompatActivity {
                                         pixedMatrix[ranNum[i]][0], pixedMatrix[ranNum[i]][1], pixedMatrix[ranNum[i]][2]);
                             }
                         }
-
                         LightEstimate estimate = frame.getLightEstimate();
-                        float lightIntensity = estimate.getPixelIntensity();
-//                        float [] colorCorrection = new float[4];
-                        float [] colorCorrection = new float[]{1.0f,0.0f,1.0f,1.0f};
-                        estimate.getColorCorrection(colorCorrection, 0);
-                        mRenderer.setLightIntensity(lightIntensity);
-//                        mRenderer.setLightIntensity((float)1/100);
-//                        mRenderer.setColorCorrection(new float[]{1.0f,0.0f,1.0f,1.0f});
-                        mRenderer.setColorCorrection(colorCorrection);
+
+
+                        colorBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                setColorCorrection(estimate);
+                            }
+                        });
+
+
 
 //                        float [] cubeMatrix = new float[16];
 //                        pose.toMatrix(cubeMatrix, 0); // 좌표를 가지고 matrix 화 함
@@ -276,7 +287,7 @@ public class GameActivity extends AppCompatActivity {
                             mRenderer.arrayObj.get(i).setModelMatrix(modelArrayMatrix[i]);
                         }
                     }
-                }
+//                }
 
 
 //                    mTouched = false;
@@ -536,5 +547,14 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+    int i = 0;
+    void setColorCorrection(LightEstimate estimate){
+        colorCorrection = colorCorrections[i];
+
+        mRenderer.setColorCorrection(colorCorrection);
+
+        i++;
+        i %= 4;
     }
 }
