@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp"
-    android:gravity="center"
     tools:context=".MainActivity">
 
 
@@ -25,9 +25,11 @@
             android:id="@+id/StartBtn"
             android:layout_width="157dp"
             android:layout_height="90dp"
-            android:background="@drawable/border_round_thin"
             android:layout_marginTop="20dp"
+            android:background="@drawable/border_round_thin"
+            android:fontFamily="@font/fontstyle"
             android:text="시작하기"
+            android:textSize="30dp"
             tools:layout_editor_absoluteX="127dp"
             tools:layout_editor_absoluteY="103dp" />
 
@@ -37,7 +39,9 @@
             android:layout_height="100dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/border_round_thin"
+            android:fontFamily="@font/fontstyle"
             android:text="게임종료"
+            android:textSize="30dp"
             tools:layout_editor_absoluteX="134dp"
             tools:layout_editor_absoluteY="355dp" />
 
