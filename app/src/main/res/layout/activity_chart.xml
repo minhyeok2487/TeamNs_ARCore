@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="20dp"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
 
 
         <LinearLayout
@@ -29,20 +29,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/gotoTable"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="표로보기" />
+                android:background="@drawable/border_round_thin"
+                android:fontFamily="@font/fontstyle"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="표로보기"
+                android:textSize="30dp" />
         </LinearLayout>
 
         <include
-            layout="@layout/activity_table"
             android:id="@+id/tableLayout"
+            layout="@layout/activity_table"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/fragment_bluetooth_chat_barchart"

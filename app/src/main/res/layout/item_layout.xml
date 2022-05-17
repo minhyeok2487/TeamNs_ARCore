@@ -5,36 +5,30 @@
     android:stretchColumns="1,2,3">
 
     <TableRow>
+
         <TextView
-            android:id="@+id/Date_Textview"
-            android:textSize="16dp"
-            android:padding="10dp"
+            android:id="@+id/id_tv"
+            android:layout_column="1"
+            android:fontFamily="@font/fontstyle"
             android:gravity="center"
-            android:layout_column="1"/>
+            android:padding="10dp"
+            android:textSize="20dp" />
+
         <TextView
-            android:id="@+id/CorrectNum_Textview"
-            android:textSize="16dp"
-            android:padding="10dp"
+            android:id="@+id/name_tv"
+            android:layout_column="1"
+            android:fontFamily="@font/fontstyle"
             android:gravity="center"
-            android:layout_column="1"/>
+            android:padding="10dp"
+            android:textSize="20dp" />
+
         <TextView
-            android:id="@+id/Timer_Textview"
-            android:textSize="16dp"
-            android:padding="10dp"
+            android:id="@+id/payment_tv"
+            android:layout_column="1"
+            android:fontFamily="@font/fontstyle"
             android:gravity="center"
-            android:layout_column="1"/>
-        <TextView
-            android:id="@+id/Score_Textview"
-            android:textSize="16dp"
             android:padding="10dp"
-            android:gravity="center"
-            android:layout_column="1"/>
-        <TextView
-            android:id="@+id/Level_Textview"
-            android:textSize="16dp"
-            android:padding="10dp"
-            android:gravity="center"
-            android:layout_column="1"/>
+            android:textSize="20dp" />
 
     </TableRow>
 

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tableLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:stretchColumns="1,2,3"
     android:layout_margin="8dp"
-    android:id="@+id/tableLayout">
+    android:padding="20dp"
+    android:stretchColumns="1,2,3">
 
     <TableRow>
+
         <TextView
-            android:text="날짜"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:padding="10dp"
+            android:layout_column="1"
+            android:fontFamily="@font/fontstyle"
             android:gravity="center"
             android:layout_column="1"/>
         <TextView
@@ -26,8 +26,10 @@
             android:textSize="16dp"
             android:textStyle="bold"
             android:padding="10dp"
-            android:gravity="center"
-            android:layout_column="1"/>
+            android:text="날짜"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
         <TextView
             android:text="점수"
             android:textSize="16dp"
@@ -39,14 +41,16 @@
             android:text="난이도"
             android:textSize="16dp"
             android:textStyle="bold"
-            android:padding="10dp"
-            android:gravity="center"
-            android:layout_column="1"/>
+            android:layout_column="1"
+            android:fontFamily="@font/fontstyle"
+            android:gravity="center"/>
+
 
     </TableRow>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
 </TableLayout>

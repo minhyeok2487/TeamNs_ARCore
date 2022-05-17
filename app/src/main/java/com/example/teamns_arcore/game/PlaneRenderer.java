@@ -46,12 +46,12 @@ public class PlaneRenderer {
     private float[] mColor;
 
     public PlaneRenderer(int color, float alpha) {
-        float r = Color.red(color) / 255.f;
-        float g = Color.green(color) / 255.f;
-        float b = Color.blue(color) / 255.f;
-        float a = Color.alpha(color) / 255.f;
+        float r = Color.red(color) / 255.0f;
+        float g = Color.green(color) / 255.0f;
+        float b = Color.blue(color) / 255.0f;
+        float a = Color.alpha(color) / 255.0f;
 
-        mColor = new float[] { r, g, b, alpha };
+        mColor = new float[]{r, g, b, alpha};
         //128
         mVertices = ByteBuffer.allocateDirect(INITIAL_COUNT * 3 * 2 * Float.BYTES).order(ByteOrder.nativeOrder()).asFloatBuffer();
         mVertices.position(0);
@@ -92,8 +92,8 @@ public class PlaneRenderer {
         }
     }
 
-    //Plane plane --> ARCore가 지정해서 사용
-    public  void update(Plane plane) {
+    // Plane plane --> AR Core가 지정해서 사용
+    public void update(Plane plane) {
         float[] planeMatrix = new float[16];
         plane.getCenterPose().toMatrix(planeMatrix, 0);
 

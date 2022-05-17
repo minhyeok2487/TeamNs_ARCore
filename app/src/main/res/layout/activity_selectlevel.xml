@@ -2,37 +2,64 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="20dp">
 
-    <Button
+    <android.widget.Button
         android:id="@+id/level1Btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="level1" />
+        android:layout_marginTop="80dp"
+        android:background="@drawable/border_round_thin"
+        android:fontFamily="@font/fontstyle"
+        android:text="level1"
+        android:textColor="@color/teal_200"
+        android:textSize="35dp" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/level2Btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="level2" />
+        android:layout_marginTop="20dp"
+        android:background="@drawable/border_round_thin"
+        android:fontFamily="@font/fontstyle"
+        android:text="level2"
+        android:textColor="#F4E347"
+        android:textSize="35dp" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/level3Btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="level3" />
+        android:layout_marginTop="20dp"
+        android:background="@drawable/border_round_thin"
+        android:fontFamily="@font/fontstyle"
+        android:text="level3"
+        android:textColor="#F46359"
+        android:textSize="35dp" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/level4Btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="level4" />
+        android:layout_marginTop="20dp"
+        android:background="@drawable/border_round_thin"
+        android:fontFamily="@font/fontstyle"
+        android:text="level4"
+        android:textColor="#E91E63"
+        android:textSize="35dp" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/resetdataBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="데이터 초기화" />
+        android:layout_marginTop="50dp"
+        android:background="@drawable/border_round_thin"
+        android:fontFamily="@font/fontstyle"
+        android:padding="15dp"
+        android:text="데이터 초기화"
+        android:textColor="#FF5722"
+        android:textSize="25dp" />
 
 </LinearLayout>
