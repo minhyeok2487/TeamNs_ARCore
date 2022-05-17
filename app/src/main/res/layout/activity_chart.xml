@@ -49,6 +49,7 @@
             android:visibility="gone" />
 
         <com.github.mikephil.charting.charts.BarChart
+            android:layout_marginTop="20dp"
             android:id="@+id/fragment_bluetooth_chat_barchart"
             android:layout_width="match_parent"
             android:layout_height="400dp"
