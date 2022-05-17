@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        currentnickname = (TextView)findViewById(R.id.currentnickname);
+        currentnickname = findViewById(R.id.currentnickname);
         runMusic();
 
         // 버튼 리스너
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.EndBtn:
                     //게임종료메서드
+                    finish();
                     break;
             }
         }

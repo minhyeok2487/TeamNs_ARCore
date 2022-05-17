@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.teamns_arcore.R;
+import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
 import com.google.ar.core.Config;
@@ -43,7 +44,7 @@ import java.util.List;
 
 public class GameActivity extends AppCompatActivity {
 
-    TextView answerTxtView;
+    TextView answerTxtView, questionTxtView;
 
     GLSurfaceView mSurfaceView;
     MainRenderer mRenderer;
@@ -57,6 +58,8 @@ public class GameActivity extends AppCompatActivity {
 
     //이동, 회전 이벤트 처리할 객체
     GestureDetector mGestureDetector;
+
+    DatabaseHelper databaseHelper;
 
     Button colorBtn;
 
@@ -144,12 +147,13 @@ public class GameActivity extends AppCompatActivity {
 
         answerTxtView = findViewById(R.id.answerTxtView);
 
+        questionTxtView = findViewById(R.id.questionTxtView);
+
         randomNum();
 
         for (int i = 0; i < ranNum.length; i++) {
             Log.d("랜덤", String.valueOf(ranNum[i]));
         }
-
 
         // 제스처이벤트 콜백함수 객체를 생성자 매개변수로 처리 (이벤트 핸들러)
         // 내꺼에서처리 this
@@ -301,9 +305,11 @@ public class GameActivity extends AppCompatActivity {
                         if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
                             msg = "터키터키~";
                             answerTxtView.setText(msg);
+                            Log.d("터치함", "좌표 : " + pose.tx() + pose.ty() + pose.tz());
                         } else {
                             msg = "못잡겠쥐~?";
                             answerTxtView.setText(msg);
+                            Log.d("터치안함", "좌표 : " + pose.tx() + pose.ty() + pose.tz());
                         }
                     }
                 }
@@ -324,6 +330,9 @@ public class GameActivity extends AppCompatActivity {
         mSurfaceView.setEGLContextClientVersion(2);
         mSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         mSurfaceView.setRenderer(mRenderer);
+
+        questionTxtView.setText("aaa");
+
     }
 
     // 버튼에 의한 조명 색상 변경
