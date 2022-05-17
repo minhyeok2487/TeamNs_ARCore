@@ -2,8 +2,6 @@ package com.example.teamns_arcore.game;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.hardware.display.DisplayManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
@@ -13,10 +11,8 @@ import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +25,6 @@ import com.google.ar.core.Camera;
 import com.google.ar.core.Config;
 import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
-import com.google.ar.core.LightEstimate;
 import com.google.ar.core.Plane;
 import com.google.ar.core.PointCloud;
 import com.google.ar.core.Pose;
@@ -42,85 +37,25 @@ import java.util.Collection;
 import java.util.List;
 
 public class GameActivity extends AppCompatActivity {
+    final String LOGCAT = "LOG WINDOW";
 
-    TextView myTextView, myCatchView;
-
-    GLSurfaceView mSurfaceView;
+    GLSurfaceView glSurfaceView;
     MainRenderer mRenderer;
+    TextView myTouchView, answerTxtView;
 
     Session mSession;
     Config mConfig;
 
-    boolean mUserRequestedInstall = true, mTouched = false, isModelInit = false, mCatched = false, flag = true;
+    boolean mUserRequestedInstall = true, isModelInit = false, mCatched = false, isPlaneDetected = false;
+    float mCatchX, mCatchY;
+    float mCurrentX = 600.0f;
+    float mCurrentY = 600.0f;
 
-    float mCurrentX, mCurrentY, mCatchX, mCatchY;
+    // 제스쳐를 감지해 이동, 회전 이벤트를 처리할 객체
+    GestureDetector mGesture;
 
-    //이동, 회전 이벤트 처리할 객체
-    GestureDetector mGestureDetector;
-
-    Button colorBtn;
-
-    final int MAX = 26;
-
-//    float [] modelMatrix = new float[16];
-
-    float [][] modelArrayMatrix = new float[MAX][16];
-
-    float [][] pixedMatrix = new float[][]{
-            {0.3f,3.2f,2.3f},
-            {0.4f,1.4f,-3.1f},
-            {0.5f,-2.2f,3.3f},
-            {0.7f,-0.2f,-0.3f},
-            {0.9f,1.2f,1.3f},
-            {1.1f,2.4f,-1.6f},
-            {1.3f,-2.5f,0.3f},
-            {1.5f,-1.4f,-2.4f},
-            {1.8f,0.2f,2.4f},
-            {1.9f,1.8f,-2.9f},
-            {2.3f,-2.2f,1.7f},
-            {2.4f,-1.3f,-0.4f},
-            {2.7f,0.1f,1.3f},
-            {2.8f,2.4f,-0.7f},
-            {3.1f,-0.6f,1.9f},
-            {3.3f,-1.9f,-2.5f},
-            {3.4f,1.5f,2.5f},
-            {3.6f,3.0f,-2.7f},
-            {3.8f,-2.3f,1.2f},
-            {3.9f,-1.2f,-3.2f},
-            {4.0f,2.9f,2.9f},
-            {4.3f,1.7f,-0.7f},
-            {4.5f,-0.8f,1.3f},
-            {4.7f,-3.2f,-3.1f},
-            {4.1f,2.7f,2.7f},
-            {-0.1f,1.3f,-3.1f},
-            {-0.3f,-1.8f,1.3f},
-            {-0.4f,-2.6f,-2.8f},
-            {-0.7f,2.9f,2.7f},
-            {-0.9f,1.1f,-0.8f},
-            {-1.1f,-0.4f,0.9f},
-            {-1.3f,-1.8f,-1.3f},
-            {-1.5f,1.7f,2.6f},
-            {-1.7f,2.6f,-2.1f},
-            {-1.9f,-0.7f,2.2f},
-            {-2.3f,-2.6f,-3.3f},
-            {-2.4f,2.5f,1.7f},
-            {-2.6f,1.3f,-2.6f},
-            {-2.8f,-0.8f,1.9f},
-            {-3.1f,-1.1f,-1.6f},
-            {-3.3f,1.6f,0.4f},
-            {-3.4f,0.9f,-0.7f},
-            {-3.6f,-2.5f,1.4f},
-            {-3.7f,-1.9f,-1.8f},
-            {-3.9f,0.7f,0.7f},
-            {-4.1f,1.7f,-3.3f},
-            {-4.3f,-3.1f,3.3f},
-            {-4.4f,-2.6f,-2.8f},
-            {-4.6f,2.2f,2.8f},
-            {-4.2f,0.8f,-1.7f}
-    };
-
-    //    ArrayList<Integer> ranNum = new ArrayList<>();
-    int [] ranNum = new int[MAX];
+    float[] modelMatrix = new float[16];
+    float[] modelMatrix01 = new float[16];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,331 +63,203 @@ public class GameActivity extends AppCompatActivity {
         hideStatusBarAndTitleBar();
         setContentView(R.layout.activity_game);
 
-        mSurfaceView = (GLSurfaceView) findViewById(R.id.gl_surface_view);
+        glSurfaceView = findViewById(R.id.glSurfaceView);
 
-        myTextView = (TextView) findViewById(R.id.myTextView);
-        myCatchView = (TextView) findViewById(R.id.myCatchView);
+        answerTxtView = findViewById(R.id.answerTxtView);
 
-        colorBtn = (Button) findViewById(R.id.colorBtn);
+//        myTouchView = findViewById(R.id.myTouchView);
 
-        randomNum();
+        // 제스쳐 이벤트 콜백함수 객체를 생성자 매개변수로 처리 (이벤트핸들러)
+        mGesture = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
 
-        for(int i = 0; i<ranNum.length;i++) {
-            Log.d("랜덤", String.valueOf(ranNum[i]));
-        }
-
-
-
-        // 제스처이벤트 콜백함수 객체를 생성자 매개변수로 처리 (이벤트 핸들러)
-        // 내꺼에서처리 this
-        mGestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener(){
-
-            // 한번 클릭 처리
+            // 한번 터치 (잡기)
             @Override
-            public boolean onSingleTapUp(MotionEvent event) {
+            public boolean onSingleTapUp(MotionEvent e) {
                 mCatched = true;
-                mCatchX = event.getX();
-                mCatchY = event.getY();
-
-                Log.d("확인 한번",event.getX()+" , "+event.getY());
+                mCatchX = e.getX();
+                mCatchY = e.getY();
+                Log.d(LOGCAT + " 클릭", e.getX() + ", " + e.getY());
                 return true;
             }
-
-            // 따닥 더블클릭 처리 (이동)
-            @Override
-            public boolean onDoubleTap(MotionEvent event) {
-                mTouched = true; // 그려라
-                isModelInit = false; // 새로 좌표를 받아라
-                mCurrentX = event.getX();
-                mCurrentY = event.getY();
-                Log.d("확인 더블클릭",event.getX()+" , "+event.getY());
-                return true;
-            }
-
 
         });
 
         DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-        if(displayManager != null){
+        if (displayManager != null) {
             displayManager.registerDisplayListener(new DisplayManager.DisplayListener() {
                 @Override
                 public void onDisplayAdded(int i) {
-
                 }
 
                 @Override
                 public void onDisplayRemoved(int i) {
-
                 }
 
                 @Override
                 public void onDisplayChanged(int i) {
-                    synchronized (this){
+                    synchronized (this) {
                         mRenderer.mViewportChanged = true;
                     }
                 }
             }, null);
         }
-
-        mRenderer = new MainRenderer(this, new MainRenderer.RenderCallback() {
+        mRenderer = new MainRenderer(this, new MainRenderer.RenderCallBack() {
             @Override
             public void preRender() {
-                if(mRenderer.mViewportChanged){
+                if (mRenderer.mViewportChanged) {
                     Display display = getWindowManager().getDefaultDisplay();
                     int displayRotation = display.getRotation();
                     mRenderer.updateSession(mSession, displayRotation);
                 }
+                mSession.setCameraTextureName(mRenderer.getTextureID());
 
-                // 카메라에 알려준다
-                mSession.setCameraTextureName(mRenderer.getTextureId());
-
-                // 세션으로부터 정보를 받아올 프레임
                 Frame frame = null;
-
                 try {
                     frame = mSession.update();
                 } catch (CameraNotAvailableException e) {
                     e.printStackTrace();
                 }
 
-                // 프레임 변경시
-                if(frame.hasDisplayGeometryChanged()){
+                if (frame.hasDisplayGeometryChanged()) {
                     mRenderer.mCamera.transformDisplayGeometry(frame);
                 }
 
+                PointCloud pointCloud = frame.acquirePointCloud();
+                mRenderer.mPointCloud.update(pointCloud);
+                pointCloud.release();
 
+                float lightIntensity = frame.getLightEstimate().getPixelIntensity();
+                float[] colorCorrection = new float[]{1.0f, 1.0f, 1.0f, 0.5f};
 
-//                PointCloud pointCloud = frame.acquirePointCloud();
-//                mRenderer.mPointCloud.update(pointCloud);
-                // 자원해제
-//                pointCloud.release();
-                if(flag) {
+                List<HitResult> results = frame.hitTest(mCurrentX, mCurrentY);
+                for (HitResult result : results) {
+                    Pose pose = result.getHitPose(); // 증강현실에서의 좌표
 
-                    List<HitResult> results = frame.hitTest(500.0f, 800.0f);
-                    for (HitResult result : results) {
-                        Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
-//                        float [] modelMatrix = new float[16];
+                    if (!isModelInit) {
+                        isModelInit = true;
+                        pose.toMatrix(modelMatrix, 0); // 좌표를 가지고 matrix화 시킴
+                        pose.toMatrix(modelMatrix01, 0); // 좌표를 가지고 matrix화 시킴
+                        Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, 0.0f);
+                        Matrix.translateM(modelMatrix01, 0, 0.25f, 0.25f, 0.0f);
+//                        Matrix.scaleM(modelMatrix, 0, 1.0f, 1.0f, 1.0f);
+//                        Matrix.scaleM(modelMatrix01, 0, 1.0f, 1.0f, 1.0f);
+                    }
 
-                        if (!isModelInit) {
-                            isModelInit = true;
-//                            flag = false;
-                            for (int i = 0; i < MAX; i++) {
-//                            pose.toMatrix(modelMatrix, 0); // 좌표를 가지고 matrix 화 함
-                                pose.toMatrix(modelArrayMatrix[i], 0);
-                                Matrix.translateM(modelArrayMatrix[i], 0,
-                                        pixedMatrix[ranNum[i]][0], pixedMatrix[ranNum[i]][1], pixedMatrix[ranNum[i]][2]);
-                            }
-                        }
+                    // 증강현실의 좌표에 객체가 있는지 받아옴 (plane이 걸려있는가)
+                    Trackable trackable = result.getTrackable();
 
-                        LightEstimate estimate = frame.getLightEstimate();
-                        float lightIntensity = estimate.getPixelIntensity();
-//                        float [] colorCorrection = new float[4];
-                        float [] colorCorrection = new float[]{1.0f,0.0f,1.0f,1.0f};
-                        estimate.getColorCorrection(colorCorrection, 0);
-                        mRenderer.setLightIntensity(lightIntensity);
-//                        mRenderer.setLightIntensity((float)1/100);
-//                        mRenderer.setColorCorrection(new float[]{1.0f,0.0f,1.0f,1.0f});
-                        mRenderer.setColorCorrection(colorCorrection);
+                    if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(pose)) {
 
-//                        float [] cubeMatrix = new float[16];
-//                        pose.toMatrix(cubeMatrix, 0); // 좌표를 가지고 matrix 화 함
+                        // 빛의 세기 값을 넘김
+                        mRenderer.mObj.setLightIntensity(lightIntensity);
 
-                        // 증강 공간의 좌표에 객체 있는지 받아온다(Plane 이 걸려 있는지 확인)
-                        Trackable trackable = result.getTrackable();
+                        // 빛의 색
+                        mRenderer.mObj.setColorCorrection(colorCorrection);
+                        mRenderer.mCup.setColorCorrection(colorCorrection);
 
-                        // 크기 변경(비율)
-//                        Matrix.scaleM(modelMatrix,0,1f,2f, 1f);
-//                    Log.d("모델 매트릭스", Arrays.toString(modelMatrix));
-
-                        // 이동(거리)
-//                        Matrix.translateM(modelMatrix, 0,0f,0.1f,0f);
-
-                        // 회전(각도)               옵셋,       각도,   축이 0 혹은 양수, 음수만 중요
-                        // 수치조절은 각도로 하기 때문에 축의 숫자는 큰 의미가 없다. 음수, 양수만 중요
-//                        Matrix.rotateM(modelMatrix,0,45,1f,0f,1f);
-//                    mRenderer.mObj.setModelMatrix(modelMatrix);
-
-                        for (int i = 0; i < MAX; i++) {
-                            mRenderer.arrayObj.get(i).setModelMatrix(modelArrayMatrix[i]);
-                        }
+                        mRenderer.mObj.setModelMatrix(modelMatrix);
+                        mRenderer.mCup.setModelMatrix(modelMatrix01);
                     }
                 }
 
-
-//                    mTouched = false;
-
-
-                //더블 클릭 하였다면 그린다
-                if(mTouched){
-//                    List<HitResult> results = frame.hitTest(mCurrentX, mCurrentY);
-//                    for(HitResult result : results){
-//                        Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
-////                        float [] modelMatrix = new float[16];
-//
-//                        if(!isModelInit) {
-//                            isModelInit = true;
-//                            pose.toMatrix(modelMatrix, 0); // 좌표를 가지고 matrix 화 함
-//
-//                        }
-//
-////                        float [] cubeMatrix = new float[16];
-////                        pose.toMatrix(cubeMatrix, 0); // 좌표를 가지고 matrix 화 함
-//
-//                        // 증강 공간의 좌표에 객체 있는지 받아온다(Plane 이 걸려 있는지 확인)
-//                        Trackable trackable = result.getTrackable();
-//
-//                        // 크기 변경(비율)
-////                        Matrix.scaleM(modelMatrix,0,1f,2f, 1f);
-//                        Log.d("모델 매트릭스", Arrays.toString(modelMatrix));
-//
-//                        // 이동(거리)
-////                        Matrix.translateM(modelMatrix, 0,0f,0.1f,0f);
-//
-//                        // 회전(각도)               옵셋,       각도,   축이 0 혹은 양수, 음수만 중요
-//                        // 수치조절은 각도로 하기 때문에 축의 숫자는 큰 의미가 없다. 음수, 양수만 중요
-////                        Matrix.rotateM(modelMatrix,0,45,1f,0f,1f);
-//
-//                        // 좌표에 걸린 객체가 Plane 인가
-//                        if(trackable instanceof Plane &&
-//                                // Plane 폴리곤(면) 안에 좌표가 있는가?
-//                                ((Plane)trackable).isPoseInPolygon(pose)
-//                        ){
-//
-//                            mRenderer.mObj.setModelMatrix(modelMatrix);
-//
-//                        }
-//                    }
-//                    mTouched = false;
-                }
-
-
-
-                //Session으로부터 증강현실 속에서의 평면이나 점 객체를 얻을 수 있다.
-                //                                   Plane   Point
+                // Session으로부터 증강현실 속에서의 평면이나 점의 객체를 얻을 수 있다.
+                // 점이면 point, 평면이면 flat
                 Collection<Plane> planes = mSession.getAllTrackables(Plane.class);
 
-
-                boolean isPlaneDetected = false;
-
-                //ARCore 상의 Plane 들을 얻는다.
-                for(Plane plane: planes){
-
-                    // plane 이 정상이라면
-                    if(plane.getTrackingState() == TrackingState.TRACKING &&
-                            plane.getSubsumedBy() == null){ // 다른 평면이 존재하는지
-
+                // AR Core 상의 Planes를 얻는다
+                for (Plane plane : planes) {
+                    // plane이 정상이라면
+                    // plane.getSubsumedBy() --> 다른 평면이 존재하는가
+                    if (plane.getTrackingState() == TrackingState.TRACKING && plane.getSubsumedBy() == null) {
                         isPlaneDetected = true;
-
-                        //렌더링에서 plane 정보를 갱신하여 출력
-//                        mRenderer.mPlane.update(plane);
+                        // 렌더링에서 plane 정보를 갱신하여 출력
+                        mRenderer.mPlane.update(plane);
                     }
                 }
 
-                if(isPlaneDetected) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            myTextView.setText("평면을 찾았다");
-                        }
-                    });
-                }else{
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            myTextView.setText("평면이 안보인다");
-                        }
-                    });
-                }
-
-//                if(mCatched) {
-//                    mCatched = false;
-//
-//                    List<HitResult> results = frame.hitTest(mCatchX, mCatchY);
-//
-//                    String msg = "잡는다";
-//
-//                    for (HitResult result : results) {
-//                        Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
-//
-//                        if (catchCheck(pose.tx() , pose.ty(), pose.tz())) {
-//                            msg = "잡았다"+ pose.tx()+" , "+pose.ty() + " , "+ pose.tz();
-//                            break;
-//                        }
-//                    }
-//
-//                    // 파이널로 바꿔줘야 한다. 그냥 변수 유지용
-//                    String finalMsg = msg;
+//                if (isPlaneDetected) {
 //                    runOnUiThread(new Runnable() {
 //                        @Override
 //                        public void run() {
-//                            myCatchView.setText(finalMsg);
+//                            Toast.makeText(getApplicationContext(), "평면~평면~", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//                } else {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(getApplicationContext(), "평면을 인식 못하겠쥐????", Toast.LENGTH_SHORT).show();
 //                        }
 //                    });
 //                }
 
-                // 카메라 세팅
+                if (mCatched) {
+                    mCatched = false;
+                    results = frame.hitTest(mCatchX, mCatchY);
+                    for (HitResult result : results) {
+                        Pose pose = result.getHitPose(); // 증강현실에서의 좌표
+
+                        if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
+                            String msg = "터키터키~";
+                            answerTxtView.setText(msg);
+                            Log.d(LOGCAT + " 잡았다~", pose.tx() + ", " + pose.ty() + ", " + pose.tz());
+                        } else {
+                            String msg = "못잡게쮜??????";
+                            answerTxtView.setText(msg);
+                        }
+                    }
+
+//                    String finalMsg = msg;
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            myTouchView.setText(finalMsg);
+//                        }
+//                    });
+                }
+
                 Camera camera = frame.getCamera();
-                float [] projMatrix = new float[16];
-                camera.getProjectionMatrix(projMatrix,0,0.1f,100f);
-                float [] viewMatrix = new float[16];
-                camera.getViewMatrix(viewMatrix,0);
+                float[] projMatrix = new float[16];
+                camera.getProjectionMatrix(projMatrix, 0, 2.0f, 20.0f);
+
+                float[] viewMatrix = new float[16];
+                camera.getViewMatrix(viewMatrix, 0);
 
                 mRenderer.setProjectionMatrix(projMatrix);
                 mRenderer.updateViewMatrix(viewMatrix);
+
             }
         });
 
-        mSurfaceView.setPreserveEGLContextOnPause(true);
-        mSurfaceView.setEGLContextClientVersion(2);
-        mSurfaceView.setEGLConfigChooser(8,8,8,8,16,0);
-        mSurfaceView.setRenderer(mRenderer);
+        glSurfaceView.setPreserveEGLContextOnPause(true);
+        glSurfaceView.setEGLContextClientVersion(2);
+        glSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        glSurfaceView.setRenderer(mRenderer);
     }
-
-    // 버튼에 의한 조명 색상 변경
-    public void btnClick(View view){
-        int color = ((ColorDrawable)view.getBackground()).getColor();
-
-        float [] colorCorrection = {
-                Color.red(color) / 255f,
-                Color.green(color) / 255f,
-                Color.blue(color) / 255f,
-                0.5f
-        };
-
-//        mRenderer.mObj.setColorCorrection(colorCorrection);
-
-        for(int i =0;i < MAX; i++){
-            mRenderer.arrayObj.get(i).setColorCorrection(colorCorrection);
-        }
-    }
-
 
     @Override
     protected void onResume() {
         super.onResume();
         requestCameraPermission();
+
         try {
-            // 세션이 없다면 세션 생성
-            if(mSession == null){
-                switch (ArCoreApk.getInstance().requestInstall(this, true)){
+            if (mSession == null) {
+                switch (ArCoreApk.getInstance().requestInstall(this, true)) {
                     case INSTALLED:
                         mSession = new Session(this);
-                        Log.d("메인"," ARCore session 생성");
+                        Log.d("Main", "AR Core Session 생성");
                         break;
-                    //설치가 안되는 기계
                     case INSTALL_REQUESTED:
                         mUserRequestedInstall = false;
-                        Log.d("메인"," ARCore 설치가 필요함");
+                        Log.d("Main", "AR Core 설치가 필요함");
                         break;
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         mConfig = new Config(mSession);
-
         mSession.configure(mConfig);
 
         try {
@@ -461,44 +268,34 @@ public class GameActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        mSurfaceView.onResume();
-        mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-
+        glSurfaceView.onResume();
+        glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        mSurfaceView.onPause();
+        glSurfaceView.onPause();
         mSession.pause();
     }
 
-    void hideStatusBarAndTitleBar(){
+    void hideStatusBarAndTitleBar() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
-    void requestCameraPermission(){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String [] {Manifest.permission.CAMERA},
-                    0
-            );
+    private void requestCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
         }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        // 위임해서 정보를 받아옴
-        mGestureDetector.onTouchEvent(event);
-
-//        if(event.getAction() == MotionEvent.ACTION_DOWN){
+        // 터치이벤트를 위임해서 받아옴
+        mGesture.onTouchEvent(event);
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
 //            mTouched = true;
 //            mCurrentX = event.getX();
 //            mCurrentY = event.getY();
@@ -506,35 +303,20 @@ public class GameActivity extends AppCompatActivity {
         return true;
     }
 
-    boolean catchCheck(float x, float y, float z){
+    boolean catchCheck(float x, float y, float z) {
 
-        float [][] resAll = mRenderer.getMinMaxPoint();
-        float [] minPoint = resAll[0];
-        float [] maxPoint = resAll[1];
-//        float [] minPoint = new float[]{-0.5f,-2.5f,-10.5f};
-//        float [] maxPoint = new float[]{0.5f,2.5f,10.5f};
+        float[][] resAll_Andy = mRenderer.mObj.getMinMaxPoint();
+        float[][] resAll_Cup = mRenderer.mCup.getMinMaxPoint();
+        float[] minPoint_Andy = resAll_Andy[0];
+        float[] maxPoint_Andy = resAll_Andy[1];
+        float[] minPoint_Cup = resAll_Cup[0];
+        float[] maxPoint_Cup = resAll_Cup[1];
 
-        // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
-        if (x >= minPoint[0]-0.1f && x <= maxPoint[0]+0.1f &&
-                y >= minPoint[1]-0.1f && y <= maxPoint[1]+0.1f &&
-                z >= minPoint[2]-1.1f && z <= maxPoint[2]+1.1f ){
+        if (x >= minPoint_Andy[0] - 2.0f && x <= maxPoint_Andy[0] + 2.0f &&
+                y >= minPoint_Andy[1] - 0.0f && y <= maxPoint_Andy[1] - 0.0f &&
+                z >= minPoint_Andy[2] - 1.0f && z <= maxPoint_Andy[2] + 50.0f) {
             return true;
         }
-
         return false;
-    }
-
-    void randomNum() {
-        int random;
-        for(int i = 0; i<MAX ;i++ ) {
-            random = (int) (Math.random() * 50);
-            ranNum[i] = random;
-            for (int j = 0; j < i; j++) {
-                if (ranNum[j] == random) {
-                    i--;
-                    break;
-                }
-            }
-        }
     }
 }

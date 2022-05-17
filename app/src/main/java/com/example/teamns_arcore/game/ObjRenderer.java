@@ -75,38 +75,6 @@ public class ObjRenderer {
                     "    gl_FragColor.rgb = color;\n" +
                     "}";
 
-//    private final String fragmentShaderString =
-//            "precision mediump float;\n" +
-//                    "uniform sampler2D uTexture;\n" +
-//                    "uniform vec4 uLighting;\n" + // 빛을 처리하는 변수
-//                    "uniform vec4 uMaterial;\n" +
-//                    "varying vec3 vPosition;\n" +
-//                    "varying vec3 vNormal;\n" +
-//                    "varying vec2 vTexCoord;\n" +
-//                    "void main() {\n" +
-//                    "    const float kGamma = 0.4545454;\n" +
-//                    "    const float kInverseGamma = 2.2;\n" +
-//                    "    vec3 viewLightDirection = uLighting.xyz;\n" +
-//                    "    float lightIntensity = uLighting.w;\n" +
-//                    "    float materialAmbient = uMaterial.x;\n" +
-//                    "    float materialDiffuse = uMaterial.y;\n" +
-//                    "    float materialSpecular = uMaterial.z;\n" +
-//                    "    float materialSpecularPower = uMaterial.w;\n" +
-//                    "    vec3 viewFragmentDirection = normalize(vPosition);\n" +
-//                    "    vec3 viewNormal = normalize(vNormal);\n" +
-//                    "    vec4 objectColor = texture2D(uTexture, vec2(vTexCoord.x, 1.0 - vTexCoord.y));\n" +
-//                    "    objectColor.rgb = pow(objectColor.rgb, vec3(kInverseGamma));\n" +
-//                    "    float ambient = materialAmbient;\n" +
-//                    "    float diffuse = lightIntensity * materialDiffuse * 0.5 * (dot(viewNormal, viewLightDirection) + 1.0);\n" +
-//                    "    vec3 reflectedLightDirection = reflect(viewLightDirection, viewNormal);\n" +
-//                    "    float specularStrength = max(0.0, dot(viewFragmentDirection, reflectedLightDirection));\n" +
-//                    "    float specular = lightIntensity * materialSpecular * pow(specularStrength, materialSpecularPower);\n" +
-//                    "    gl_FragColor.a = objectColor.a;\n" +
-//                    "    gl_FragColor.rgb = pow(objectColor.rgb * (ambient + diffuse) + specular, vec3(kGamma));\n" +
-//                    "}";
-
-
-
     private Context mContext;
     private String mObjName;
     private String mTextureName;
@@ -128,9 +96,7 @@ public class ObjRenderer {
     // 빛의 세기 변수
     private float mLightIntensity;
 
-    //    float [] mColorCorrection = new float[4];
-    //초기 색상
-    float [] mColorCorrection = {0.8f,0.8f,0.8f,0.8f};
+    float[] mColorCorrection = new float[4];
 
     public ObjRenderer(Context context, String objName, String textureName) {
         mContext = context;
@@ -156,8 +122,7 @@ public class ObjRenderer {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
             bmp.recycle();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }
 
@@ -245,17 +210,15 @@ public class ObjRenderer {
         int colorCorrection = GLES20.glGetUniformLocation(mProgram, "uColorCorrection");
 
 
-
+        // 빛의 색상 값을 가지고 있음
         float[] viewLightDirection = new float[4];
-        float[] lightDirection = new float[] {0.250f, 0.866f, 0.433f, 0.0f};
+        float[] lightDirection = new float[]{0.250f, 0.866f, 0.433f, 0.0f};
         Matrix.multiplyMV(viewLightDirection, 0, mvMatrix, 0, lightDirection, 0);
         normalize(viewLightDirection);
-
-        // 빛의 세기를 받아 재질을 표현한다
+        // 빛의 세기를 받아 표현
         GLES20.glUniform4f(lighting, viewLightDirection[0], viewLightDirection[1], viewLightDirection[2], mLightIntensity);
 
         GLES20.glUniform4f(colorCorrection, mColorCorrection[0], mColorCorrection[1], mColorCorrection[2], mColorCorrection[3]);
-
 
         float ambient = 0.3f;
         float diffuse = 1.0f;
@@ -314,74 +277,63 @@ public class ObjRenderer {
         v[2] /= norm;
     }
 
-    void setColorCorrection(float [] colorCorrection){
+    void setColorCorrection(float[] colorCorrection) {
         mColorCorrection[0] = colorCorrection[0];
         mColorCorrection[1] = colorCorrection[1];
         mColorCorrection[2] = colorCorrection[2];
         mColorCorrection[3] = colorCorrection[3];
     }
 
-    float [] myMinPoint;
-    float [] myMaxPoint;
+    float[] myMinPoint;
+    float[] myMaxPoint;
 
-    float [][] getMinMaxPoint(){
-        calcMinMax();
+    float[][] getMinMaxPoint() {
+        calcMyMinMax();
 
-        float [] localMvMatrix = new float[16]; // 모델 + 뷰
-        float [] localMvpMatrix = new float[16]; // 모델 + 뷰 + 프로젝션
+        float[] localMvMatrix = new float[16];
+        float[] localMvpMatrix = new float[16];
 
-        Matrix.multiplyMM(localMvMatrix, 0, mViewMatrix, 0, mModelMatrix,0);
-        Matrix.multiplyMM(localMvpMatrix, 0, mProjMatrix, 0, localMvMatrix,0);
+        // center를 잡고 min, max를 계산
+        Matrix.multiplyMM(localMvMatrix, 0, mViewMatrix, 0, mModelMatrix, 0);
+        Matrix.multiplyMM(localMvpMatrix, 0, mProjMatrix, 0, localMvpMatrix, 0);
 
-        float [] minPoint = new float[4];
-        Matrix.multiplyMV(minPoint,0,mModelMatrix,0,
-                new float[]{myMinPoint[0],myMinPoint[1],myMinPoint[2],1f},0);
+        float[] minPoint = new float[4];
+        Matrix.multiplyMV(minPoint, 0, mModelMatrix, 0, new float[]{myMinPoint[0], myMinPoint[1], myMinPoint[2], 1.0f}, 0);
 
-        float [] maxPoint = new float[4];
-        Matrix.multiplyMV(maxPoint,0,mModelMatrix,0,
-                new float[]{myMaxPoint[0],myMaxPoint[1],myMaxPoint[2],1f},0);
+        float[] res00 = new float[3];
 
-        float [] res0 = new float[3];
+        res00[0] = Math.min(minPoint[0], myMaxPoint[0]);
+        res00[1] = Math.min(minPoint[1], myMaxPoint[1]);
+        res00[2] = Math.min(minPoint[2], myMaxPoint[2]);
 
-        res0[0] = Math.min(myMinPoint[0],myMaxPoint[0]);
-        res0[1] = Math.min(myMinPoint[1],myMaxPoint[1]);
-        res0[2] = Math.min(myMinPoint[2],myMaxPoint[2]);
+        float[] res01 = new float[3];
 
-        float [] res1 = new float[3];
+        res01[0] = Math.max(minPoint[0], myMaxPoint[0]);
+        res01[1] = Math.max(minPoint[1], myMaxPoint[1]);
+        res01[2] = Math.max(minPoint[2], myMaxPoint[2]);
 
-        res1[0] = Math.max(myMinPoint[0],myMaxPoint[0]);
-        res1[1] = Math.max(myMinPoint[1],myMaxPoint[1]);
-        res1[2] = Math.max(myMinPoint[2],myMaxPoint[2]);
-
-        float [][] resAll = {res0, res1};
+        float[][] resAll = {res00, res01};
 
         return resAll;
     }
 
-
-
-    void calcMinMax(){
+    void calcMyMinMax() {
         myMinPoint = new float[3];
         myMaxPoint = new float[3];
 
-        // obj 의 데이터를 읽어온다
-        float [] vertices = ObjData.getVerticesArray(mObj);
+        float[] vertices = ObjData.getVerticesArray(mObj);
 
-        // x, y, z 를 가지고 있는 점들의 배열
-        // getNumverices() 점의 개수 (4개)
-        // 점1, 점2, 점3, 점4
-        // vertices(점1.x, 점1.y, 점1.z,점2.x, 점2.y, 점2.z,점3.x, 점3.y, 점3.z,4.x, 점4.y, 점4.z)
-        // vertices 의 0번째는 다른값이 들어가므로 1번부터이다
-        for (int i = 1; i < mObj.getNumVertices();i++){
-            // 두개가 들어오면 가장 작은 값을 리턴
-            myMinPoint[0] = Math.min(myMinPoint[0],vertices[i*3+0]); // x
-            myMinPoint[1] = Math.min(myMinPoint[1],vertices[i*3+1]); // y
-            myMinPoint[2] = Math.min(myMinPoint[2],vertices[i*3+2]); // z
+        // x,y,z를 가지고 있는 점들의 배열
+        // 점1, 점2, 점3, 점4 --> Vertice(점1.x, 점1.y, 점1.z,점2.x, 점2.y, 점2.z,점3.x, 점3.y, 점3.z,점4.x, 점4.y, 점4.z)
+        // getNumVertices()는 점의 갯수
+        for (int i = 1; i < mObj.getNumVertices(); i++) {
+            myMinPoint[0] = Math.min(myMinPoint[0], vertices[i * 3 + 0]); // x
+            myMinPoint[1] = Math.min(myMinPoint[1], vertices[i * 3 + 1]); // y
+            myMinPoint[2] = Math.min(myMinPoint[2], vertices[i * 3 + 2]); // z
 
-            // 두개가 들어오면 가장 큰 값을 리턴
-            myMaxPoint[0] = Math.max(myMaxPoint[0],vertices[i*3+0]); // x
-            myMaxPoint[1] = Math.max(myMaxPoint[1],vertices[i*3+1]); // y
-            myMaxPoint[2] = Math.max(myMaxPoint[2],vertices[i*3+2]); // z
+            myMaxPoint[0] = Math.min(myMaxPoint[0], vertices[i * 3 + 0]); // x
+            myMaxPoint[1] = Math.min(myMaxPoint[1], vertices[i * 3 + 1]); // y
+            myMaxPoint[2] = Math.min(myMaxPoint[2], vertices[i * 3 + 2]); // z
         }
     }
 }
