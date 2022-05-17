@@ -95,7 +95,7 @@ public class SelectLevelActivity extends AppCompatActivity {
     public void newarr( ArrayList<StractEn> arrayList2){
         for(int i = 0; i <10; i++){
             int good = Integer.parseInt(arrayList.get(newrand[i]).flagtime);
-            good +=1;
+            good /=2;
             arrayList.get(newrand[i]).setFlagtime(String.valueOf(good));
             arrayList2.add(new StractEn(arrayList.get(newrand[i]).getEnglish(),arrayList.get(newrand[i]).means,arrayList.get(newrand[i]).flagtime));
         }
