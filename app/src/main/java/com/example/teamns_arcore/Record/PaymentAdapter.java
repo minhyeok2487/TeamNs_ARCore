@@ -58,7 +58,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
             Date_Textview = itemView.findViewById(R.id.Date_Textview);
             CorrectNum_Textview = itemView.findViewById(R.id.CorrectNum_Textview);
             Timer_Textview = itemView.findViewById(R.id.Timer_Textview);
-            Score_Textview = itemView.findViewById(R.id.Timer_Textview);
+            Score_Textview = itemView.findViewById(R.id.Score_Textview);
             Level_Textview = itemView.findViewById(R.id.Level_Textview);
         }
     }
