@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
-    tools:context=".HintDialog">
+    android:orientation="vertical"
+    tools:context=".game.HintDialog">
 
     <TextView
+        android:id="@+id/hintTxtView"
+        android:padding="20dp"
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="힌트~"
-        android:textSize="50dp"
         android:fontFamily="@font/fontstyle"
-        android:id="@+id/hintTxtView"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="힌트~"
+        android:textSize="50dp" />
 
 </LinearLayout>
