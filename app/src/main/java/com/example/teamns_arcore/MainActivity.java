@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout editnicknameview;
     EditText editnicknametext;
     TextView currentnickname;
+    Button StartBtn, EndBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
         runMusic();
 
         // 버튼 리스너
+        StartBtn = findViewById(R.id.StartBtn);
+        EndBtn = findViewById(R.id.EndBtn);
+        StartBtn.setVisibility(View.GONE);
+        EndBtn.setVisibility(View.GONE);
         findViewById(R.id.regnicknameBtn).setOnClickListener(onClickListener);
         findViewById(R.id.StartBtn).setOnClickListener(onClickListener);
         findViewById(R.id.EndBtn).setOnClickListener(onClickListener);
@@ -63,8 +68,11 @@ public class MainActivity extends AppCompatActivity {
         if (pname.length() < 1) { //초기 닉네임이 등록되지 않았으면
             pname = editnicknametext.getText().toString();
             editnicknameview.setVisibility(View.GONE);//등록되면 닉네임 등록창 사라짐
+            StartBtn.setVisibility(View.VISIBLE);
+            EndBtn.setVisibility(View.VISIBLE);
         } else {
             editnicknameview.setVisibility(View.VISIBLE);
+
         }
     }
 

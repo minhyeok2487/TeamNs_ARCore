@@ -1,10 +1,12 @@
-package com.example.teamns_arcore.Record;
+package com.example.teamns_arcore.game;
 
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,7 +24,7 @@ public class TimerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timer);
 
         chronometer = findViewById(R.id.chronometer);
-        chronometer.setFormat("시간:%s");
+        chronometer.setFormat("%s");
 
         Button startBtn = findViewById(R.id.start_btn);
         Button stopBtn = findViewById(R.id.stop_btn);
@@ -48,6 +50,8 @@ public class TimerActivity extends AppCompatActivity {
                     chronometer.stop();
                     pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
                     running = false;
+                    int data = getSecondsFromDurationString(chronometer.getText().toString());
+                    Log.d("뭘까>?",data+"");
                 }
             }
         });
@@ -62,5 +66,28 @@ public class TimerActivity extends AppCompatActivity {
                 running=false;
             }
         });
+    }
+
+    public static int getSecondsFromDurationString(String value){
+
+        String [] parts = value.split(":");
+
+        // Wrong format, no value for you.
+//        if(parts.length < 2 || parts.length > 3)
+//            return 0;
+
+        int seconds = 0, minutes = 0, hours = 0;
+
+        if(parts.length == 2){
+            seconds = Integer.parseInt(parts[1]);
+            minutes = Integer.parseInt(parts[0]);
+        }
+        else if(parts.length == 3){
+            seconds = Integer.parseInt(parts[2]);
+            minutes = Integer.parseInt(parts[1]);
+            hours = Integer.parseInt(parts[0]);
+        }
+
+        return seconds + (minutes*60) + (hours*3600);
     }
 }

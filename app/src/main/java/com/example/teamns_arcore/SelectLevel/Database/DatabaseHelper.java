@@ -23,10 +23,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         DBNAME = DBname+".db";
         // TABLE = "levelone";
         TABLE = tableName;
-
+        this.mContext = context;
         DBLOCAION = "/data/data/" + context.getPackageName() + "/databases/";
 
-        this.mContext = context;
 
 //        super(context,DBNAME,null,1); // 1은 데이터베이스 버전
 //        DBNAME = DBname+".db";
