@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.teamns_arcore">
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera.ar"/>
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera.ar" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,6 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TeamNs_ARCore">
+        <activity
+            android:name=".HintDialog"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -19,12 +25,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SelectLevel.SelectLevelMain"></activity>
-        <activity android:name=".SelectLevel.SelectLevelActivity"></activity>
-        <activity android:name=".game.GameActivity"></activity>
-        <activity android:name=".Record.ChartActivity"></activity>
-        <activity android:name=".Record.TableActivity"></activity>
-        <activity android:name=".game.TimerActivity"></activity>
-        <meta-data android:name="com.google.ar.core" android:value="required"/>
+        <activity android:name=".SelectLevel.SelectLevelMain" />
+        <activity android:name=".SelectLevel.SelectLevelActivity" />
+        <activity android:name=".game.GameActivity" />
+        <activity android:name=".Record.ChartActivity" />
+        <activity android:name=".Record.TableActivity" />
+        <activity android:name=".game.TimerActivity" />
+
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="required" />
     </application>
+
 </manifest>

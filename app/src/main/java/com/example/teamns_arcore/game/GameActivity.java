@@ -23,6 +23,7 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -80,9 +81,11 @@ public class GameActivity extends AppCompatActivity {
 
     DatabaseHelper databaseHelper;
 
-    Button colorBtn, skipBtn;
+    Button colorBtn, skipBtn, hintBtn;
 
     ArrayList<StractEn> seArrList;
+
+    View dialogView;
 
     int count = 0;
 
@@ -169,6 +172,8 @@ public class GameActivity extends AppCompatActivity {
         colorBtn = findViewById(R.id.colorBtn);
 
         skipBtn = findViewById(R.id.skipBtn);
+
+        hintBtn = findViewById(R.id.hintBtn);
 
         answerTxtView = findViewById(R.id.answerTxtView);
 
@@ -374,20 +379,31 @@ public class GameActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String[] ranNum = intent.getStringArrayExtra("RandomNum");
 
-        questionTxtView.setText(ranNum[count]);
+        questionTxtView.setText(String.format("[ %s ]", ranNum[count]));
 
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 count++;
                 if (count < ranNum.length) {
-                    questionTxtView.setText(ranNum[count]);
+                    questionTxtView.setText(String.format("[ %s ]", ranNum[count]));
                     Log.d("랜덤이다~" + "if문", ranNum[count] + "");
                 } else {
                     Toast.makeText(getApplicationContext(), "시작단어입니다", Toast.LENGTH_SHORT).show();
                     count = 0;
-                    questionTxtView.setText(ranNum[count]);
+                    questionTxtView.setText(String.format("[ %s ]", ranNum[count]));
                 }
+            }
+        });
+
+        hintBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogView = View.inflate(GameActivity.this, R.layout.activity_hint_dialog, null);
+                AlertDialog.Builder hintDialogBuilder = new AlertDialog.Builder(GameActivity.this);
+                AlertDialog hintDialog = hintDialogBuilder.create();
+                hintDialog.setView(dialogView);
+                hintDialog.show();
             }
         });
 
@@ -571,5 +587,4 @@ public class GameActivity extends AppCompatActivity {
 
         return seconds + (minutes * 60) + (hours * 3600);
     }
-
 }
