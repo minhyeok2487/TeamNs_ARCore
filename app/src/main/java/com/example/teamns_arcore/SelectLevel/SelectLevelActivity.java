@@ -42,7 +42,7 @@ public class SelectLevelActivity extends AppCompatActivity {
     ListView englist;
     Button button;
     File database;
-    
+
     // 버튼 정보 가져오기
     Intent levelintent;
     int lv1,lv2,lv3,lv4;
@@ -136,13 +136,22 @@ public class SelectLevelActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         englist.setAdapter(adapter);
-        
+
         englist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 tts.speak(arrayList2.get(position).english,TextToSpeech.QUEUE_FLUSH, null);
             }
         });
+
+        String[] ranWords = new String[arrayList2.size()];
+        for (int i = 0; i < arrayList2.size(); i++){
+            ranWords[i] = arrayList2.get(i).getEnglish();
+//            Log.d("랜덤랜덤임", ranWords[i] + "");
+        }
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra("RandomNum", ranWords);
+        startActivity(intent);
 
     }
     public void newarr( ArrayList<StractEn> arrayList2){
