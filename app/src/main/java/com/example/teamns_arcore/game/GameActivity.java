@@ -84,8 +84,6 @@ public class GameActivity extends AppCompatActivity {
 
     ArrayList<StractEn> seArrList;
 
-    int[] randomNum = new int[100];
-
     int count = 0;
 
     float[][] colorCorrections = new float[][]{
@@ -381,16 +379,16 @@ public class GameActivity extends AppCompatActivity {
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (count <= ranNum.length) {
-                    count++;
+                count++;
+                if (count < ranNum.length) {
                     questionTxtView.setText(ranNum[count]);
                     Log.d("랜덤이다~" + "if문", ranNum[count] + "");
                 } else {
                     Toast.makeText(getApplicationContext(), "마지막입니다", Toast.LENGTH_SHORT).show();
-                    if (count > ranNum.length) {
-                        count = 0;
+                    count = 0;
+                    if (count >= ranNum.length) {
                         questionTxtView.setText(ranNum[count]);
-                    Log.d("랜덤이다~" + "else문", ranNum[count] + "");
+                        Log.d("랜덤이다~" + "else문", ranNum[count] + "");
                     }
                 }
             }
