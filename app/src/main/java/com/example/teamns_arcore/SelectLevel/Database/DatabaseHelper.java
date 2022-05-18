@@ -12,23 +12,20 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String DBNAME;
-    public static String TABLE;
+    public static String TABLE = "";
     //public static final String DBLOCAION = "/data/data/"+ G.context.getPackageName()+"/databases";
     public static String DBLOCAION = "";
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
-    public DatabaseHelper(Context context, String DBname){
+    public DatabaseHelper(Context context, String tableName, String DBname){
         super(context,DBNAME,null,1);
         DBNAME = DBname+".db";
-        TABLE = "levelone";
-        if(android.os.Build.VERSION.SDK_INT >= 17){
-            DBLOCAION = context.getApplicationInfo().dataDir + "/databases/";
-        }
-        else
-        {
-            DBLOCAION = "/data/data/" + context.getPackageName() + "/databases/";
-        }
+        // TABLE = "levelone";
+        TABLE = tableName;
+
+        DBLOCAION = "/data/data/" + context.getPackageName() + "/databases/";
+
         this.mContext = context;
 
 //        super(context,DBNAME,null,1); // 1은 데이터베이스 버전

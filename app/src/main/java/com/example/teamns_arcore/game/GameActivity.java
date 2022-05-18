@@ -349,7 +349,7 @@ public class GameActivity extends AppCompatActivity {
             }
         }
 
-        DatabaseHelper dh = new DatabaseHelper(getApplicationContext(), "lv_one_quiz");
+        DatabaseHelper dh = new DatabaseHelper(getApplicationContext(),"levelone",  "lv_one_quiz"); // -> db바뀌면서 tablename 넣어줌
         seArrList = dh.getEnglish();
         questionTxtView.setText(seArrList.get(randomNum[i]).getEnglish());
 
