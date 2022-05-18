@@ -21,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -79,11 +80,13 @@ public class GameActivity extends AppCompatActivity {
 
     DatabaseHelper databaseHelper;
 
-    Button colorBtn;
+    Button colorBtn, skipBtn;
 
     ArrayList<StractEn> seArrList;
 
     int[] randomNum = new int[100];
+
+    int count = 0;
 
     float[][] colorCorrections = new float[][]{
             {0.8f, 0.8f, 0.8f, 0.8f},
@@ -166,6 +169,8 @@ public class GameActivity extends AppCompatActivity {
         mSurfaceView = findViewById(R.id.gl_surface_view);
 
         colorBtn = findViewById(R.id.colorBtn);
+
+        skipBtn = findViewById(R.id.skipBtn);
 
         answerTxtView = findViewById(R.id.answerTxtView);
 
@@ -368,25 +373,28 @@ public class GameActivity extends AppCompatActivity {
         mSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         mSurfaceView.setRenderer(mRenderer);
 
-        Random r = new Random();
-
-        for (int i = 0; i < 10; i++) {
-            randomNum[i] = r.nextInt(20); // 0~20까지의 난수
-            for (int j = 0; j < i; j++) {
-                if (randomNum[i] == randomNum[j]) {
-                    i--;
-                }
-            }
-        }
-
-//        DatabaseHelper dh = new DatabaseHelper(getApplicationContext(),"levelone",  "lv_one_quiz"); // -> db바뀌면서 tablename 넣어줌
-//        seArrList = dh.getEnglish();
-
         Intent intent = getIntent();
         String[] ranNum = intent.getStringArrayExtra("RandomNum");
 
-        questionTxtView.setText(ranNum[0]);
-        Log.d("랜덤이다~", ranNum[0] + "");
+        questionTxtView.setText(ranNum[count]);
+
+        skipBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (count <= ranNum.length) {
+                    count++;
+                    questionTxtView.setText(ranNum[count]);
+                    Log.d("랜덤이다~" + "if문", ranNum[count] + "");
+                } else {
+                    Toast.makeText(getApplicationContext(), "마지막입니다", Toast.LENGTH_SHORT).show();
+                    if (count > ranNum.length) {
+                        count = 0;
+                        questionTxtView.setText(ranNum[count]);
+                    Log.d("랜덤이다~" + "else문", ranNum[count] + "");
+                    }
+                }
+            }
+        });
 
 
     }
