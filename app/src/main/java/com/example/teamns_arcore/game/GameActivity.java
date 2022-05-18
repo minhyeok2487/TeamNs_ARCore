@@ -1,6 +1,7 @@
 package com.example.teamns_arcore.game;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -174,11 +175,11 @@ public class GameActivity extends AppCompatActivity {
         chronometer = findViewById(R.id.chronometer);
         chronometer.setFormat("%s");
 
-        if(!running){ //running이 false이면 타이머 돌아감
-            chronometer.setBase(SystemClock.elapsedRealtime()-pauseOffset);
+        if (!running) { //running이 false이면 타이머 돌아감
+            chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
             chronometer.start();
             running = true;
-        }else{
+        } else {
             chronometer.stop();
             pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
             timerValue = getSecondsFromDurationString(chronometer.getText().toString());
@@ -378,11 +379,16 @@ public class GameActivity extends AppCompatActivity {
             }
         }
 
-        DatabaseHelper dh = new DatabaseHelper(getApplicationContext(),"levelone",  "lv_one_quiz"); // -> db바뀌면서 tablename 넣어줌
-        seArrList = dh.getEnglish();
-        questionTxtView.setText(seArrList.get(randomNum[i]).getEnglish());
+//        DatabaseHelper dh = new DatabaseHelper(getApplicationContext(),"levelone",  "lv_one_quiz"); // -> db바뀌면서 tablename 넣어줌
+//        seArrList = dh.getEnglish();
 
-        Log.d("랜덤랜덤~", randomNum[i] + "");
+        Intent intent = getIntent();
+        String[] ranNum = intent.getStringArrayExtra("RandomNum");
+
+        questionTxtView.setText(ranNum[0]);
+        Log.d("랜덤이다~", ranNum[0] + "");
+
+
     }
 
     // 버튼에 의한 조명 색상 변경
@@ -546,22 +552,21 @@ public class GameActivity extends AppCompatActivity {
     }
 
     //타이머 변환 메서드
-    public static int getSecondsFromDurationString(String value){
+    public static int getSecondsFromDurationString(String value) {
 
-        String [] parts = value.split(":");
+        String[] parts = value.split(":");
         int seconds = 0, minutes = 0, hours = 0;
 
-        if(parts.length == 2){
+        if (parts.length == 2) {
             seconds = Integer.parseInt(parts[1]);
             minutes = Integer.parseInt(parts[0]);
-        }
-        else if(parts.length == 3){
+        } else if (parts.length == 3) {
             seconds = Integer.parseInt(parts[2]);
             minutes = Integer.parseInt(parts[1]);
             hours = Integer.parseInt(parts[0]);
         }
 
-        return seconds + (minutes*60) + (hours*3600);
+        return seconds + (minutes * 60) + (hours * 3600);
     }
 
 }
