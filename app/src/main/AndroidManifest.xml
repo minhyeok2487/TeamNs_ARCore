@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TeamNs_ARCore">
         <activity
-            android:name=".HintDialog"
+            android:name=".game.HintDialog"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

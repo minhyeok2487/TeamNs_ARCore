@@ -49,6 +49,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -63,7 +65,7 @@ public class GameActivity extends AppCompatActivity {
     //////////////////////////
 
 
-    TextView answerTxtView, questionTxtView;
+    TextView answerTxtView, questionTxtView, hintTxtView;
 
 
     GLSurfaceView mSurfaceView;
@@ -377,21 +379,24 @@ public class GameActivity extends AppCompatActivity {
         mSurfaceView.setRenderer(mRenderer);
 
         Intent intent = getIntent();
-        String[] ranNum = intent.getStringArrayExtra("RandomNum");
+        String[] ranNumEng = intent.getStringArrayExtra("RandomEng");
 
-        questionTxtView.setText(String.format("[ %s ]", ranNum[count]));
+        String[] ranNumKor = intent.getStringArrayExtra("RandomKor");
+
+        questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
+
 
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 count++;
-                if (count < ranNum.length) {
-                    questionTxtView.setText(String.format("[ %s ]", ranNum[count]));
-                    Log.d("랜덤이다~" + "if문", ranNum[count] + "");
+                if (count < ranNumKor.length) {
+                    questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
+                    Log.d("랜덤이다~" + "if문", ranNumKor[count] + "");
                 } else {
                     Toast.makeText(getApplicationContext(), "시작단어입니다", Toast.LENGTH_SHORT).show();
                     count = 0;
-                    questionTxtView.setText(String.format("[ %s ]", ranNum[count]));
+                    questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
                 }
             }
         });
@@ -404,6 +409,28 @@ public class GameActivity extends AppCompatActivity {
                 AlertDialog hintDialog = hintDialogBuilder.create();
                 hintDialog.setView(dialogView);
                 hintDialog.show();
+
+                hintTxtView = dialogView.findViewById(R.id.hintTxtView);
+                hintTxtView.setText(String.format("[ %s ]", ranNumEng[count]));
+
+                Thread th = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // n초가 지나면 다이얼로그를 닫도록 타이머를 줌
+                        TimerTask timerTask = new TimerTask() {
+                            @Override
+                            public void run() {
+                                hintDialog.dismiss();
+                            }
+                        };
+
+                        Timer timer = new Timer();
+                        timer.schedule(timerTask, 2000);
+                    }
+                });
+                th.start();
+
+
             }
         });
 
