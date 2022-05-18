@@ -16,7 +16,7 @@ import com.example.teamns_arcore.SelectLevel.SelectLevelMain;
 public class MainActivity extends AppCompatActivity {
 
     MediaPlayer mediaPlayer;
-    public static String pname ="";
+    public static String pname = "";
     RelativeLayout editnicknameview;
     EditText editnicknametext;
     TextView currentnickname;
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        currentnickname = (TextView)findViewById(R.id.currentnickname);
+        currentnickname = findViewById(R.id.currentnickname);
         runMusic();
 
         // 버튼 리스너
@@ -43,10 +43,10 @@ public class MainActivity extends AppCompatActivity {
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.regnicknameBtn:
                     RegNickname();
-                    currentnickname.setText("현재 닉네임 : "+ pname);
+                    currentnickname.setText("현재 닉네임 : " + pname);
                     break;
                 case R.id.StartBtn:
                     //난이도 선택
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.EndBtn:
                     //게임종료메서드
+                    finish();
                     break;
             }
         }
@@ -61,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
 
     //초기 닉네임 등록 메소드
     //닉네임이 있으면 안보이고 없으면 보임
-    public void RegNickname(){
+    public void RegNickname() {
         editnicknameview = findViewById(R.id.editnicknameview);
         editnicknametext = findViewById(R.id.editnicknametext);
-        if(pname.length()<1){ //초기 닉네임이 등록되지 않았으면
+        if (pname.length() < 1) { //초기 닉네임이 등록되지 않았으면
             pname = editnicknametext.getText().toString();
             editnicknameview.setVisibility(View.GONE);//등록되면 닉네임 등록창 사라짐
             StartBtn.setVisibility(View.VISIBLE);
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void runMusic(){
+    private void runMusic() {
         mediaPlayer = MediaPlayer.create(this, R.raw.music);
         mediaPlayer.setLooping(true); //무한재생
         mediaPlayer.start();

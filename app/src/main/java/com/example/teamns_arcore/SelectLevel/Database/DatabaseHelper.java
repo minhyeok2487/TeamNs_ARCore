@@ -12,16 +12,17 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String DBNAME;
-    public static String TABLE;
+    public static String TABLE = "";
     //public static final String DBLOCAION = "/data/data/"+ G.context.getPackageName()+"/databases";
     public static String DBLOCAION = "";
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
-    public DatabaseHelper(Context context, String DBname){
+    public DatabaseHelper(Context context, String tableName, String DBname){
         super(context,DBNAME,null,1);
         DBNAME = DBname+".db";
-        TABLE = "levelone";
+        // TABLE = "levelone";
+        TABLE = tableName;
         this.mContext = context;
         DBLOCAION = "/data/data/" + context.getPackageName() + "/databases/";
 
@@ -58,7 +59,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // get records
     public ArrayList<StractEn> getEnglish(){
-
         StractEn stractEn = null;
         ArrayList<StractEn> arrayListEng = new ArrayList<StractEn>();
         OpenDatabase();
@@ -70,9 +70,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             arrayListEng.add(stractEn);
             cursor.moveToNext();
         }
-        for(int i = 0; i<=3; i++){
-            System.out.println("arrayListEng.get(i) : "+arrayListEng.get(i));
-        }
+        System.out.println("arrayListEng.get(0) : "+arrayListEng.get(0).getEnglish() + "," + arrayListEng.get(0).getMeans() + "," +arrayListEng.get(0).getFlagtime());
+        // arrayListEng.get(0) : act,행동하다,행동,행위,100 들어옴
         cursor.close();
         CloseDatabase();
         return arrayListEng;

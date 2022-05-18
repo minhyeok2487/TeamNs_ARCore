@@ -9,12 +9,19 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.teamns_arcore.R;
+
 import com.example.teamns_arcore.game.TimerActivity;
 import com.example.teamns_arcore.game.GameActivity;
+
+
+import java.io.File;
+
 
 public class SelectLevelMain extends AppCompatActivity {
     TextView count_view;
     RelativeLayout count_view_layout;
+    // 레벨버튼 intent
+    //Intent leveltwo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,7 @@ public class SelectLevelMain extends AppCompatActivity {
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            //leveltwo = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
             switch (v.getId()){
                 case R.id.level1Btn:
                     setCount_view(GameActivity.class);
@@ -59,6 +67,12 @@ public class SelectLevelMain extends AppCompatActivity {
             }
         }
     };
+    // 레벨 버튼 intent
+    private void levelActivity(Class c, int i) {
+        Intent levelintent = new Intent(this, c);
+        levelintent.putExtra("choice", (int)i);
+        startActivity(levelintent);
+    }
 
     View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
         @Override
@@ -122,6 +136,10 @@ public class SelectLevelMain extends AppCompatActivity {
                 }
             }
             public void onFinish() {
+                //끝날때 실행
+                count_view_layout.setVisibility(View.GONE);
+                //myStartActivity(SelectLevelActivity.class); --> levelintent 사용해서 막음
+                levelActivity(SelectLevelActivity.class,1);
             }
         };
         if(mrunning[0]){

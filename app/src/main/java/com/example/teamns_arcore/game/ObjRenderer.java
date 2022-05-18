@@ -106,7 +106,6 @@ public class ObjRenderer {
 //                    "}";
 
 
-
     private Context mContext;
     private String mObjName;
     private String mTextureName;
@@ -130,7 +129,7 @@ public class ObjRenderer {
 
     //    float [] mColorCorrection = new float[4];
     //초기 색상
-    float [] mColorCorrection = {0.8f,0.8f,0.8f,0.8f};
+    float[] mColorCorrection = {0.8f, 0.8f, 0.8f, 0.8f};
 
     public ObjRenderer(Context context, String objName, String textureName) {
         mContext = context;
@@ -156,8 +155,7 @@ public class ObjRenderer {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
             bmp.recycle();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }
 
@@ -245,9 +243,8 @@ public class ObjRenderer {
         int colorCorrection = GLES20.glGetUniformLocation(mProgram, "uColorCorrection");
 
 
-
         float[] viewLightDirection = new float[4];
-        float[] lightDirection = new float[] {0.250f, 0.866f, 0.433f, 0.0f};
+        float[] lightDirection = new float[]{0.250f, 0.866f, 0.433f, 0.0f};
         Matrix.multiplyMV(viewLightDirection, 0, mvMatrix, 0, lightDirection, 0);
         normalize(viewLightDirection);
 
@@ -314,74 +311,73 @@ public class ObjRenderer {
         v[2] /= norm;
     }
 
-    void setColorCorrection(float [] colorCorrection){
+    void setColorCorrection(float[] colorCorrection) {
         mColorCorrection[0] = colorCorrection[0];
         mColorCorrection[1] = colorCorrection[1];
         mColorCorrection[2] = colorCorrection[2];
         mColorCorrection[3] = colorCorrection[3];
     }
 
-    float [] myMinPoint;
-    float [] myMaxPoint;
+    float[] myMinPoint;
+    float[] myMaxPoint;
 
-    float [][] getMinMaxPoint(){
+    float[][] getMinMaxPoint() {
         calcMinMax();
 
-        float [] localMvMatrix = new float[16]; // 모델 + 뷰
-        float [] localMvpMatrix = new float[16]; // 모델 + 뷰 + 프로젝션
+        float[] localMvMatrix = new float[16]; // 모델 + 뷰
+        float[] localMvpMatrix = new float[16]; // 모델 + 뷰 + 프로젝션
 
-        Matrix.multiplyMM(localMvMatrix, 0, mViewMatrix, 0, mModelMatrix,0);
-        Matrix.multiplyMM(localMvpMatrix, 0, mProjMatrix, 0, localMvMatrix,0);
+        Matrix.multiplyMM(localMvMatrix, 0, mViewMatrix, 0, mModelMatrix, 0);
+        Matrix.multiplyMM(localMvpMatrix, 0, mProjMatrix, 0, localMvMatrix, 0);
 
-        float [] minPoint = new float[4];
-        Matrix.multiplyMV(minPoint,0,mModelMatrix,0,
-                new float[]{myMinPoint[0],myMinPoint[1],myMinPoint[2],1f},0);
+        float[] minPoint = new float[4];
+        Matrix.multiplyMV(minPoint, 0, mModelMatrix, 0,
+                new float[]{myMinPoint[0], myMinPoint[1], myMinPoint[2], 1f}, 0);
 
-        float [] maxPoint = new float[4];
-        Matrix.multiplyMV(maxPoint,0,mModelMatrix,0,
-                new float[]{myMaxPoint[0],myMaxPoint[1],myMaxPoint[2],1f},0);
+        float[] maxPoint = new float[4];
+        Matrix.multiplyMV(maxPoint, 0, mModelMatrix, 0,
+                new float[]{myMaxPoint[0], myMaxPoint[1], myMaxPoint[2], 1f}, 0);
 
-        float [] res0 = new float[3];
+        float[] res0 = new float[3];
 
-        res0[0] = Math.min(myMinPoint[0],myMaxPoint[0]);
-        res0[1] = Math.min(myMinPoint[1],myMaxPoint[1]);
-        res0[2] = Math.min(myMinPoint[2],myMaxPoint[2]);
+        res0[0] = Math.min(myMinPoint[0], myMaxPoint[0]);
+        res0[1] = Math.min(myMinPoint[1], myMaxPoint[1]);
+        res0[2] = Math.min(myMinPoint[2], myMaxPoint[2]);
 
-        float [] res1 = new float[3];
+        float[] res1 = new float[3];
 
-        res1[0] = Math.max(myMinPoint[0],myMaxPoint[0]);
-        res1[1] = Math.max(myMinPoint[1],myMaxPoint[1]);
-        res1[2] = Math.max(myMinPoint[2],myMaxPoint[2]);
+        res1[0] = Math.max(myMinPoint[0], myMaxPoint[0]);
+        res1[1] = Math.max(myMinPoint[1], myMaxPoint[1]);
+        res1[2] = Math.max(myMinPoint[2], myMaxPoint[2]);
 
-        float [][] resAll = {res0, res1};
+        float[][] resAll = {res0, res1};
 
         return resAll;
     }
 
 
-
-    void calcMinMax(){
+    void calcMinMax() {
         myMinPoint = new float[3];
         myMaxPoint = new float[3];
 
         // obj 의 데이터를 읽어온다
-        float [] vertices = ObjData.getVerticesArray(mObj);
+        float[] vertices = ObjData.getVerticesArray(mObj);
 
         // x, y, z 를 가지고 있는 점들의 배열
         // getNumverices() 점의 개수 (4개)
         // 점1, 점2, 점3, 점4
         // vertices(점1.x, 점1.y, 점1.z,점2.x, 점2.y, 점2.z,점3.x, 점3.y, 점3.z,4.x, 점4.y, 점4.z)
         // vertices 의 0번째는 다른값이 들어가므로 1번부터이다
-        for (int i = 1; i < mObj.getNumVertices();i++){
+        for (int i = 1; i < mObj.getNumVertices(); i++) {
             // 두개가 들어오면 가장 작은 값을 리턴
-            myMinPoint[0] = Math.min(myMinPoint[0],vertices[i*3+0]); // x
-            myMinPoint[1] = Math.min(myMinPoint[1],vertices[i*3+1]); // y
-            myMinPoint[2] = Math.min(myMinPoint[2],vertices[i*3+2]); // z
+            myMinPoint[0] = Math.min(myMinPoint[0], vertices[i * 3 + 0]); // x
+            myMinPoint[1] = Math.min(myMinPoint[1], vertices[i * 3 + 1]); // y
+            myMinPoint[2] = Math.min(myMinPoint[2], vertices[i * 3 + 2]); // z
 
             // 두개가 들어오면 가장 큰 값을 리턴
-            myMaxPoint[0] = Math.max(myMaxPoint[0],vertices[i*3+0]); // x
-            myMaxPoint[1] = Math.max(myMaxPoint[1],vertices[i*3+1]); // y
-            myMaxPoint[2] = Math.max(myMaxPoint[2],vertices[i*3+2]); // z
+            myMaxPoint[0] = Math.max(myMaxPoint[0], vertices[i * 3 + 0]); // x
+            myMaxPoint[1] = Math.max(myMaxPoint[1], vertices[i * 3 + 1]); // y
+            myMaxPoint[2] = Math.max(myMaxPoint[2], vertices[i * 3 + 2]); // z
         }
     }
 }
