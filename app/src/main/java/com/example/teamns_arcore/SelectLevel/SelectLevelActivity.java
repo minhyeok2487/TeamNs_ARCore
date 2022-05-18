@@ -125,7 +125,7 @@ public class SelectLevelActivity extends AppCompatActivity {
             }
         }
     };
-
+//
     public void gogogo(){
         ArrayList<StractEn> arrayList2 = new ArrayList<StractEn>();
         rand(arrayList2);
