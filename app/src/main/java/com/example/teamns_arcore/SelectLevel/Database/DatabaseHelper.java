@@ -22,14 +22,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context,DBNAME,null,1);
         DBNAME = DBname+".db";
         TABLE = "levelone";
-        if(android.os.Build.VERSION.SDK_INT >= 17){
-            DBLOCAION = context.getApplicationInfo().dataDir + "/databases/";
-        }
-        else
-        {
-            DBLOCAION = "/data/data/" + context.getPackageName() + "/databases/";
-        }
         this.mContext = context;
+        DBLOCAION = "/data/data/" + context.getPackageName() + "/databases/";
+
 
 //        super(context,DBNAME,null,1); // 1은 데이터베이스 버전
 //        DBNAME = DBname+".db";
