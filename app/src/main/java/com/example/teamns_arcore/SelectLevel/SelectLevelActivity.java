@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -28,9 +30,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
-
+import static android.speech.tts.TextToSpeech.ERROR;
 public class SelectLevelActivity extends AppCompatActivity {
 
     ArrayList<StractEn> arrayList = new ArrayList<StractEn>();
@@ -45,6 +48,7 @@ public class SelectLevelActivity extends AppCompatActivity {
     int lv1,lv2,lv3,lv4;
     DatabaseHelper mDBHELPER;
 
+    private TextToSpeech tts;// TTS 변수 선언
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +85,19 @@ public class SelectLevelActivity extends AppCompatActivity {
             }
         }
         arrayList = mDBHELPER.getEnglish(); //  mDBHELPER.getEnglish() == return arrayListEng
+
+        // TTS를 생성하고 OnInitListener로 초기화 한다.
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != ERROR) {
+                    // 언어를 선택한다.
+                    tts.setLanguage(Locale.ENGLISH);
+                    tts.setSpeechRate((float)0.8); // 음성 속도 지정
+                }
+            }
+        });
+
 
         gogogo();
 
@@ -119,6 +136,14 @@ public class SelectLevelActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         englist.setAdapter(adapter);
+        
+        englist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                tts.speak(arrayList2.get(position).english,TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
+
     }
     public void newarr( ArrayList<StractEn> arrayList2){
         for(int i = 0; i <10; i++){

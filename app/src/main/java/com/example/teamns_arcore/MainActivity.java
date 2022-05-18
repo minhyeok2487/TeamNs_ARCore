@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void runMusic() {
         mediaPlayer = MediaPlayer.create(this, R.raw.music);
-        mediaPlayer.setLooping(true); //무한재생
-        mediaPlayer.start();
+        //mediaPlayer.setLooping(true); //무한재생
+        //mediaPlayer.start();
     }
 }
