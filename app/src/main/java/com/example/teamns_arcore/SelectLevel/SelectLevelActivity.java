@@ -146,7 +146,7 @@ public class SelectLevelActivity extends AppCompatActivity {
 
         String[] ranWords = new String[arrayList2.size()];
         for (int i = 0; i < arrayList2.size(); i++){
-            ranWords[i] = arrayList2.get(i).getEnglish();
+            ranWords[i] = arrayList2.get(i).getMeans();
 //            Log.d("랜덤랜덤임", ranWords[i] + "");
         }
         Intent intent = new Intent(this, GameActivity.class);
