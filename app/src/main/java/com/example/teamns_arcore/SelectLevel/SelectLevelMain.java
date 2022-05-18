@@ -10,10 +10,15 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.teamns_arcore.R;
 import com.example.teamns_arcore.Record.TimerActivity;
+import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
+
+import java.io.File;
 
 public class SelectLevelMain extends AppCompatActivity {
     TextView count_view;
     RelativeLayout count_view_layout;
+    // 레벨버튼 intent
+    //Intent leveltwo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +38,21 @@ public class SelectLevelMain extends AppCompatActivity {
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            //leveltwo = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
             switch (v.getId()){
                 case R.id.level1Btn:
                     setCount_view();
                     break;
                 case R.id.level2Btn:
-                    myStartActivity(SelectLevelActivity.class);
+                    levelActivity(SelectLevelActivity.class,2);
+                    //leveltwo.putExtra("choice", (int)2);
+                    //startActivity(leveltwo);
                     break;
                 case R.id.level3Btn:
-                    myStartActivity(SelectLevelActivity.class);
+                    levelActivity(SelectLevelActivity.class,3);
                     break;
                 case R.id.level4Btn:
-                    myStartActivity(SelectLevelActivity.class);
+                    levelActivity(SelectLevelActivity.class,4);
                     break;
                 case R.id.resetdataBtn:
                     //데이터 초기화 - 타이머 액티비티 박아둠
@@ -53,6 +61,12 @@ public class SelectLevelMain extends AppCompatActivity {
             }
         }
     };
+    // 레벨 버튼 intent
+    private void levelActivity(Class c, int i) {
+        Intent levelintent = new Intent(this, c);
+        levelintent.putExtra("choice", (int)i);
+        startActivity(levelintent);
+    }
 
     private void myStartActivity(Class c) {
         Intent intent = new Intent(this, c);
@@ -87,7 +101,8 @@ public class SelectLevelMain extends AppCompatActivity {
             public void onFinish() {
                 //끝날때 실행
                 count_view_layout.setVisibility(View.GONE);
-                myStartActivity(SelectLevelActivity.class);
+                //myStartActivity(SelectLevelActivity.class); --> levelintent 사용해서 막음
+                levelActivity(SelectLevelActivity.class,1);
             }
         }.start();
     }

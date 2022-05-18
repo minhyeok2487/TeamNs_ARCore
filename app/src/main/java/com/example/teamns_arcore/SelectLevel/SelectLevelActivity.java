@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,6 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class SelectLevelActivity extends AppCompatActivity {
@@ -35,16 +38,40 @@ public class SelectLevelActivity extends AppCompatActivity {
     ArrayAdapter adapter;
     ListView englist;
     Button button;
-
+    File database;
+    
+    // 버튼 정보 가져오기
+    Intent levelintent;
+    int lv1,lv2,lv3,lv4;
+    DatabaseHelper mDBHELPER;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selectlevel_list);
         englist = findViewById(R.id.englist);
+        // SelectLevelMain.java에서 보낸 파이어베이스에 저장된 정보가져오기
+        //intent = getIntent();
+        levelintent = getIntent();
 
+        // lv에 따른 intent값 다르게 받기
+        lv1 = levelintent.getIntExtra("choice", 1);
+        lv2 = levelintent.getIntExtra("choice", 2);
+        lv3 = levelintent.getIntExtra("choice", 3);
+        lv4 = levelintent.getIntExtra("choice", 4);
+        int a = lv1; int b = lv2; int c = lv3; int d = lv4;
+        if(a==lv1){ // 같으면 자기 db table 가지고 와주라
+            mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelone","lv_one_quiz");
+        }else if(b==lv2){
+            mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "leveltwo","lv_one_quiz");
+        }else if(c==lv3){
+            mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelthree","lv_one_quiz");
+        }else if(d==lv4){
+            mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelfour","lv_one_quiz");
+        }else{
+            System.out.println("어떤 버튼을 눌렀는지 모릅니다.");
+        }
 
-        DatabaseHelper mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "lv_one_quiz");
         File database = getApplicationContext().getDatabasePath(DatabaseHelper.DBNAME);
 
         if(database.exists()==false){
@@ -61,6 +88,7 @@ public class SelectLevelActivity extends AppCompatActivity {
         findViewById(R.id.button).setOnClickListener(onClickListener);
         findViewById(R.id.gotogameBtn).setOnClickListener(onClickListener);
         findViewById(R.id.gotoChartBtn).setOnClickListener(onClickListener);
+
     }
 
     //버튼 클릭 리스너
@@ -99,8 +127,29 @@ public class SelectLevelActivity extends AppCompatActivity {
             arrayList.get(newrand[i]).setFlagtime(String.valueOf(good));
             arrayList2.add(new StractEn(arrayList.get(newrand[i]).getEnglish(),arrayList.get(newrand[i]).means,arrayList.get(newrand[i]).flagtime));
         }
+        ////
+        Map<StractEn, Double> w = new HashMap<StractEn, Double>();
+        for(int i =0; i<arrayList.size();i++){
+            w.put(arrayList.get(i),100D);//가중치%
+        }
+        Random rand = new Random();
+        Log.d("asd",getWeightedRandom(w, rand).getEnglish());
     }
 
+    public static <E> E getWeightedRandom(Map<E, Double> weights, Random random) {
+        E result = null;
+        double bestValue = Double.MAX_VALUE;
+
+        for (E element : weights.keySet()) {
+            double value = -Math.log(random.nextDouble()) / weights.get(element);
+            if (value < bestValue) {
+                bestValue = value;
+                result = element;
+            }
+        }
+        return result;
+    }
+    ////
     public void rand( ArrayList<StractEn> arrayList2){
         int count = 10; // 난수 생성 갯수
         int a[] = new int[count];
@@ -120,6 +169,8 @@ public class SelectLevelActivity extends AppCompatActivity {
             System.out.println("랜덤수"+newrand[i]);
         }
     }
+
+
 
     public Boolean copydatabase(Context context){
         try {
