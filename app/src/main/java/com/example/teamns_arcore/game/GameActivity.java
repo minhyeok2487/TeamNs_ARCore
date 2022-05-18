@@ -384,12 +384,9 @@ public class GameActivity extends AppCompatActivity {
                     questionTxtView.setText(ranNum[count]);
                     Log.d("랜덤이다~" + "if문", ranNum[count] + "");
                 } else {
-                    Toast.makeText(getApplicationContext(), "마지막입니다", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "시작단어입니다", Toast.LENGTH_SHORT).show();
                     count = 0;
-                    if (count >= ranNum.length) {
-                        questionTxtView.setText(ranNum[count]);
-                        Log.d("랜덤이다~" + "else문", ranNum[count] + "");
-                    }
+                    questionTxtView.setText(ranNum[count]);
                 }
             }
         });
