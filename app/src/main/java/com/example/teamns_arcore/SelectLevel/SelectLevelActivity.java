@@ -85,7 +85,7 @@ public class SelectLevelActivity extends AppCompatActivity {
             }
         }
         arrayList = mDBHELPER.getEnglish(); //  mDBHELPER.getEnglish() == return arrayListEng
-
+        //
         // TTS를 생성하고 OnInitListener로 초기화 한다.
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
