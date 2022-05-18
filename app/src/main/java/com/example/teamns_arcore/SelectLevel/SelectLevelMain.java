@@ -79,16 +79,16 @@ public class SelectLevelMain extends AppCompatActivity {
         public boolean onLongClick(View view) {
             switch (view.getId()){
                 case R.id.level1Btn:
-                    myStartActivity(SelectLevelActivity.class);
+                    levelActivity(SelectLevelActivity.class,1);
                     break;
                 case R.id.level2Btn:
-                    myStartActivity(SelectLevelActivity.class);
+                    levelActivity(SelectLevelActivity.class,2);
                     break;
                 case R.id.level3Btn:
-                    myStartActivity(SelectLevelActivity.class);
+                    levelActivity(SelectLevelActivity.class,3);
                     break;
                 case R.id.level4Btn:
-                    myStartActivity(SelectLevelActivity.class);
+                    levelActivity(SelectLevelActivity.class,4);
                     break;
             }
             return true;
@@ -127,9 +127,9 @@ public class SelectLevelMain extends AppCompatActivity {
                 long getMin = millisUntilFinished - (millisUntilFinished / (60 * 60 * 1000)) ;
                 // 초단위
                 String second = String.valueOf((getMin % (60 * 1000)) / 1000); // 나머지
-                count_view.setText(second);
-                if((getMin % (60 * 1000)) / 1000<3){
+                if((getMin % (60 * 1000)) / 1000<4){
                     myStartActivity(c);
+                    count_view.setText(second);
                 } else if((getMin % (60 * 1000)) / 1000<2){
                     mrunning[0] = false;
                     count_view.setText("1");
@@ -137,9 +137,8 @@ public class SelectLevelMain extends AppCompatActivity {
             }
             public void onFinish() {
                 //끝날때 실행
-                count_view_layout.setVisibility(View.GONE);
+                //count_view_layout.setVisibility(View.GONE);
                 //myStartActivity(SelectLevelActivity.class); --> levelintent 사용해서 막음
-                levelActivity(SelectLevelActivity.class,1);
             }
         };
         if(mrunning[0]){
