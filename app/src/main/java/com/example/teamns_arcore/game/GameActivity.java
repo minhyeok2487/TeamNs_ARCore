@@ -8,6 +8,7 @@ import android.hardware.display.DisplayManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,7 +45,18 @@ import java.util.List;
 
 public class GameActivity extends AppCompatActivity {
 
+<<<<<<< Updated upstream
     TextView myTextView, myCatchView;
+=======
+    ////타이머 관련 변수//////////
+    private Chronometer chronometer;
+    private boolean running;
+    private long pauseOffset;
+    private int timerValue;
+    //////////////////////////
+
+    TextView answerTxtView, questionTxtView;
+>>>>>>> Stashed changes
 
     GLSurfaceView mSurfaceView;
     MainRenderer mRenderer;
@@ -145,6 +158,21 @@ public class GameActivity extends AppCompatActivity {
 
         colorBtn = (Button) findViewById(R.id.colorBtn);
 
+        //////타이머 관련////////
+        chronometer = findViewById(R.id.chronometer);
+        chronometer.setFormat("%s");
+
+        if(!running){ //running이 false이면 타이머 돌아감
+            chronometer.setBase(SystemClock.elapsedRealtime()-pauseOffset);
+            chronometer.start();
+            running = true;
+        }else{
+            chronometer.stop();
+            pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
+            timerValue = getSecondsFromDurationString(chronometer.getText().toString());
+            running = false;
+        }
+        /////////////
         randomNum();
 
         for(int i = 0; i<ranNum.length;i++) {
@@ -557,4 +585,24 @@ public class GameActivity extends AppCompatActivity {
         i++;
         i %= 4;
     }
+
+    //타이머 변환 메서드
+    public static int getSecondsFromDurationString(String value){
+
+        String [] parts = value.split(":");
+        int seconds = 0, minutes = 0, hours = 0;
+
+        if(parts.length == 2){
+            seconds = Integer.parseInt(parts[1]);
+            minutes = Integer.parseInt(parts[0]);
+        }
+        else if(parts.length == 3){
+            seconds = Integer.parseInt(parts[2]);
+            minutes = Integer.parseInt(parts[1]);
+            hours = Integer.parseInt(parts[0]);
+        }
+
+        return seconds + (minutes*60) + (hours*3600);
+    }
+
 }

@@ -1,93 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="20dp">
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <android.widget.Button
+                android:id="@+id/level1Btn"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/border_round_thin"
+                android:fontFamily="@font/fontstyle"
+                android:padding="10dp"
+                android:text="level1"
+                android:textColor="@color/teal_200"
+                android:textSize="35dp" />
+
+            <android.widget.Button
+                android:id="@+id/level2Btn"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/border_round_thin"
+                android:fontFamily="@font/fontstyle"
+                android:padding="10dp"
+                android:text="level2"
+                android:textColor="#F4E347"
+                android:textSize="35dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <android.widget.Button
+                android:id="@+id/level3Btn"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/border_round_thin"
+                android:fontFamily="@font/fontstyle"
+                android:padding="10dp"
+                android:text="level3"
+                android:textColor="#FF5722"
+                android:textSize="35dp" />
+
+            <android.widget.Button
+                android:id="@+id/level4Btn"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/border_round_thin"
+                android:fontFamily="@font/fontstyle"
+                android:padding="10dp"
+                android:text="level4"
+                android:textColor="#E91E63"
+                android:textSize="35dp" />
+
+        </LinearLayout>
+
+        <android.widget.Button
+            android:id="@+id/resetdataBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/border_round_thin"
+            android:fontFamily="@font/fontstyle"
+            android:padding="15dp"
+            android:text="데이터 초기화"
+            android:textColor="#FF5722"
+            android:textSize="25dp" />
+
+    </LinearLayout>
 
     <include
         layout="@layout/count_view_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="false"
         android:visibility="gone" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-    <android.widget.Button
-        android:id="@+id/level1Btn"
-        android:layout_marginHorizontal="10dp"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:background="@drawable/border_round_thin"
-        android:fontFamily="@font/fontstyle"
-        android:text="level1"
-        android:padding="10dp"
-        android:textColor="@color/teal_200"
-        android:textSize="35dp" />
-
-    <android.widget.Button
-        android:id="@+id/level2Btn"
-        android:padding="10dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:background="@drawable/border_round_thin"
-        android:fontFamily="@font/fontstyle"
-        android:text="level2"
-        android:textColor="#F4E347"
-        android:textSize="35dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-
-        <android.widget.Button
-            android:id="@+id/level3Btn"
-            android:layout_marginHorizontal="10dp"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:background="@drawable/border_round_thin"
-            android:fontFamily="@font/fontstyle"
-            android:text="level3"
-            android:padding="10dp"
-            android:textColor="#FF5722"
-            android:textSize="35dp" />
-
-        <android.widget.Button
-            android:id="@+id/level4Btn"
-            android:padding="10dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:background="@drawable/border_round_thin"
-            android:fontFamily="@font/fontstyle"
-            android:text="level4"
-            android:textColor="#E91E63"
-            android:textSize="35dp" />
-
-    </LinearLayout>
-
-    <android.widget.Button
-        android:id="@+id/resetdataBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/border_round_thin"
-        android:fontFamily="@font/fontstyle"
-        android:padding="15dp"
-        android:text="데이터 초기화"
-        android:textColor="#FF5722"
-        android:textSize="25dp" />
-
-</LinearLayout>
+</RelativeLayout>

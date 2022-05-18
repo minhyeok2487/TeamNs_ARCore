@@ -1,4 +1,4 @@
-package com.example.teamns_arcore.Record;
+package com.example.teamns_arcore.game;
 
 import android.os.Bundle;
 import android.os.SystemClock;
