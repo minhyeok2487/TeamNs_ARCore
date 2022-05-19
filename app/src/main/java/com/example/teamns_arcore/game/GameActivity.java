@@ -34,6 +34,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.teamns_arcore.DashboardActivity;
 import com.example.teamns_arcore.R;
+import com.example.teamns_arcore.Record.ChartActivity;
 import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
 import com.example.teamns_arcore.SelectLevel.Model.StractEn;
 import com.google.ar.core.ArCoreApk;
@@ -100,6 +101,9 @@ public class GameActivity extends AppCompatActivity {
     View dialogView;
 
     int count = 0;
+
+    int answerCount = 0;
+    int incorrectCount = 0;
 
     float[][] colorCorrections = new float[][]{
             {0.8f, 0.8f, 0.8f, 0.8f},
@@ -437,7 +441,8 @@ public class GameActivity extends AppCompatActivity {
                 count++;
                 if (count < ranNumKor.length) {
                     questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
-                    Log.d("랜덤이다~" + "if문", ranNumKor[count] + "");
+                    incorrectCount++;
+                    Log.d("정답틀림 : ", incorrectCount + "");
                 } else {
                     Toast.makeText(getApplicationContext(), "시작단어입니다", Toast.LENGTH_SHORT).show();
                     count = 0;
@@ -503,8 +508,18 @@ public class GameActivity extends AppCompatActivity {
 
                 if (ranNumEng[count].equals(answerTxtView.getText().toString())) {
                     count++;
-                    Toast.makeText(getApplicationContext(), "정답입니다!!!", Toast.LENGTH_SHORT).show();
-                    questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
+                    if (count == ranNumEng.length) {
+                        Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요. 결과 화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
+                        Intent nextPage = new Intent(GameActivity.this, ChartActivity.class);
+                        startActivity(nextPage);
+                        Log.d("정답갯수 : ", answerCount + "");
+                    } else {
+                        Toast.makeText(getApplicationContext(), "정답입니다!!!", Toast.LENGTH_SHORT).show();
+                        questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
+                        answerTxtView.setText("");
+                        answerCount++;
+                        Log.d("정답맞힘 : ", answerCount + "");
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(), "틀렸어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
                 }
