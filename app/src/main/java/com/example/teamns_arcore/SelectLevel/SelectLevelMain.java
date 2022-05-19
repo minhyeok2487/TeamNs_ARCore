@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -35,11 +36,18 @@ public class SelectLevelMain extends AppCompatActivity {
     String EmailHolder;
     TextView Name;
     //
+    MediaPlayer mediaPlayer;
+    int currentPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectlevel);
+
+        //배경음악
+        mediaPlayer = MediaPlayer.create(this, R.raw.openning);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
 
 
         // 버튼 리스너
@@ -146,6 +154,7 @@ public class SelectLevelMain extends AppCompatActivity {
         // 화면에 보일 TextView
         count_view = (TextView)findViewById(R.id.count_view);
         count_view_layout = (RelativeLayout)findViewById(R.id.count_view_layout);
+
         //3초 타이머
         String conversionTime = "4";
 
@@ -186,6 +195,27 @@ public class SelectLevelMain extends AppCompatActivity {
         }else{
             countDownTimer.cancel();
         }
+    }
+
+    @Override
+    public void onUserLeaveHint(){
+        super.onUserLeaveHint();
+        currentPosition = mediaPlayer.getCurrentPosition();
+        mediaPlayer.pause();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        mediaPlayer.seekTo(currentPosition);
+        mediaPlayer.start();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        currentPosition = mediaPlayer.getCurrentPosition();
+        mediaPlayer.pause();
     }
 
 }

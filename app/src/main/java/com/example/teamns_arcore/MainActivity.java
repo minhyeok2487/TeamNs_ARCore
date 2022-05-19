@@ -1,5 +1,7 @@
 package com.example.teamns_arcore;
 
+import static android.content.Intent.FLAG_ACTIVITY_NO_USER_ACTION;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -20,7 +22,7 @@ import com.example.teamns_arcore.SelectLevel.SelectLevelMain;
 
 public class MainActivity extends AppCompatActivity {
 
-    MediaPlayer mediaPlayer;
+
     public static String pname = "";
     RelativeLayout editnicknameview;
     EditText editnicknametext;
@@ -41,14 +43,15 @@ public class MainActivity extends AppCompatActivity {
     public static final String UserEmail = "";
     public static final String UserId = "";
     //
-    
 
+    MediaPlayer mediaPlayer;
+    int currentPosition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //currentnickname = findViewById(R.id.currentnickname);
-        runMusic();
+        //runMusic();
 
         // 로그인 add
         LogInButton = (Button)findViewById(R.id.buttonLogin);
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+                intent.addFlags(FLAG_ACTIVITY_NO_USER_ACTION);
                 startActivity(intent);
             }
         });
@@ -144,33 +148,6 @@ public class MainActivity extends AppCompatActivity {
         TempPassword = "찾지 못했습니다." ;
     }
 
-    //
-
-
-
-    //초기 닉네임 등록 메소드
-    //닉네임이 있으면 안보이고 없으면 보임
-//    public void RegNickname() {
-//        editnicknameview = findViewById(R.id.editnicknameview);
-//        editnicknametext = findViewById(R.id.editnicknametext);
-//        if (pname.length() < 1) { //초기 닉네임이 등록되지 않았으면
-//            pname = editnicknametext.getText().toString();
-//            editnicknameview.setVisibility(View.GONE);//등록되면 닉네임 등록창 사라짐
-//            StartBtn.setVisibility(View.VISIBLE);
-//            EndBtn.setVisibility(View.VISIBLE);
-//        } else {
-//            editnicknameview.setVisibility(View.VISIBLE);
-//
-//        }
-//    }
-
-
-
-    private void runMusic() {
-        mediaPlayer = MediaPlayer.create(this, R.raw.music);
-        //mediaPlayer.setLooping(true); //무한재생
-        //mediaPlayer.start();
-    }
 
 
 }
