@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.display.DisplayManager;
+import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
@@ -53,7 +54,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity {
-
+    MediaPlayer mediaPlayer;
+    int currentPosition;
 
     TextView myTextView, myCatchView;
 
@@ -170,6 +172,12 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         hideStatusBarAndTitleBar();
         setContentView(R.layout.activity_game);
+
+        //배경음악
+        mediaPlayer = MediaPlayer.create(this, R.raw.game);
+        mediaPlayer.setVolume(0.5f,0.5f);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
 
         mSurfaceView = findViewById(R.id.gl_surface_view);
 
@@ -475,6 +483,8 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mediaPlayer.seekTo(currentPosition);
+        mediaPlayer.start();
         requestCameraPermission();
         try {
             // 세션이 없다면 세션 생성
@@ -686,6 +696,20 @@ public class GameActivity extends AppCompatActivity {
         float near = (p.pointX - q.pointX) * (p.pointX - q.pointX) + (p.pointY - q.pointY) * (p.pointY - q.pointY) + (p.pointZ - q.pointZ) * (p.pointZ - q.pointZ);
         Log.d("최근좌표 near","요기"+near);
         return near;
+    }
+
+    @Override
+    public void onUserLeaveHint(){
+        super.onUserLeaveHint();
+        currentPosition = mediaPlayer.getCurrentPosition();
+        mediaPlayer.pause();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        currentPosition = mediaPlayer.getCurrentPosition();
+        mediaPlayer.pause();
     }
 
 }
