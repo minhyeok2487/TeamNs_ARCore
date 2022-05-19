@@ -146,11 +146,6 @@ public class SelectLevelActivity extends AppCompatActivity {
                 tts.speak(arrayList2.get(position).english,TextToSpeech.QUEUE_FLUSH, null);
             }
         });
-        for(StractEn ss : arrayList){
-            Log.d("뭔데",ss.getEnglish());
-            Log.d("뭔데",ss.getFlagtime());
-            Log.d("뭔데",ss.getMeans());
-        }
         String[] ranWordsKor = new String[arrayList2.size()];
         String[] ranWordsEng = new String[arrayList2.size()];
         for (int i = 0; i < arrayList2.size(); i++){
@@ -162,6 +157,7 @@ public class SelectLevelActivity extends AppCompatActivity {
         intentGame.putExtra("RandomKor", ranWordsKor);
         intentGame.putExtra("RandomEng", ranWordsEng);
         startActivity(intentGame);
+        finish();
 
     }
     public void newarr( ArrayList<StractEn> arrayList2){

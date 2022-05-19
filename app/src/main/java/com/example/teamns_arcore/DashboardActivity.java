@@ -39,13 +39,16 @@ public class DashboardActivity extends AppCompatActivity {
 
     public static Boolean ismute =true;
     Button muteBtn;
+
+    // 마지막으로 뒤로 가기 버튼을 눌렀던 시간 저장
+    private long backKeyPressedTime = 0;
+    // 첫 번째 뒤로 가기 버튼을 누를 때 표시
+    private Toast toast;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        
-        
-        
+
         //Name = (TextView)findViewById(R.id.textView1);
         LogOUT = (Button)findViewById(R.id.button1);
         NameChg = (Button)findViewById(R.id.namechg);
@@ -79,9 +82,9 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //버튼 클릭 시 현재 DashBoard 활동을 마칩니다.
-                finish();
-                Toast.makeText(DashboardActivity.this,"로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
-
+                //finish();
+                //Toast.makeText(DashboardActivity.this,"로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+                Logout();
             }
         });
         
@@ -159,10 +162,33 @@ public class DashboardActivity extends AppCompatActivity {
         }
     };
 
-    private void myStartActivity(Class c) {
-        Intent myStartintent = new Intent(this, c);
-        startActivity(myStartintent);
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Logout();
+
     }
-
-
+    public void Logout(){
+        // 마지막으로 뒤로 가기 버튼을 눌렀던 시간에 1.5초를 더해 현재 시간과 비교 후
+        // 마지막으로 뒤로 가기 버튼을 눌렀던 시간이 1.5초가 지났으면 Toast 출력
+        // 1500 milliseconds = 1.5 seconds
+        if (System.currentTimeMillis() > backKeyPressedTime + 2500) {
+            backKeyPressedTime = System.currentTimeMillis();
+            toast = Toast.makeText(this, "버튼을 한 번 더 누르시면 로그아웃 됩니다", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+        // 마지막으로 뒤로 가기 버튼을 눌렀던 시간에 1.5초를 더해 현재 시간과 비교 후
+        // 마지막으로 뒤로 가기 버튼을 눌렀던 시간이 1.5초가 지나지 않았으면 종료
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2500) {
+            finish();
+            toast.cancel();
+            toast = Toast.makeText(this,"로그아웃 되었습니다",Toast.LENGTH_SHORT);
+            toast.show();
+            Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
 }

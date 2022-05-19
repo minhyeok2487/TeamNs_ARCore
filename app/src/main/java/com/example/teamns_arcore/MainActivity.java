@@ -23,19 +23,11 @@ import com.example.teamns_arcore.SelectLevel.SelectLevelMain;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static String pname = "";
-    RelativeLayout editnicknameview;
-    EditText editnicknametext;
-    //TextView currentnickname;
-    //Button StartBtn, EndBtn;
-    ContentValues row;
     
     // 로그인 구현으로 add한 부분
     Button LogInButton, RegisterButton ;
-    //EditText Email, Password ;
-    //String EmailHolder, PasswordHolder;
-    EditText Name, Email, Password ;
-    String NameHolder,EmailHolder, PasswordHolder;
+    EditText Email, Password ;
+    String EmailHolder, PasswordHolder;
     Boolean EditTextEmptyHolder;
     SQLiteDatabase sqLiteDatabaseObj;
     SQLiteHelper sqLiteHelper;
@@ -43,39 +35,36 @@ public class MainActivity extends AppCompatActivity {
     String TempPassword = "찾지 못했습니다." ;
     public static final String UserEmail = "";
     public static final String UserId = "";
-    //
-    MediaPlayer mediaPlayer;
-    int currentPosition;
+   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        insert("테스트", "test", "1111");
-        //currentnickname = findViewById(R.id.currentnickname);
-        //runMusic();
-
-        // 로그인 add
+        insert("테스트", "test", "1111"); // 테스트를 위한 데이터 미리넣어놓기
+        
+        // 로그인 회원가입 버튼
         LogInButton = (Button)findViewById(R.id.buttonLogin);
         RegisterButton = (Button)findViewById(R.id.buttonRegister);
 
+        // 이메일 패스워드 입력 EditText
         Email = (EditText)findViewById(R.id.editEmail);
         Password = (EditText)findViewById(R.id.editPassword);
 
         sqLiteHelper = new SQLiteHelper(this);
 
-        //Adding click listener to log in button.
+        // 로그인 버튼 클릭
         LogInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Calling EditText is empty or no method.
+                // 로그인 유효성 검사 : 텍스트가 하나라도 비어있는지 확인
                 CheckEditTextStatus();
 
-                // Calling login method.
+                // 로그인 메서드
                 LoginFunction();
             }
         });
 
-        // 회원가입
+        // 회원가입 버튼 클릭
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("Range") // -> 추가됨
     public void LoginFunction(){
 
-        if(EditTextEmptyHolder) {
+        if(EditTextEmptyHolder) { //하나라도 빈곳이 없어야
             // Opening SQLite database write permission.
             sqLiteDatabaseObj = sqLiteHelper.getWritableDatabase();
 
@@ -102,12 +91,11 @@ public class MainActivity extends AppCompatActivity {
                     cursor.moveToFirst();
                     // 입력한 이메일과 관련된 비밀번호를 저장
                     TempPassword = cursor.getString(cursor.getColumnIndex(SQLiteHelper.Table_Column_3_Password));
-
                     cursor.close();
                 }
             }
             // 저장 전에 체크!
-            CheckFinalResult();
+            CheckFinalResult();//확인 메서드
             // 로그인 정보 레벨 선택 페이지로 넘기기
             // 환영합니다 뒤에 붙을 거
         }
@@ -118,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    // 미리 데이터 저장 insert
+    // 테스트를 위한 데이터 저장 insert
     public void insert(String name, String email, String password){
         // 미리 데이터 넣어놓기
         sqLiteHelper = new SQLiteHelper(this);
@@ -138,9 +126,8 @@ public class MainActivity extends AppCompatActivity {
     public void CheckEditTextStatus(){
         EmailHolder = Email.getText().toString();
         PasswordHolder = Password.getText().toString();
-        //NameHolder = Name.getText().toString();
-        //System.out.println("메인의 NameHolder : "+ NameHolder);
         // String값이 비어있는지를 체크하고싶은 경우는 TextUtils
+        // 하나만 트루여도 EditTextEmptyHolder = false
         if( TextUtils.isEmpty(EmailHolder) || TextUtils.isEmpty(PasswordHolder)){
             EditTextEmptyHolder = false ;
         }
@@ -151,19 +138,19 @@ public class MainActivity extends AppCompatActivity {
     // 비밀번호 확인
     public void CheckFinalResult(){
         if(TempPassword.equals(PasswordHolder)){
-            Toast.makeText(MainActivity.this,"로그인 성공",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this,"로그인 성공",Toast.LENGTH_SHORT).show();
 
             // 로그인되면 로그인된 창으로 가기
             Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
             intent.putExtra(UserEmail, EmailHolder);
             startActivity(intent);
+            finish();
         }
         else {
             Toast.makeText(MainActivity.this,"ID나 비밀번호가 틀렸습니다. 다시 시도하세요.",Toast.LENGTH_SHORT).show();
         }
         TempPassword = "찾지 못했습니다." ;
     }
-
 
 
 }
