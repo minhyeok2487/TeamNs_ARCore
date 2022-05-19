@@ -2,27 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp"
-    android:gravity="center"
-    tools:context=".MainActivity"
-    android:id="@+id/activity_main"
-    >
+    tools:context=".MainActivity">
 
     <!--로그인 -->
 
     <TextView
-        android:text="로그인"
-        android:gravity="center"
-        android:textSize="20dp"
-        android:textColor="#000"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView" />
+        android:gravity="center"
+        android:text="로그인"
+        android:textColor="#000"
+        android:textSize="20dp" />
 
     <EditText
         android:id="@+id/editEmail"
@@ -34,37 +33,39 @@
         android:ems="10"
         android:gravity="center"
         android:hint="아이디를 입력하세요"
+        android:text="test"
         android:inputType="textEmailAddress"
         android:textColor="#000" />
 
     <EditText
+        android:id="@+id/editPassword"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:hint="비밀번호를 입력하세요"
-        android:textColor="#000"
-        android:ems="10"
         android:layout_below="@+id/editEmail"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:id="@+id/editPassword"
-        android:gravity="center"/>
+        android:ems="10"
+        android:gravity="center"
+        android:hint="비밀번호를 입력하세요"
+        android:text="1111"
+        android:inputType="textPassword"
+        android:textColor="#000" />
 
     <Button
+        android:id="@+id/buttonLogin"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonLogin"
         android:layout_below="@+id/editPassword"
         android:layout_marginTop="20dp"
-        android:text="로그인"/>
+        android:text="로그인" />
 
     <Button
+        android:id="@+id/buttonRegister"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonRegister"
         android:layout_below="@+id/buttonLogin"
         android:layout_marginTop="20dp"
-        android:text="회원가입"/>
+        android:text="회원가입" />
 
     <!-- 추가된 사항 끝 -->
 
