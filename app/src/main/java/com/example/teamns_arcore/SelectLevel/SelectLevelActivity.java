@@ -127,9 +127,11 @@ public class SelectLevelActivity extends AppCompatActivity {
         }
     };
 //
+    ///
     public void gogogo(){
         ArrayList<StractEn> arrayList2 = new ArrayList<StractEn>();
-        rand(arrayList2);
+
+        //rand(arrayList2);
         newarr(arrayList2);
         //G로 하니까 메인엑티비티에서 벗어났을때 출력이안되는 문제발생해서
         //G클래스지우고 Context를 화면에서 받음
@@ -144,7 +146,11 @@ public class SelectLevelActivity extends AppCompatActivity {
                 tts.speak(arrayList2.get(position).english,TextToSpeech.QUEUE_FLUSH, null);
             }
         });
-
+        for(StractEn ss : arrayList){
+            Log.d("뭔데",ss.getEnglish());
+            Log.d("뭔데",ss.getFlagtime());
+            Log.d("뭔데",ss.getMeans());
+        }
         String[] ranWordsKor = new String[arrayList2.size()];
         String[] ranWordsEng = new String[arrayList2.size()];
         for (int i = 0; i < arrayList2.size(); i++){
@@ -157,23 +163,46 @@ public class SelectLevelActivity extends AppCompatActivity {
         intentGame.putExtra("RandomEng", ranWordsEng);
         startActivity(intentGame);
 
-
     }
     public void newarr( ArrayList<StractEn> arrayList2){
-        for(int i = 0; i <10; i++){
-            int good = Integer.parseInt(arrayList.get(newrand[i]).flagtime);
-            good /=2;
-            arrayList.get(newrand[i]).setFlagtime(String.valueOf(good));
-            arrayList2.add(new StractEn(arrayList.get(newrand[i]).getEnglish(),arrayList.get(newrand[i]).means,arrayList.get(newrand[i]).flagtime));
-        }
-        ////
         Map<StractEn, Double> w = new HashMap<StractEn, Double>();
-        for(int i =0; i<arrayList.size();i++){
-            w.put(arrayList.get(i),100D);//가중치%
+        for(int a = 0; a<arrayList.size(); a++){
+            w.put(arrayList.get(a),Double.valueOf(arrayList.get(a).getFlagtime()));
         }
+        int[] len = new int[10];
+        // 중복검사 안함
         Random rand = new Random();
-        Log.d("asd",getWeightedRandom(w, rand).getEnglish());
+        for(int i =0; i<10;i++) {
+            boolean overlap = false;
+            int num = 0;
+
+            StractEn res = getWeightedRandom(w, rand);
+
+            for(int k=0;k<arrayList.size();k++){
+                if(res.getEnglish().equals(arrayList.get(k).getEnglish())){
+                    num = k;
+                    break;
+                }
+            }
+            for (int j = 0; j < i; j++) {
+                if (res == arrayList2.get(j)) {
+                    i--;
+                    overlap = true;
+                }
+            }
+            if(!overlap){
+                arrayList2.add(res);
+                Log.d("가중치 랜덤 뽑기", res.getEnglish());
+                Double resFlag = Double.valueOf(res.getFlagtime())/2;
+                arrayList.get(num).setFlagtime(String.valueOf(resFlag));
+            }
+        }
+
+
     }
+    ///
+
+
 
     public static <E> E getWeightedRandom(Map<E, Double> weights, Random random) {
         E result = null;
@@ -234,8 +263,8 @@ public class SelectLevelActivity extends AppCompatActivity {
     }
 
     private void myStartActivity(Class c) {
-        Intent intent = new Intent(this, c);
-        startActivity(intent);
+        Intent myStartintent = new Intent(this, c);
+        startActivity(myStartintent);
     }
 
 

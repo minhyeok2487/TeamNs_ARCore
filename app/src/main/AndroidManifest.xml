@@ -32,6 +32,9 @@
         <activity android:name=".Record.TableActivity" />
         <activity android:name=".game.TimerActivity" />
 
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".DashboardActivity"/>
+
         <meta-data
             android:name="com.google.ar.core"
             android:value="required" />

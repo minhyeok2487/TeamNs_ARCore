@@ -189,8 +189,8 @@ public class ChartActivity extends AppCompatActivity {
     };
 
     private void myStartActivity(Class c) {
-        Intent intent = new Intent(this, c);
-        startActivity(intent);
+        Intent myStartintent = new Intent(this, c);
+        startActivity(myStartintent);
     }
 
     private void setRecyclerView() {

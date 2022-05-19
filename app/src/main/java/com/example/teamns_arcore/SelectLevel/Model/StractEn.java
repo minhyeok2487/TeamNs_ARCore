@@ -34,4 +34,5 @@ public class StractEn {
     public void setFlagtime(String flagtime) {
         this.flagtime = flagtime;
     }
+
 }
