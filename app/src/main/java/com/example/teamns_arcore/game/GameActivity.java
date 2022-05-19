@@ -12,6 +12,7 @@ import android.opengl.Matrix;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -22,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,13 +57,14 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import static android.speech.tts.TextToSpeech.ERROR;
 
 public class GameActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     int currentPosition;
 
-    TextView myTextView, myCatchView;
+    TextView myTextView, myCatchView, questionTxtView, hintTxtView;
 
     ////타이머 관련 변수//////////
     private Chronometer chronometer;
@@ -73,8 +76,7 @@ public class GameActivity extends AppCompatActivity {
     ///////힌트변수///////
     private TextToSpeech tts;
 
-    TextView answerTxtView, questionTxtView, hintTxtView;
-
+    EditText answerTxtView;
 
     GLSurfaceView mSurfaceView;
     MainRenderer mRenderer;
@@ -91,7 +93,7 @@ public class GameActivity extends AppCompatActivity {
 
     DatabaseHelper databaseHelper;
 
-    Button colorBtn, skipBtn, hintBtn;
+    Button colorBtn, skipBtn, hintBtn, submitBtn;
 
     ArrayList<StractEn> seArrList;
 
@@ -181,20 +183,19 @@ public class GameActivity extends AppCompatActivity {
 
         //배경음악
         mediaPlayer = MediaPlayer.create(this, R.raw.game);
-        mediaPlayer.setVolume(0.2f,0.2f);
+        mediaPlayer.setVolume(0.2f, 0.2f);
         mediaPlayer.setLooping(true);
 
         //TTS
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                if(status != ERROR) {
+                if (status != ERROR) {
                     // 언어를 선택한다.
                     tts.setLanguage(Locale.ENGLISH);
                 }
             }
         });
-
 
 
         mSurfaceView = findViewById(R.id.gl_surface_view);
@@ -204,6 +205,8 @@ public class GameActivity extends AppCompatActivity {
         skipBtn = findViewById(R.id.skipBtn);
 
         hintBtn = findViewById(R.id.hintBtn);
+
+        submitBtn = findViewById(R.id.submitBtn);
 
         answerTxtView = findViewById(R.id.answerTxtView);
 
@@ -377,7 +380,7 @@ public class GameActivity extends AppCompatActivity {
                     results = frame.hitTest(mCatchX, mCatchY);
 
                     String msg = "터키터키~";
-                    answerTxtView.setText(msg);
+//                    answerTxtView.setText(msg);
 
                     for (HitResult result : results) {
                         Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
@@ -447,7 +450,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                mediaPlayer.setVolume(0.1f,0.1f);
+                mediaPlayer.setVolume(0.1f, 0.1f);
                 dialogView = View.inflate(GameActivity.this, R.layout.activity_hint_dialog, null);
                 AlertDialog.Builder hintDialogBuilder = new AlertDialog.Builder(GameActivity.this);
                 AlertDialog hintDialog = hintDialogBuilder.create();
@@ -471,7 +474,7 @@ public class GameActivity extends AppCompatActivity {
 
                 hintTxtView = dialogView.findViewById(R.id.hintTxtView);
                 hintTxtView.setText(String.format("[ %s ]", stringBuffer));
-                tts.speak(ranNumEng[count],TextToSpeech.QUEUE_FLUSH, null);
+                tts.speak(ranNumEng[count], TextToSpeech.QUEUE_FLUSH, null);
 
                 Thread th = new Thread(new Runnable() {
                     @Override
@@ -491,6 +494,20 @@ public class GameActivity extends AppCompatActivity {
                 th.start();
 
 
+            }
+        });
+
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (ranNumEng[count].equals(answerTxtView.getText().toString())) {
+                    count++;
+                    Toast.makeText(getApplicationContext(), "정답입니다!!!", Toast.LENGTH_SHORT).show();
+                    questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
+                } else {
+                    Toast.makeText(getApplicationContext(), "틀렸어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -519,10 +536,10 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(DashboardActivity.ismute){
+        if (DashboardActivity.ismute) {
             mediaPlayer.seekTo(currentPosition);
             mediaPlayer.start();
-        }else {
+        } else {
             mediaPlayer.pause();
         }
         requestCameraPermission();
@@ -739,10 +756,10 @@ public class GameActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onUserLeaveHint(){
+    public void onUserLeaveHint() {
         super.onUserLeaveHint();
 
-        if(mediaPlayer.isPlaying()){
+        if (mediaPlayer.isPlaying()) {
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
         }
@@ -750,11 +767,10 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
-
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
-        if(mediaPlayer.isPlaying()){
+        if (mediaPlayer.isPlaying()) {
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
         }
