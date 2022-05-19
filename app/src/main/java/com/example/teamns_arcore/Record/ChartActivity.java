@@ -1,5 +1,6 @@
 package com.example.teamns_arcore.Record;
 
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.teamns_arcore.DashboardActivity;
 import com.example.teamns_arcore.R;
 import com.example.teamns_arcore.Record.Model.RecordModel;
+import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
+import com.example.teamns_arcore.SelectLevel.SelectLevelActivity;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
@@ -29,6 +32,11 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +51,10 @@ public class ChartActivity extends AppCompatActivity {
     RecyclerView recycler_view;
     PaymentAdapter adapter;
     Button gotoTable;
-    List<RecordModel> recordModels = new ArrayList<>();
+    public static ArrayList<RecordModel> recordModels = new ArrayList<>();
     MediaPlayer mediaPlayer;
     int currentPosition = 12000;
+    RecordSQLiteHelper recordSQLiteHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +63,18 @@ public class ChartActivity extends AppCompatActivity {
         mediaPlayer = MediaPlayer.create(this, R.raw.endding);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
+
+        //데이터 불러오기
+        File database = getApplicationContext().getDatabasePath(RecordSQLiteHelper.DATABASE_NAME);
+        recordSQLiteHelper = new RecordSQLiteHelper(ChartActivity.this);
+        if(database.exists()==false){
+            recordSQLiteHelper.getReadableDatabase();
+            if(!copydatabase(ChartActivity.this)){
+                return;
+            }
+        }
+        recordModels = recordSQLiteHelper.getData();
+
 
         gotoTable = findViewById(R.id.gotoTable);
         findViewById(R.id.gotoTable).setOnClickListener(onClickListener);
@@ -98,11 +119,10 @@ public class ChartActivity extends AppCompatActivity {
     public void graphInitSetting4() {
         ArrayList<String> jsonList = new ArrayList<>(); // ArrayList 선언
         ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
-        jsonList.add(recordModels.get(0).getScore());
-        jsonList.add(recordModels.get(1).getScore());
-
-        labelList.add(recordModels.get(0).getDate());
-        labelList.add(recordModels.get(1).getDate());
+        for(int i=0;i<recordModels.size();i++){
+            jsonList.add(recordModels.get(i).getScore());
+            labelList.add(recordModels.get(i).getDate());
+        }
 
         BarChartGraph(labelList, jsonList);
         LineGraph(labelList,jsonList);
@@ -133,7 +153,7 @@ public class ChartActivity extends AppCompatActivity {
             entries.add(new BarEntry(Float.parseFloat(valList.get(i)), i));
         }
 
-        BarDataSet depenses = new BarDataSet(entries, "맞춘 정답 갯수"); // 변수로 받아서 넣어줘도 됨
+        BarDataSet depenses = new BarDataSet(entries, "점수"); // 변수로 받아서 넣어줘도 됨
         depenses.setAxisDependency(YAxis.AxisDependency.LEFT);
         barChart.setDescription(" ");
 
@@ -162,7 +182,7 @@ public class ChartActivity extends AppCompatActivity {
         for (int i = 0; i < labelList.size(); i++) {
             labels.add((String) labelList.get(i));
         }
-        LineDataSet depenses = new LineDataSet(entries, "맞춘 정답 갯수");
+        LineDataSet depenses = new LineDataSet(entries, "점수");
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(depenses);
 
@@ -196,10 +216,6 @@ public class ChartActivity extends AppCompatActivity {
         }
     };
 
-    private void myStartActivity(Class c) {
-        Intent myStartintent = new Intent(this, c);
-        startActivity(myStartintent);
-    }
 
     private void setRecyclerView() {
         recycler_view.setHasFixedSize(true);
@@ -209,29 +225,33 @@ public class ChartActivity extends AppCompatActivity {
     }
 
     //임시 데이터 생성
-    //String id, Date date, int correctNum, float timer, float score
+    //String id, String date, int correctNum, float timer, float score
     private List<RecordModel> getList(){
-        RecordModel model1 = new RecordModel("냐옹",Date.valueOf("2022-04-13"),8, 100, 0, 1);
-        model1.setScore();
-        recordModels.add(model1);
 
-        RecordModel model2 = new RecordModel("냐옹",Date.valueOf("2022-04-17"),4, 50, 0,2);
-        model2.setScore();
-        recordModels.add(model2);
-
-        RecordModel model3 = new RecordModel("냐옹",Date.valueOf("2022-05-05"),8, 130, 0,2);
-        model3.setScore();
-        recordModels.add(model3);
-
-        RecordModel model4 = new RecordModel("냐옹",Date.valueOf("2022-05-10"),10, 150, 0,3);
-        model4.setScore();
-        recordModels.add(model4);
-
-        RecordModel model5 = new RecordModel("냐옹",Date.valueOf("2022-05-11"),8, 110, 0,4);
-        model5.setScore();
-        recordModels.add(model5);
 
         return recordModels;
+    }
+
+    public Boolean copydatabase(Context context){
+        try {
+            InputStream inputStream = context.getAssets().open(RecordSQLiteHelper.DATABASE_NAME);
+            String OutFileName = RecordSQLiteHelper.DBLOCAION+RecordSQLiteHelper.DATABASE_NAME;
+            File f = new File(OutFileName);
+            f.getParentFile().mkdirs();
+            OutputStream outputStream = new FileOutputStream(OutFileName);
+
+            byte[] buffer = new byte[1024];
+            int length = 0;
+            while((length = inputStream.read(buffer))>0){
+                outputStream.write(buffer, 0, length);
+            }
+            outputStream.flush();
+            outputStream.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

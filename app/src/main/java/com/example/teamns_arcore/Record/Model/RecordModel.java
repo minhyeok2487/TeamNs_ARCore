@@ -5,12 +5,12 @@ import java.sql.Date;
 
 public class RecordModel {
     String id;
-    Date date;
+    String date;
     int correctNum, Level;
     float timer;
     float score;
 
-    public RecordModel(String id, Date date, int correctNum, float timer, float score, int Level) {
+    public RecordModel(String id, String date, int correctNum, float timer, float score, int Level) {
         this.id = id;
         this.date = date;
         this.correctNum = correctNum;
@@ -32,7 +32,7 @@ public class RecordModel {
         return Stringdate;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
