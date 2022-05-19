@@ -23,6 +23,7 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -48,6 +49,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -62,7 +65,7 @@ public class GameActivity extends AppCompatActivity {
     //////////////////////////
 
 
-    TextView answerTxtView, questionTxtView;
+    TextView answerTxtView, questionTxtView, hintTxtView;
 
 
     GLSurfaceView mSurfaceView;
@@ -80,9 +83,11 @@ public class GameActivity extends AppCompatActivity {
 
     DatabaseHelper databaseHelper;
 
-    Button colorBtn, skipBtn;
+    Button colorBtn, skipBtn, hintBtn;
 
     ArrayList<StractEn> seArrList;
+
+    View dialogView;
 
     int count = 0;
 
@@ -101,6 +106,8 @@ public class GameActivity extends AppCompatActivity {
 //    float [] modelMatrix = new float[16];
 
     float[][] modelArrayMatrix = new float[MAX][16];
+    float[][] modelTransArrayMatrix = new float[MAX][16];
+
 
     float[][] pixedMatrix = new float[][]{
             {0.3f, 3.2f, 2.3f},
@@ -169,6 +176,8 @@ public class GameActivity extends AppCompatActivity {
         colorBtn = findViewById(R.id.colorBtn);
 
         skipBtn = findViewById(R.id.skipBtn);
+
+        hintBtn = findViewById(R.id.hintBtn);
 
         answerTxtView = findViewById(R.id.answerTxtView);
 
@@ -274,6 +283,11 @@ public class GameActivity extends AppCompatActivity {
                             pose.toMatrix(modelArrayMatrix[i], 0);
                             Matrix.translateM(modelArrayMatrix[i], 0,
                                     pixedMatrix[ranNum[i]][0], pixedMatrix[ranNum[i]][1], pixedMatrix[ranNum[i]][2]);
+
+                            // 변경된 좌표를 알기 위한 변수
+                            modelTransArrayMatrix[i][0] = pose.tx() + pixedMatrix[ranNum[i]][0];
+                            modelTransArrayMatrix[i][1] = pose.ty() + pixedMatrix[ranNum[i]][1];
+                            modelTransArrayMatrix[i][2] = pose.tz() + pixedMatrix[ranNum[i]][2];
                         }
                     }
                     LightEstimate estimate = frame.getLightEstimate();
@@ -342,14 +356,23 @@ public class GameActivity extends AppCompatActivity {
                     for (HitResult result : results) {
                         Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
 
-                        if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
-                            msg = "터키터키~";
-                            answerTxtView.setText(msg);
-                            Log.d("터치함", "좌표 : " + pose.tx() + pose.ty() + pose.tz());
-                        } else {
-                            msg = "못잡겠쥐~?";
-                            answerTxtView.setText(msg);
-                            Log.d("터치안함", "좌표 : " + pose.tx() + pose.ty() + pose.tz());
+//                        if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
+//                            msg = "터키터키~";
+//                            answerTxtView.setText(msg);
+//                            Log.d("터치함", "좌표 : " + pose.tx() + pose.ty() + pose.tz());
+//                        } else {
+//                            msg = "못잡겠쥐~?";
+//                            answerTxtView.setText(msg);
+//                            Log.d("터치안함", "좌표 : " + pose.tx() + pose.ty() + pose.tz());
+//                        }
+
+                        nearPoint(pose.tx(), pose.ty(), pose.tz());
+
+                        float [] picColor = new float[]{0.2f,0.2f,0.2f,0.8f};
+                        mRenderer.picObjColor(picColor, minIDX);
+                        if(tooFar) {
+                            tooFar = false;
+                            mRenderer.picObjColor(picColor, minIDX);
                         }
                     }
                 }
@@ -372,22 +395,58 @@ public class GameActivity extends AppCompatActivity {
         mSurfaceView.setRenderer(mRenderer);
 
         Intent intent = getIntent();
-        String[] ranNum = intent.getStringArrayExtra("RandomNum");
+        String[] ranNumEng = intent.getStringArrayExtra("RandomEng");
 
-        questionTxtView.setText(ranNum[count]);
+        String[] ranNumKor = intent.getStringArrayExtra("RandomKor");
+
+        questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
+
 
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 count++;
-                if (count < ranNum.length) {
-                    questionTxtView.setText(ranNum[count]);
-                    Log.d("랜덤이다~" + "if문", ranNum[count] + "");
+                if (count < ranNumKor.length) {
+                    questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
+                    Log.d("랜덤이다~" + "if문", ranNumKor[count] + "");
                 } else {
                     Toast.makeText(getApplicationContext(), "시작단어입니다", Toast.LENGTH_SHORT).show();
                     count = 0;
-                    questionTxtView.setText(ranNum[count]);
+                    questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
                 }
+            }
+        });
+
+        hintBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogView = View.inflate(GameActivity.this, R.layout.activity_hint_dialog, null);
+                AlertDialog.Builder hintDialogBuilder = new AlertDialog.Builder(GameActivity.this);
+                AlertDialog hintDialog = hintDialogBuilder.create();
+                hintDialog.setView(dialogView);
+                hintDialog.show();
+
+                hintTxtView = dialogView.findViewById(R.id.hintTxtView);
+                hintTxtView.setText(String.format("[ %s ]", ranNumEng[count]));
+
+                Thread th = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // n초가 지나면 다이얼로그를 닫도록 타이머를 줌
+                        TimerTask timerTask = new TimerTask() {
+                            @Override
+                            public void run() {
+                                hintDialog.dismiss();
+                            }
+                        };
+
+                        Timer timer = new Timer();
+                        timer.schedule(timerTask, 2000);
+                    }
+                });
+                th.start();
+
+
             }
         });
 
@@ -492,22 +551,36 @@ public class GameActivity extends AppCompatActivity {
         return true;
     }
 
-    boolean catchCheck(float x, float y, float z) {
+//    boolean catchCheck(float x, float y, float z) {
+//
+//        float[][] resAll = mRenderer.getMinMaxPoint();
+//        float[] minPoint = resAll[0];
+//        float[] maxPoint = resAll[1];
+////        float [] minPoint = new float[]{-0.5f,-2.5f,-10.5f};
+////        float [] maxPoint = new float[]{0.5f,2.5f,10.5f};
+//
+//        // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
+//        if (x >= minPoint[0] - 0.0f && x <= maxPoint[0] + 0.0f &&
+//                y >= minPoint[1] - 0.0f && y <= maxPoint[1] + 0.0f &&
+//                z >= minPoint[2] - 0.0f && z <= maxPoint[2] + 0.0f) {
+//            return true;
+//        }
+//
+//        return false;
+//    }
 
-        float[][] resAll = mRenderer.getMinMaxPoint();
-        float[] minPoint = resAll[0];
-        float[] maxPoint = resAll[1];
-//        float [] minPoint = new float[]{-0.5f,-2.5f,-10.5f};
-//        float [] maxPoint = new float[]{0.5f,2.5f,10.5f};
+    float[][] catchCheck() {
 
-        // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
-        if (x >= minPoint[0] - 0.0f && x <= maxPoint[0] + 0.0f &&
-                y >= minPoint[1] - 0.0f && y <= maxPoint[1] + 0.0f &&
-                z >= minPoint[2] - 0.0f && z <= maxPoint[2] + 0.0f) {
-            return true;
+
+        float[][][] resAll = mRenderer.getMinMaxPoint();
+        float[][] resXYZ = new float[MAX][3];
+
+        for(int i = 0 ; i<MAX;i++ ){
+            resXYZ[i][0] = (resAll[i][1][0]-resAll[i][0][0])/2; // i번째 obj x의 중간값
+            resXYZ[i][1] = (resAll[i][1][1]-resAll[i][0][1])/2; // i번째 obj y의 중간값
+            resXYZ[i][2] = (resAll[i][1][2]-resAll[i][0][2])/2; // i번째 obj y의 중간값
         }
-
-        return false;
+        return resXYZ;
     }
 
     void randomNum() {
@@ -570,6 +643,49 @@ public class GameActivity extends AppCompatActivity {
         }
 
         return seconds + (minutes * 60) + (hours * 3600);
+    }
+
+    int minIDX = 0;
+    boolean tooFar = false;
+
+    void nearPoint(float clickX, float clickY, float clickZ) {
+
+        // modelTransArrayMatrix 여기서 중간값 찾기
+
+        minIDX = 0;
+        PointXYZ pointAll = new PointXYZ(0,0,0);
+        PointXYZ pointClick = new PointXYZ(clickX,clickY,clickZ);
+
+        float minDistance = 100, newMinDistance = 0;
+        float[][] resXYZ = catchCheck();
+
+        for(int i = 0; i<MAX; i++){
+            Log.d("최근좌표 catchCheck","요기"+resXYZ[i][0]+","+resXYZ[i][1]+","+resXYZ[i][2]);
+        }
+
+        for (int i = 0; i < MAX; i++) {
+            pointAll.pointX = modelTransArrayMatrix[i][0];
+            pointAll.pointY = modelTransArrayMatrix[i][1];
+            pointAll.pointZ = modelTransArrayMatrix[i][2];
+
+            newMinDistance = getDistPoint(pointAll,pointClick);
+            if(minDistance > newMinDistance){
+                minIDX = i;
+                Log.d("최근좌표 if 들어옴 minIDX","요기"+minIDX);
+                minDistance = newMinDistance;
+                if(minIDX <= 12.0f){
+                    tooFar = true;
+                }
+            }
+        }
+        Log.d("최근좌표","요기"+minIDX);
+    }
+
+    // 두 점 사이 거리의 제곱 계산 함수
+    public float getDistPoint(PointXYZ p, PointXYZ q) {
+        float near = (p.pointX - q.pointX) * (p.pointX - q.pointX) + (p.pointY - q.pointY) * (p.pointY - q.pointY) + (p.pointZ - q.pointZ) * (p.pointZ - q.pointZ);
+        Log.d("최근좌표 near","요기"+near);
+        return near;
     }
 
 }

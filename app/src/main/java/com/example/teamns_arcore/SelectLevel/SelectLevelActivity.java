@@ -22,6 +22,7 @@ import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
 import com.example.teamns_arcore.SelectLevel.Model.StractEn;
 import com.example.teamns_arcore.SelectLevel.adapter.EnglishAdapter;
 import com.example.teamns_arcore.game.GameActivity;
+import com.example.teamns_arcore.game.HintDialog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -144,14 +145,18 @@ public class SelectLevelActivity extends AppCompatActivity {
             }
         });
 
-        String[] ranWords = new String[arrayList2.size()];
+        String[] ranWordsKor = new String[arrayList2.size()];
+        String[] ranWordsEng = new String[arrayList2.size()];
         for (int i = 0; i < arrayList2.size(); i++){
-            ranWords[i] = arrayList2.get(i).getMeans();
+            ranWordsKor[i] = arrayList2.get(i).getMeans();
+            ranWordsEng[i] = arrayList2.get(i).getEnglish();
 //            Log.d("랜덤랜덤임", ranWords[i] + "");
         }
-        Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra("RandomNum", ranWords);
-        startActivity(intent);
+        Intent intentGame = new Intent(this, GameActivity.class);
+        intentGame.putExtra("RandomKor", ranWordsKor);
+        intentGame.putExtra("RandomEng", ranWordsEng);
+        startActivity(intentGame);
+
 
     }
     public void newarr( ArrayList<StractEn> arrayList2){
