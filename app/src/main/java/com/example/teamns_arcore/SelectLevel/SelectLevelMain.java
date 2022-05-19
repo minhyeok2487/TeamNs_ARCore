@@ -111,6 +111,7 @@ public class SelectLevelMain extends AppCompatActivity {
         startActivity(levelintent);
         finish();
     }
+    //
 
 
     //카운트 다운 후 실행할 액티비티 변수
