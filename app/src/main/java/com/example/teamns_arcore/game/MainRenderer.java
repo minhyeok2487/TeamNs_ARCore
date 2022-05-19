@@ -148,12 +148,24 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         }
     }
 
-    float[][] getMinMaxPoint() {
-        float[][] resAll;
-        for (ObjRenderer mMinMax : arrayObj) {
-            resAll = mMinMax.getMinMaxPoint();
-            return resAll;
+//    float[][] getMinMaxPoint() {
+//        float[][] resAll;
+//        for (ObjRenderer mMinMax : arrayObj) {
+//            resAll = mMinMax.getMinMaxPoint();
+//            return resAll;
+//        }
+//        return null;
+//    }
+
+    void picObjColor(float[] picColor, int minIDX){
+        arrayObj.get(minIDX).setColorCorrection(picColor);
+    }
+
+    float[][][] getMinMaxPoint() {
+        float[][][] resAll = new float[MAX][2][3];
+        for (int i=0;i<MAX;i++) {
+            resAll[i] = arrayObj.get(i).getMinMaxPoint();
         }
-        return null;
+        return resAll;
     }
 }
