@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.teamns_arcore.DashboardActivity;
 import com.example.teamns_arcore.R;
 import com.example.teamns_arcore.Record.Model.RecordModel;
 import com.github.mikephil.charting.charts.BarChart;
@@ -236,21 +237,32 @@ public class ChartActivity extends AppCompatActivity {
     @Override
     public void onUserLeaveHint(){
         super.onUserLeaveHint();
-        currentPosition = mediaPlayer.getCurrentPosition();
-        mediaPlayer.pause();
+
+        if(mediaPlayer.isPlaying()){
+            currentPosition = mediaPlayer.getCurrentPosition();
+            mediaPlayer.pause();
+        }
+
     }
 
     @Override
     public void onResume(){
         super.onResume();
         mediaPlayer.seekTo(currentPosition);
-        mediaPlayer.start();
+        if(DashboardActivity.ismute){
+            mediaPlayer.start();
+        }else {
+            mediaPlayer.pause();
+        }
+
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
-        currentPosition = mediaPlayer.getCurrentPosition();
-        mediaPlayer.pause();
+        if(mediaPlayer.isPlaying()){
+            currentPosition = mediaPlayer.getCurrentPosition();
+            mediaPlayer.pause();
+        }
     }
 }
