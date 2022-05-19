@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.teamns_arcore.SQLiteHelper;
 import com.example.teamns_arcore.SelectLevel.Model.StractEn;
 
 import java.util.ArrayList;
@@ -18,6 +19,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
+    public static final String Table_Column_1_English="english"; // 영어
+    public static final String Table_Column_2_Means="means"; // 의미
+    public static final String Table_Column_3_Flagtime="flagtime"; // 나온횟수
+    public static final int Rest_DATA_Record = 100; // 초기화된 수
+
     public DatabaseHelper(Context context, String tableName, String DBname){
         super(context,DBNAME,null,1);
         DBNAME = DBname+".db";
@@ -25,7 +31,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         TABLE = tableName;
         this.mContext = context;
         DBLOCAION = "/data/data/" + context.getPackageName() + "/databases/";
-
 
 //        super(context,DBNAME,null,1); // 1은 데이터베이스 버전
 //        DBNAME = DBname+".db";
@@ -76,5 +81,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         CloseDatabase();
         return arrayListEng;
     }
+
 
 }
