@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String UserEmail = "";
     public static final String UserId = "";
     //
-    //
     MediaPlayer mediaPlayer;
     int currentPosition;
     @Override
