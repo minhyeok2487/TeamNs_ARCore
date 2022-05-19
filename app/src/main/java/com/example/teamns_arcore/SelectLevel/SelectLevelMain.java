@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.teamns_arcore.DashboardActivity;
 import com.example.teamns_arcore.MainActivity;
 import com.example.teamns_arcore.R;
 
@@ -200,22 +201,33 @@ public class SelectLevelMain extends AppCompatActivity {
     @Override
     public void onUserLeaveHint(){
         super.onUserLeaveHint();
-        currentPosition = mediaPlayer.getCurrentPosition();
-        mediaPlayer.pause();
+
+        if(mediaPlayer.isPlaying()){
+            currentPosition = mediaPlayer.getCurrentPosition();
+            mediaPlayer.pause();
+        }
+
     }
 
     @Override
     public void onResume(){
         super.onResume();
         mediaPlayer.seekTo(currentPosition);
-        mediaPlayer.start();
+        if(DashboardActivity.ismute){
+            mediaPlayer.start();
+        }else {
+            mediaPlayer.pause();
+        }
+
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
-        currentPosition = mediaPlayer.getCurrentPosition();
-        mediaPlayer.pause();
+        if(mediaPlayer.isPlaying()){
+            currentPosition = mediaPlayer.getCurrentPosition();
+            mediaPlayer.pause();
+        }
     }
 
 }

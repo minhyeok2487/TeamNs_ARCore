@@ -37,12 +37,15 @@ public class DashboardActivity extends AppCompatActivity {
     Button StartBtn, EndBtn;
     //
 
-
+    public static Boolean ismute =true;
+    Button muteBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
+        
+        
+        
         //Name = (TextView)findViewById(R.id.textView1);
         LogOUT = (Button)findViewById(R.id.button1);
         NameChg = (Button)findViewById(R.id.namechg);
@@ -51,11 +54,13 @@ public class DashboardActivity extends AppCompatActivity {
         // 버튼 리스너
         StartBtn = findViewById(R.id.StartBtn); // -> start버튼이 로그인 후 페이지로 가야한다.
         EndBtn = findViewById(R.id.EndBtn);
+        muteBtn = findViewById(R.id.muteBtn);
         //StartBtn.setVisibility(View.GONE);
         //EndBtn.setVisibility(View.GONE);
         //findViewById(R.id.regnicknameBtn).setOnClickListener(onClickListener);
         findViewById(R.id.StartBtn).setOnClickListener(onClickListener);
         findViewById(R.id.EndBtn).setOnClickListener(onClickListener);
+        findViewById(R.id.muteBtn).setOnClickListener(onClickListener);
         //
 
         Intent intent = getIntent();
@@ -140,6 +145,15 @@ public class DashboardActivity extends AppCompatActivity {
                 case R.id.EndBtn:
                     //게임종료메서드
                     finish();
+                    break;
+                case R.id.muteBtn:
+                    if(ismute){
+                        ismute = false;
+                        muteBtn.setText("음소거 해제");
+                    } else {
+                        ismute = true;
+                        muteBtn.setText("음소거");
+                    }
                     break;
             }
         }

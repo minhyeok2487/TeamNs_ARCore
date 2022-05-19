@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.teamns_arcore.DashboardActivity;
 import com.example.teamns_arcore.R;
 import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
 import com.example.teamns_arcore.SelectLevel.Model.StractEn;
@@ -498,8 +499,12 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mediaPlayer.seekTo(currentPosition);
-        mediaPlayer.start();
+        if(DashboardActivity.ismute){
+            mediaPlayer.seekTo(currentPosition);
+            mediaPlayer.start();
+        }else {
+            mediaPlayer.pause();
+        }
         requestCameraPermission();
         try {
             // 세션이 없다면 세션 생성
@@ -716,15 +721,23 @@ public class GameActivity extends AppCompatActivity {
     @Override
     public void onUserLeaveHint(){
         super.onUserLeaveHint();
-        currentPosition = mediaPlayer.getCurrentPosition();
-        mediaPlayer.pause();
+
+        if(mediaPlayer.isPlaying()){
+            currentPosition = mediaPlayer.getCurrentPosition();
+            mediaPlayer.pause();
+        }
+
     }
+
+
 
     @Override
     public void onDestroy(){
         super.onDestroy();
-        currentPosition = mediaPlayer.getCurrentPosition();
-        mediaPlayer.pause();
+        if(mediaPlayer.isPlaying()){
+            currentPosition = mediaPlayer.getCurrentPosition();
+            mediaPlayer.pause();
+        }
     }
 
 }
