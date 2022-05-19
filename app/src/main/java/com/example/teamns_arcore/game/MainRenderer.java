@@ -37,7 +37,8 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 //        mObj = new ObjRenderer(context, "andy.obj","andy.png");
 
         for (int i = 0; i < MAX; i++) {
-            arrayObj.add(new ObjRenderer(context, "andy.obj", "andy.png"));
+//            arrayObj.add(new ObjRenderer(context, "andy.obj", "andy.png"));
+            arrayObj.add(new ObjRenderer(context, "alphabet"+i+".obj", "andy.png"));
         }
     }
 
