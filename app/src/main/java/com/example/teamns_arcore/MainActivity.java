@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
         values.put("email", email);
         values.put("password", password);
         sqLiteDatabaseObj.insert("UserTable", null, values); // 테이블/널컬럼핵/데이터(널컬럼핵=디폴트)
-        // tip : 마우스를 db.insert에 올려보면 매개변수가 어떤 것이 와야 하는지 알 수 있다.
     }
 
     // EditText를 비어있는지 확인하는 용도
