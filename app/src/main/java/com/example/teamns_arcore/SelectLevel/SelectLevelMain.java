@@ -28,8 +28,6 @@ import java.io.File;
 public class SelectLevelMain extends AppCompatActivity {
     TextView count_view;
     RelativeLayout count_view_layout;
-    // 레벨버튼 intent
-    //Intent leveltwo;
 
     // 로그인 add
     SQLiteDatabase sqLiteDatabaseObj; // == private SQLiteDatabase db;
@@ -56,12 +54,6 @@ public class SelectLevelMain extends AppCompatActivity {
         findViewById(R.id.level2Btn).setOnClickListener(onClickListener);
         findViewById(R.id.level3Btn).setOnClickListener(onClickListener);
         findViewById(R.id.level4Btn).setOnClickListener(onClickListener);
-        findViewById(R.id.resetdataBtn).setOnClickListener(onClickListener);
-
-        findViewById(R.id.level1Btn).setOnLongClickListener(onLongClickListener);
-        findViewById(R.id.level2Btn).setOnLongClickListener(onLongClickListener);
-        findViewById(R.id.level3Btn).setOnLongClickListener(onLongClickListener);
-        findViewById(R.id.level4Btn).setOnLongClickListener(onLongClickListener);
 
         // 로그인 add
         Name = (TextView)findViewById(R.id.textView1);
@@ -97,20 +89,16 @@ public class SelectLevelMain extends AppCompatActivity {
             //leveltwo = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
             switch (v.getId()){
                 case R.id.level1Btn:
-                    setCount_view(GameActivity.class);
+                    setCount_view(SelectLevelActivity.class,1);
                     break;
                 case R.id.level2Btn:
-                    setCount_view(GameActivity.class);
+                    setCount_view(SelectLevelActivity.class,1);
                     break;
                 case R.id.level3Btn:
-                    setCount_view(GameActivity.class);
+                    setCount_view(SelectLevelActivity.class,1);
                     break;
                 case R.id.level4Btn:
-                    setCount_view(GameActivity.class);
-                    break;
-                case R.id.resetdataBtn:
-                    //데이터 초기화 - 타이머 액티비티 박아둠
-                    myStartActivity(TimerActivity.class);
+                    setCount_view(SelectLevelActivity.class,1);
                     break;
             }
         }
@@ -121,43 +109,18 @@ public class SelectLevelMain extends AppCompatActivity {
         Intent levelintent = new Intent(this, c);
         levelintent.putExtra("choice", (int)i);
         startActivity(levelintent);
+        finish();
     }
 
-    View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View view) {
-            switch (view.getId()){
-                case R.id.level1Btn:
-                    levelActivity(SelectLevelActivity.class,1);
-                    break;
-                case R.id.level2Btn:
-                    levelActivity(SelectLevelActivity.class,2);
-                    break;
-                case R.id.level3Btn:
-                    levelActivity(SelectLevelActivity.class,3);
-                    break;
-                case R.id.level4Btn:
-                    levelActivity(SelectLevelActivity.class,4);
-                    break;
-            }
-            return true;
-        }
-    };
-
-    private void myStartActivity(Class c) {
-        Intent myStartintent = new Intent(this, c);
-
-        startActivity(myStartintent);
-    }
 
     //카운트 다운 후 실행할 액티비티 변수
-    private void setCount_view(Class c){
+    private void setCount_view(Class c, int selectLevel){
         // 화면에 보일 TextView
         count_view = (TextView)findViewById(R.id.count_view);
         count_view_layout = (RelativeLayout)findViewById(R.id.count_view_layout);
 
         //3초 타이머
-        String conversionTime = "4";
+        String conversionTime = "3";
 
         // 카운트 다운 시작
         count_view_layout.setVisibility(View.VISIBLE);
@@ -168,40 +131,25 @@ public class SelectLevelMain extends AppCompatActivity {
 
         // 첫번쨰 인자 : 원하는 시간 (예를들어 30초면 30 x 1000(주기))
         // 두번쨰 인자 : 주기( 1000 = 1초)
-        CountDownTimer countDownTimer = null;
-        final boolean[] mrunning = {true};
-        countDownTimer = new CountDownTimer(conversionTime2, 1000) {
+        new CountDownTimer(conversionTime2, 1000) {
             // 특정 시간마다 뷰 변경
             public void onTick(long millisUntilFinished) {
                 // 분단위
                 long getMin = millisUntilFinished - (millisUntilFinished / (60 * 60 * 1000)) ;
                 // 초단위
-                String second = String.valueOf((getMin % (60 * 1000)) / 1000); // 나머지
-                if((getMin % (60 * 1000)) / 1000<4){
-                    myStartActivity(c);
-                    count_view.setText(second);
-                } else if((getMin % (60 * 1000)) / 1000<2){
-                    mrunning[0] = false;
-                    count_view.setText("1");
-                }
+                String second = String.valueOf((getMin % (60 * 1000)) / 1000 +1); // 나머지
+                count_view.setText(second);
             }
             public void onFinish() {
-                //끝날때 실행
-                //count_view_layout.setVisibility(View.GONE);
-                //myStartActivity(SelectLevelActivity.class); --> levelintent 사용해서 막음
+                levelActivity(SelectLevelActivity.class,selectLevel);
+                count_view.setText("시작~!");
             }
-        };
-        if(mrunning[0]){
-            countDownTimer.start();
-        }else{
-            countDownTimer.cancel();
-        }
+        }.start();
     }
 
     @Override
     public void onUserLeaveHint(){
         super.onUserLeaveHint();
-
         if(mediaPlayer.isPlaying()){
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();

@@ -87,19 +87,6 @@
 
         </LinearLayout>
 
-        <android.widget.Button
-            android:id="@+id/resetdataBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/border_round_thin"
-            android:fontFamily="@font/fontstyle"
-            android:padding="15dp"
-            android:text="데이터 초기화"
-            android:textColor="#FF5722"
-            android:textSize="25dp" />
-
     </LinearLayout>
 
     <include

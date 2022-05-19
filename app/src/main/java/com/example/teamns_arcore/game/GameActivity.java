@@ -33,6 +33,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.teamns_arcore.DashboardActivity;
+import com.example.teamns_arcore.MainActivity;
 import com.example.teamns_arcore.R;
 import com.example.teamns_arcore.Record.ChartActivity;
 import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
@@ -781,7 +782,6 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -791,4 +791,34 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    // 마지막으로 뒤로 가기 버튼을 눌렀던 시간 저장
+    private long backKeyPressedTime = 0;
+    // 첫 번째 뒤로 가기 버튼을 누를 때 표시
+    private Toast toast;
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        out();
+
+    }
+    public void out(){
+        // 마지막으로 뒤로 가기 버튼을 눌렀던 시간에 1.5초를 더해 현재 시간과 비교 후
+        // 마지막으로 뒤로 가기 버튼을 눌렀던 시간이 1.5초가 지났으면 Toast 출력
+        // 1500 milliseconds = 1.5 seconds
+        if (System.currentTimeMillis() > backKeyPressedTime + 2500) {
+            backKeyPressedTime = System.currentTimeMillis();
+            toast = Toast.makeText(this, "버튼을 한 번 더 누르시면 게임이 종료됩니다", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+        // 마지막으로 뒤로 가기 버튼을 눌렀던 시간에 1.5초를 더해 현재 시간과 비교 후
+        // 마지막으로 뒤로 가기 버튼을 눌렀던 시간이 1.5초가 지나지 않았으면 종료
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2500) {
+            finish();
+            toast.cancel();
+            toast = Toast.makeText(this,"게임이 종료되었습니다",Toast.LENGTH_SHORT);
+            toast.show();
+            finish();
+        }
+    }
 }
