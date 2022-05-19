@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TeamNs_ARCore">
         <activity
+            android:name=".Result_Dialog"
+            android:exported="false" />
+        <activity
             android:name=".game.HintDialog"
             android:exported="false" />
         <activity
@@ -31,9 +34,8 @@
         <activity android:name=".Record.ChartActivity" />
         <activity android:name=".Record.TableActivity" />
         <activity android:name=".game.TimerActivity" />
-
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".DashboardActivity"/>
+        <activity android:name=".DashboardActivity" />
 
         <meta-data
             android:name="com.google.ar.core"

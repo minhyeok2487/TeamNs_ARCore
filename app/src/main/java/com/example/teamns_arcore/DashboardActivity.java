@@ -92,7 +92,7 @@ public class DashboardActivity extends AppCompatActivity {
         NameChg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialogPopUp = (LinearLayout) View.inflate(DashboardActivity.this, R.layout.dialog, null);
+                dialogPopUp = (LinearLayout) View.inflate(DashboardActivity.this, R.layout.rename_dialog, null);
                 AlertDialog.Builder dlg = new AlertDialog.Builder(DashboardActivity.this);
                 dlg.setTitle("사용자 닉네임 변경");
                 dlg.setView(dialogPopUp); // 대화상자에 뷰 넣음

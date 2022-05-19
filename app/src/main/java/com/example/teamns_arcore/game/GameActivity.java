@@ -66,7 +66,7 @@ public class GameActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     int currentPosition;
 
-    TextView myTextView, myCatchView, questionTxtView, hintTxtView;
+    TextView myTextView, myCatchView, questionTxtView, hintTxtView, correctTxtView_count, incorrectTxtView_count;
 
     ////타이머 관련 변수//////////
     private Chronometer chronometer;
@@ -99,7 +99,7 @@ public class GameActivity extends AppCompatActivity {
 
     ArrayList<StractEn> seArrList;
 
-    View dialogView;
+    View dialogView, resultDialogView;
 
     int count = 0;
 
@@ -445,9 +445,19 @@ public class GameActivity extends AppCompatActivity {
                     incorrectCount++;
                     Log.d("정답틀림 : ", incorrectCount + "");
                 } else {
-                    Toast.makeText(getApplicationContext(), "시작단어입니다", Toast.LENGTH_SHORT).show();
-                    count = 0;
-                    questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
+                    Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요.", Toast.LENGTH_SHORT).show();
+                    resultDialogView = View.inflate(GameActivity.this, R.layout.activity_result_dialog, null);
+                    AlertDialog.Builder resultDialogBuilder = new AlertDialog.Builder(GameActivity.this);
+                    AlertDialog resultDialog = resultDialogBuilder.create();
+                    resultDialog.setView(resultDialogView);
+                    resultDialog.show();
+                    resultDialog.setCancelable(false);
+                    correctTxtView_count = resultDialogView.findViewById(R.id.correctTxtView_count);
+                    incorrectTxtView_count = resultDialogView.findViewById(R.id.incorrectTxtView_count);
+                    correctTxtView_count.setText(String.valueOf(answerCount));
+                    incorrectTxtView_count.setText(String.valueOf(incorrectCount));
+
+                    Log.d("정답갯수 : ", (answerCount + incorrectCount) + "");
                 }
             }
         });
@@ -509,23 +519,48 @@ public class GameActivity extends AppCompatActivity {
 
                 if (ranNumEng[count].equals(answerTxtView.getText().toString())) {
                     count++;
-                    if (count == ranNumEng.length) {
-                        Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요. 결과 화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
-                        Intent nextPage = new Intent(GameActivity.this, ChartActivity.class);
-                        startActivity(nextPage);
-                        Log.d("정답갯수 : ", answerCount + "");
-                    } else {
+                    if (count < ranNumEng.length) {
                         Toast.makeText(getApplicationContext(), "정답입니다!!!", Toast.LENGTH_SHORT).show();
                         questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
                         answerTxtView.setText("");
                         answerCount++;
                         Log.d("정답맞힘 : ", answerCount + "");
+                    } else {
+                        Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요.", Toast.LENGTH_SHORT).show();
+                        resultDialogView = View.inflate(GameActivity.this, R.layout.activity_result_dialog, null);
+                        AlertDialog.Builder resultDialogBuilder = new AlertDialog.Builder(GameActivity.this);
+                        AlertDialog resultDialog = resultDialogBuilder.create();
+                        resultDialog.setView(resultDialogView);
+                        resultDialog.show();
+                        resultDialog.setCancelable(false);
+                        correctTxtView_count = resultDialogView.findViewById(R.id.correctTxtView_count);
+                        incorrectTxtView_count = resultDialogView.findViewById(R.id.incorrectTxtView_count);
+                        correctTxtView_count.setText(String.valueOf(answerCount));
+                        incorrectTxtView_count.setText(String.valueOf(incorrectCount));
+
+                        Log.d("정답갯수 : ", (answerCount + incorrectCount) + "");
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "틀렸어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+//        if ((answerCount + incorrectCount) == 10) {
+//            Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요.", Toast.LENGTH_SHORT).show();
+//            dialogView = View.inflate(GameActivity.this, R.layout.activity_result_dialog, null);
+//            AlertDialog.Builder resultDialogBuilder = new AlertDialog.Builder(GameActivity.this);
+//            AlertDialog resultDialog = resultDialogBuilder.create();
+//            resultDialog.setView(dialogView);
+//            resultDialog.show();
+//            resultDialog.setCancelable(false);
+//            correctTxtView_count = dialogView.findViewById(R.id.correctTxtView_count);
+//            incorrectTxtView_count = dialogView.findViewById(R.id.incorrectTxtView_count);
+//            correctTxtView_count.setText(answerCount);
+//            incorrectTxtView_count.setText(incorrectCount);
+//
+//            Log.d("정답갯수 : ", (answerCount + incorrectCount) + "");
+//        }
 
 
     }
@@ -795,13 +830,15 @@ public class GameActivity extends AppCompatActivity {
     private long backKeyPressedTime = 0;
     // 첫 번째 뒤로 가기 버튼을 누를 때 표시
     private Toast toast;
+
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
         out();
 
     }
-    public void out(){
+
+    public void out() {
         // 마지막으로 뒤로 가기 버튼을 눌렀던 시간에 1.5초를 더해 현재 시간과 비교 후
         // 마지막으로 뒤로 가기 버튼을 눌렀던 시간이 1.5초가 지났으면 Toast 출력
         // 1500 milliseconds = 1.5 seconds
@@ -816,7 +853,7 @@ public class GameActivity extends AppCompatActivity {
         if (System.currentTimeMillis() <= backKeyPressedTime + 2500) {
             finish();
             toast.cancel();
-            toast = Toast.makeText(this,"게임이 종료되었습니다",Toast.LENGTH_SHORT);
+            toast = Toast.makeText(this, "게임이 종료되었습니다", Toast.LENGTH_SHORT);
             toast.show();
             finish();
         }
