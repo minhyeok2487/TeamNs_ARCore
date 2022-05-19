@@ -1,5 +1,6 @@
 package com.example.teamns_arcore;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -64,6 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
         // MODE_PRIVATE는 자기 앱에서만 사용하도록 설정하는 기본 값
         sqLiteDatabaseObj = openOrCreateDatabase(SQLiteHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
     }
+
+
 
     public void SQLiteTableBuild() {
          //  execSQL -> CREATE TABLE, DELETE, INSERT , rawQuery -> SELECT

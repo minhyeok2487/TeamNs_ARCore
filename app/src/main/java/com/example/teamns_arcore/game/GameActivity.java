@@ -394,9 +394,9 @@ public class GameActivity extends AppCompatActivity {
 
                         nearPoint(pose.tx(), pose.ty(), pose.tz());
 
-                        float [] picColor = new float[]{0.2f,0.2f,0.2f,0.8f};
+                        float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
                         mRenderer.picObjColor(picColor, minIDX);
-                        if(tooFar) {
+                        if (tooFar) {
                             tooFar = false;
                             mRenderer.picObjColor(picColor, minIDX);
                         }
@@ -454,9 +454,25 @@ public class GameActivity extends AppCompatActivity {
                 hintDialog.setView(dialogView);
                 hintDialog.show();
 
+                String word = ranNumEng[count];
+
+                String mosaic = "*";
+
+                StringBuffer mosaicBuffer = new StringBuffer();
+
+                for (int i = 2; i < word.length(); i++) {
+                    mosaicBuffer.append(mosaic);
+                }
+
+                StringBuffer stringBuffer = new StringBuffer();
+                stringBuffer.append(word);
+                stringBuffer.replace(1, word.length() - 1, mosaicBuffer.toString());
+
+
                 hintTxtView = dialogView.findViewById(R.id.hintTxtView);
-                hintTxtView.setText(String.format("[ %s ]", ranNumEng[count]));
+                hintTxtView.setText(String.format("[ %s ]", stringBuffer));
                 tts.speak(ranNumEng[count],TextToSpeech.QUEUE_FLUSH, null);
+
                 Thread th = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -469,8 +485,7 @@ public class GameActivity extends AppCompatActivity {
                         };
 
                         Timer timer = new Timer();
-                        timer.schedule(timerTask, 2000);
-
+                        timer.schedule(timerTask, 1000);
                     }
                 });
                 th.start();
@@ -610,10 +625,10 @@ public class GameActivity extends AppCompatActivity {
         float[][][] resAll = mRenderer.getMinMaxPoint();
         float[][] resXYZ = new float[MAX][3];
 
-        for(int i = 0 ; i<MAX;i++ ){
-            resXYZ[i][0] = (resAll[i][1][0]-resAll[i][0][0])/2; // i번째 obj x의 중간값
-            resXYZ[i][1] = (resAll[i][1][1]-resAll[i][0][1])/2; // i번째 obj y의 중간값
-            resXYZ[i][2] = (resAll[i][1][2]-resAll[i][0][2])/2; // i번째 obj y의 중간값
+        for (int i = 0; i < MAX; i++) {
+            resXYZ[i][0] = (resAll[i][1][0] - resAll[i][0][0]) / 2; // i번째 obj x의 중간값
+            resXYZ[i][1] = (resAll[i][1][1] - resAll[i][0][1]) / 2; // i번째 obj y의 중간값
+            resXYZ[i][2] = (resAll[i][1][2] - resAll[i][0][2]) / 2; // i번째 obj y의 중간값
         }
         return resXYZ;
     }
@@ -688,14 +703,14 @@ public class GameActivity extends AppCompatActivity {
         // modelTransArrayMatrix 여기서 중간값 찾기
 
         minIDX = 0;
-        PointXYZ pointAll = new PointXYZ(0,0,0);
-        PointXYZ pointClick = new PointXYZ(clickX,clickY,clickZ);
+        PointXYZ pointAll = new PointXYZ(0, 0, 0);
+        PointXYZ pointClick = new PointXYZ(clickX, clickY, clickZ);
 
         float minDistance = 100, newMinDistance = 0;
         float[][] resXYZ = catchCheck();
 
-        for(int i = 0; i<MAX; i++){
-            Log.d("최근좌표 catchCheck","요기"+resXYZ[i][0]+","+resXYZ[i][1]+","+resXYZ[i][2]);
+        for (int i = 0; i < MAX; i++) {
+            Log.d("최근좌표 catchCheck", "요기" + resXYZ[i][0] + "," + resXYZ[i][1] + "," + resXYZ[i][2]);
         }
 
         for (int i = 0; i < MAX; i++) {
@@ -703,23 +718,23 @@ public class GameActivity extends AppCompatActivity {
             pointAll.pointY = modelTransArrayMatrix[i][1];
             pointAll.pointZ = modelTransArrayMatrix[i][2];
 
-            newMinDistance = getDistPoint(pointAll,pointClick);
-            if(minDistance > newMinDistance){
+            newMinDistance = getDistPoint(pointAll, pointClick);
+            if (minDistance > newMinDistance) {
                 minIDX = i;
-                Log.d("최근좌표 if 들어옴 minIDX","요기"+minIDX);
+                Log.d("최근좌표 if 들어옴 minIDX", "요기" + minIDX);
                 minDistance = newMinDistance;
-                if(minIDX <= 12.0f){
+                if (minIDX <= 12.0f) {
                     tooFar = true;
                 }
             }
         }
-        Log.d("최근좌표","요기"+minIDX);
+        Log.d("최근좌표", "요기" + minIDX);
     }
 
     // 두 점 사이 거리의 제곱 계산 함수
     public float getDistPoint(PointXYZ p, PointXYZ q) {
         float near = (p.pointX - q.pointX) * (p.pointX - q.pointX) + (p.pointY - q.pointY) * (p.pointY - q.pointY) + (p.pointZ - q.pointZ) * (p.pointZ - q.pointZ);
-        Log.d("최근좌표 near","요기"+near);
+        Log.d("최근좌표 near", "요기" + near);
         return near;
     }
 

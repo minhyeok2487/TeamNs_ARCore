@@ -3,26 +3,24 @@ package com.example.teamns_arcore.game;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.teamns_arcore.R;
 
-public class HintDialog extends AppCompatActivity {
+import java.util.Objects;
 
-//    TextView hintTxtView;
-//    int count = 0;
+public class HintDialog extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hint_dialog);
 
-//        hintTxtView = findViewById(R.id.hintTxtView);
+        // 다이얼로그 배경을 투명으로 만든다
+        Objects.requireNonNull(getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-//        Intent intent = getIntent();
-//        String[] ranNum = intent.getStringArrayExtra("RandomEng");
-
-//        hintTxtView.setText("힌트 바뀜");
     }
 }
