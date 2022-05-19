@@ -1,6 +1,7 @@
 package com.example.teamns_arcore.Record;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,11 +43,17 @@ public class ChartActivity extends AppCompatActivity {
     PaymentAdapter adapter;
     Button gotoTable;
     List<RecordModel> recordModels = new ArrayList<>();
-
+    MediaPlayer mediaPlayer;
+    int currentPosition = 12000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
+        //배경음악
+        mediaPlayer = MediaPlayer.create(this, R.raw.endding);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
         gotoTable = findViewById(R.id.gotoTable);
         findViewById(R.id.gotoTable).setOnClickListener(onClickListener);
         tableLayout = (TableLayout) findViewById(R.id.tableLayout);
@@ -226,5 +233,24 @@ public class ChartActivity extends AppCompatActivity {
         return recordModels;
     }
 
+    @Override
+    public void onUserLeaveHint(){
+        super.onUserLeaveHint();
+        currentPosition = mediaPlayer.getCurrentPosition();
+        mediaPlayer.pause();
+    }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        mediaPlayer.seekTo(currentPosition);
+        mediaPlayer.start();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        currentPosition = mediaPlayer.getCurrentPosition();
+        mediaPlayer.pause();
+    }
 }

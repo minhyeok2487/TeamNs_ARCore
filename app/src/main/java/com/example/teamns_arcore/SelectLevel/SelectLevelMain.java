@@ -37,7 +37,7 @@ public class SelectLevelMain extends AppCompatActivity {
     TextView Name;
     //
     MediaPlayer mediaPlayer;
-    int currentPosition;
+    int currentPosition = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class SelectLevelMain extends AppCompatActivity {
         //배경음악
         mediaPlayer = MediaPlayer.create(this, R.raw.openning);
         mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        //mediaPlayer.start();
 
 
         // 버튼 리스너
