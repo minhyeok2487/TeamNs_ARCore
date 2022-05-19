@@ -11,6 +11,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -50,9 +51,11 @@ import com.google.ar.core.exceptions.CameraNotAvailableException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import static android.speech.tts.TextToSpeech.ERROR;
 
 public class GameActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
@@ -67,6 +70,8 @@ public class GameActivity extends AppCompatActivity {
     private int timerValue;
     //////////////////////////
 
+    ///////힌트변수///////
+    private TextToSpeech tts;
 
     TextView answerTxtView, questionTxtView, hintTxtView;
 
@@ -176,9 +181,21 @@ public class GameActivity extends AppCompatActivity {
 
         //배경음악
         mediaPlayer = MediaPlayer.create(this, R.raw.game);
-        mediaPlayer.setVolume(0.5f,0.5f);
+        mediaPlayer.setVolume(0.2f,0.2f);
         mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+
+        //TTS
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != ERROR) {
+                    // 언어를 선택한다.
+                    tts.setLanguage(Locale.ENGLISH);
+                }
+            }
+        });
+
+
 
         mSurfaceView = findViewById(R.id.gl_surface_view);
 
@@ -429,6 +446,8 @@ public class GameActivity extends AppCompatActivity {
         hintBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                mediaPlayer.setVolume(0.1f,0.1f);
                 dialogView = View.inflate(GameActivity.this, R.layout.activity_hint_dialog, null);
                 AlertDialog.Builder hintDialogBuilder = new AlertDialog.Builder(GameActivity.this);
                 AlertDialog hintDialog = hintDialogBuilder.create();
@@ -437,7 +456,7 @@ public class GameActivity extends AppCompatActivity {
 
                 hintTxtView = dialogView.findViewById(R.id.hintTxtView);
                 hintTxtView.setText(String.format("[ %s ]", ranNumEng[count]));
-
+                tts.speak(ranNumEng[count],TextToSpeech.QUEUE_FLUSH, null);
                 Thread th = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -451,6 +470,7 @@ public class GameActivity extends AppCompatActivity {
 
                         Timer timer = new Timer();
                         timer.schedule(timerTask, 2000);
+
                     }
                 });
                 th.start();
