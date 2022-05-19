@@ -92,13 +92,13 @@ public class SelectLevelMain extends AppCompatActivity {
                     setCount_view(SelectLevelActivity.class,1);
                     break;
                 case R.id.level2Btn:
-                    setCount_view(SelectLevelActivity.class,1);
+                    setCount_view(SelectLevelActivity.class,2);
                     break;
                 case R.id.level3Btn:
-                    setCount_view(SelectLevelActivity.class,1);
+                    setCount_view(SelectLevelActivity.class,3);
                     break;
                 case R.id.level4Btn:
-                    setCount_view(SelectLevelActivity.class,1);
+                    setCount_view(SelectLevelActivity.class,4);
                     break;
             }
         }
