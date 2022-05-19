@@ -5,6 +5,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NO_USER_ACTION;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,12 +23,12 @@ import com.example.teamns_arcore.SelectLevel.SelectLevelMain;
 
 public class MainActivity extends AppCompatActivity {
 
-
     public static String pname = "";
     RelativeLayout editnicknameview;
     EditText editnicknametext;
     //TextView currentnickname;
     //Button StartBtn, EndBtn;
+    ContentValues row;
     
     // 로그인 구현으로 add한 부분
     Button LogInButton, RegisterButton ;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        insert("테스트", "test", "1111");
         //currentnickname = findViewById(R.id.currentnickname);
         //runMusic();
 
@@ -116,6 +118,21 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    }
+    // 미리 데이터 저장 insert
+    public void insert(String name, String email, String password){
+        // 미리 데이터 넣어놓기
+        sqLiteHelper = new SQLiteHelper(this);
+        //sqLiteDatabaseObj = openOrCreateDatabase(SQLiteHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
+        sqLiteDatabaseObj = sqLiteHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        // db.insert의 매개변수인 values가 ContentValues 변수이므로 그에 맞춤
+        // 데이터의 삽입은 put을 이용한다.
+        values.put("name", name);
+        values.put("email", email);
+        values.put("password", password);
+        sqLiteDatabaseObj.insert("UserTable", null, values); // 테이블/널컬럼핵/데이터(널컬럼핵=디폴트)
+        // tip : 마우스를 db.insert에 올려보면 매개변수가 어떤 것이 와야 하는지 알 수 있다.
     }
 
     // EditText를 비어있는지 확인하는 용도
