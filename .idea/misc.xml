@@ -14,6 +14,7 @@
         <entry key="..\:/Users/Minhyeok/Desktop/Minhyeok/TeamNs_ARCore/app/src/main/res/layout/activity_chart.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Minhyeok/Desktop/Minhyeok/TeamNs_ARCore/app/src/main/res/layout/activity_dashboard.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Minhyeok/Desktop/Minhyeok/TeamNs_ARCore/app/src/main/res/layout/activity_game.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/Minhyeok/Desktop/Minhyeok/TeamNs_ARCore/app/src/main/res/layout/activity_dashboard.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Minhyeok/Desktop/Minhyeok/TeamNs_ARCore/app/src/main/res/layout/activity_main.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/Minhyeok/Desktop/Minhyeok/TeamNs_ARCore/app/src/main/res/layout/activity_selectlevel.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/Minhyeok/Desktop/Minhyeok/TeamNs_ARCore/app/src/main/res/layout/activity_table.xml" value="0.25364583333333335" />
@@ -28,10 +29,12 @@
         <entry key="app/src/main/res/layout/activity_game.xml" value="0.31203703703703706" />
         <entry key="app/src/main/res/layout/activity_hint_dialog.xml" value="0.32708333333333334" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.32205128205128203" />
+        <entry key="app/src/main/res/layout/activity_result_dialog.xml" value="0.17552083333333332" />
         <entry key="app/src/main/res/layout/activity_selectlevel.xml" value="0.32205128205128203" />
         <entry key="app/src/main/res/layout/activity_table.xml" value="0.32205128205128203" />
         <entry key="app/src/main/res/layout/activity_timer.xml" value="0.16197916666666667" />
         <entry key="app/src/main/res/layout/count_view_layout.xml" value="0.32708333333333334" />
+        <entry key="app/src/main/res/layout/dialog.xml" value="0.32708333333333334" />
         <entry key="app/src/main/res/layout/edit_nickname.xml" value="0.32205128205128203" />
         <entry key="app/src/main/res/layout/item_layout.xml" value="0.32205128205128203" />
         <entry key="app/src/main/res/layout/recorditem.xml" value="0.32205128205128203" />
