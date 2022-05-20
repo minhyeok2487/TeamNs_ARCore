@@ -21,7 +21,7 @@ public class RecordSQLiteHelper extends SQLiteOpenHelper {
     public static final String Table_Column_2_CorrectNum="CorrectNum"; // 맞은정답개수
     public static final String Table_Column_3_Timer="Timer"; // 타이머
     public static final String Table_Column_4_Score="Score"; // 점수
-    public static final String Table_Column_5_Level="Level"; // 타이머
+    public static final String Table_Column_5_Level="Level"; // 레벨
 
     private Context mContext;
     public static String DBLOCAION = "";
