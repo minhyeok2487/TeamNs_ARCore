@@ -29,6 +29,7 @@ public class SelectLevelMain extends AppCompatActivity {
     TextView count_view;
     RelativeLayout count_view_layout;
 
+    CountDownTimer countDownTimer;
     // 로그인 add
     SQLiteDatabase sqLiteDatabaseObj; // == private SQLiteDatabase db;
     SQLiteHelper sqLiteHelper;
@@ -133,7 +134,7 @@ public class SelectLevelMain extends AppCompatActivity {
 
         // 첫번쨰 인자 : 원하는 시간 (예를들어 30초면 30 x 1000(주기))
         // 두번쨰 인자 : 주기( 1000 = 1초)
-        new CountDownTimer(conversionTime2, 1000) {
+        countDownTimer = new CountDownTimer(conversionTime2, 1000) {
             // 특정 시간마다 뷰 변경
             public void onTick(long millisUntilFinished) {
                 // 분단위
@@ -146,7 +147,9 @@ public class SelectLevelMain extends AppCompatActivity {
                 levelActivity(SelectLevelActivity.class,selectLevel);
                 count_view.setText("시작~!");
             }
-        }.start();
+        };
+
+        countDownTimer.start();
     }
 
     @Override
@@ -155,6 +158,7 @@ public class SelectLevelMain extends AppCompatActivity {
         if(mediaPlayer.isPlaying()){
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
+            countDownTimer.cancel();
         }
 
     }
@@ -167,6 +171,7 @@ public class SelectLevelMain extends AppCompatActivity {
             mediaPlayer.start();
         }else {
             mediaPlayer.pause();
+            countDownTimer.cancel();
         }
 
     }
@@ -177,6 +182,7 @@ public class SelectLevelMain extends AppCompatActivity {
         if(mediaPlayer.isPlaying()){
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
+            countDownTimer.cancel();
         }
     }
 
