@@ -401,17 +401,11 @@ public class GameActivity extends AppCompatActivity {
 
                     for (HitResult result : results) {
                         Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
-
-                
-       
                         if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
-
                             // 클릭확인용
                             float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
                             mRenderer.picObjColor(picColor, catchIDX);
-                             tooFar = false;
-                            //mRenderer.picObjColor(picColor, minIDX);
-                            insertText += String.valueOf(minIDX);
+                            insertText += String.valueOf(catchIDX);
                             answerTxtView.setText(insertText);
                         } else {
 
