@@ -8,17 +8,26 @@
     tools:context=".RegisterActivity">
 
     <!-- 회원가입 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="20dp">
 
     <TextView
         android:text="회원 가입"
         android:gravity="center"
-        android:textSize="20dp"
-        android:textColor="#000"
+        android:textSize="60dp"
+        android:textColor="#2583E3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView" />
+        android:layout_marginBottom="20dp"
+        android:id="@+id/textView"
+        android:fontFamily="@font/fontstyle"
+        />
 
     <EditText
         android:layout_width="fill_parent"
@@ -31,6 +40,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:id="@+id/editName"
+        android:textSize="20dp"
         android:gravity="center"/>
 
     <EditText
@@ -44,6 +54,7 @@
         android:gravity="center"
         android:hint="아이디를 입력하세요"
         android:inputType="textEmailAddress"
+        android:textSize="20dp"
         android:textColor="#000" />
 
     <EditText
@@ -57,16 +68,21 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:id="@+id/editPassword"
+        android:textSize="20dp"
         android:gravity="center"/>
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonRegister"
-        android:layout_below="@+id/editPassword"
-        android:layout_marginTop="20dp"
-        android:text="회원가입"/>
+        <android.widget.Button
+            android:id="@+id/buttonRegister"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editPassword"
+            android:background="@drawable/border_round_fill"
+            android:layout_marginTop="50dp"
+            android:textSize="18dp"
+            android:textColor="#fff"
+            android:text="회원가입" />
 
+    </LinearLayout>
 
 
 </RelativeLayout>
