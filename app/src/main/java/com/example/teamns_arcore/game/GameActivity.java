@@ -115,9 +115,8 @@ public class GameActivity extends AppCompatActivity {
 
     int hour = localTime.getHour();
     int min = localTime.getMinute();
-    int sec = localTime.getSecond();
 
-    String currentTime = String.format("%s %d:%d:%d", localDate, hour, min, sec);
+    String currentTime = String.format("%s %d:%d", localDate, hour, min);
 
     float[][] colorCorrections = new float[][]{
             {0.8f, 0.8f, 0.8f, 0.8f},
