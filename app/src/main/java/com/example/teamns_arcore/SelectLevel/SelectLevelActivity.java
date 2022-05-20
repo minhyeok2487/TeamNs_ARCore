@@ -135,7 +135,7 @@ public class SelectLevelActivity extends AppCompatActivity {
     //
     ///
     public void gogogo() {
-        ArrayList<StractEn> arrayList2 = new ArrayList<StractEn>();
+        ArrayList<StractEn> arrayList2 = new ArrayList<>();
 
         //rand(arrayList2);
         newarr(arrayList2);
@@ -177,7 +177,7 @@ public class SelectLevelActivity extends AppCompatActivity {
     }
 
     public void newarr(ArrayList<StractEn> arrayList2) {
-        Map<StractEn, Double> w = new HashMap<StractEn, Double>();
+        Map<StractEn, Double> w = new HashMap<>();
         for (int a = 0; a < arrayList.size(); a++) {
             w.put(arrayList.get(a), Double.valueOf(arrayList.get(a).getFlagtime()));
         }
@@ -205,7 +205,7 @@ public class SelectLevelActivity extends AppCompatActivity {
             if (!overlap) {
                 arrayList2.add(res);
                 Log.d("가중치 랜덤 뽑기", res.getEnglish());
-                Double resFlag = Double.valueOf(res.getFlagtime()) / 2;
+                Double resFlag = Double.parseDouble(res.getFlagtime()) / 2;
                 arrayList.get(num).setFlagtime(String.valueOf(resFlag));
             }
         }
