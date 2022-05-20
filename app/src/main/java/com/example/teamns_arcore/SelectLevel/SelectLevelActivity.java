@@ -61,17 +61,19 @@ public class SelectLevelActivity extends AppCompatActivity {
 
         // lv에 따른 intent값 다르게 받기
         lv1 = levelintent.getIntExtra("choice", 1);
+        System.out.println("SelectLevelActivity.lv1 : "+lv1);
         lv2 = levelintent.getIntExtra("choice", 2);
+        System.out.println("SelectLevelActivity.lv2 : "+lv2);
         lv3 = levelintent.getIntExtra("choice", 3);
         lv4 = levelintent.getIntExtra("choice", 4);
-        int a = lv1; int b = lv2; int c = lv3; int d = lv4;
-        if(a==lv1){ // 같으면 자기 db table 가지고 와주라
+        if(lv1==1){ // 같으면 자기 db table 가지고 와주라 // -> 이거 문제 생김
             mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelone","lv_one_quiz");
-        }else if(b==lv2){
+        }else if(lv2==2){
             mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "leveltwo","lv_one_quiz");
-        }else if(c==lv3){
+            System.out.println("lv2로 들어왔습니다.");
+        }else if(lv3==3){
             mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelthree","lv_one_quiz");
-        }else if(d==lv4){
+        }else if(lv4==4){
             mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelfour","lv_one_quiz");
         }else{
             System.out.println("어떤 버튼을 눌렀는지 모릅니다.");
@@ -126,7 +128,7 @@ public class SelectLevelActivity extends AppCompatActivity {
             }
         }
     };
-//
+    //
     ///
     public void gogogo(){
         ArrayList<StractEn> arrayList2 = new ArrayList<StractEn>();

@@ -27,7 +27,7 @@
             android:layout_marginHorizontal="10dp"
             android:background="@drawable/border_round_thin"
             android:text="SKIP"
-            android:textColor="@color/white" />
+            android:textColor="#3E9CFC" />
 
         <Chronometer
             android:id="@+id/chronometer"
@@ -50,7 +50,7 @@
             android:layout_marginHorizontal="10dp"
             android:background="@drawable/border_round_thin"
             android:text="색 변경"
-            android:textColor="@color/white" />
+            android:textColor="#3E9CFC" />
 
 
     </LinearLayout>
@@ -74,7 +74,7 @@
             android:padding="5dp"
             android:text="문제"
             android:textAlignment="center"
-            android:textColor="#FFEB3B"
+            android:textColor="#FEDB67"
             android:textSize="50dp" />
 
         <EditText
