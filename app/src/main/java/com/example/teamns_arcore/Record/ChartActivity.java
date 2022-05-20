@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -55,6 +56,7 @@ public class ChartActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     int currentPosition = 12000;
     RecordSQLiteHelper recordSQLiteHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,14 +69,13 @@ public class ChartActivity extends AppCompatActivity {
         //데이터 불러오기
         File database = getApplicationContext().getDatabasePath(RecordSQLiteHelper.DATABASE_NAME);
         recordSQLiteHelper = new RecordSQLiteHelper(ChartActivity.this);
-        if(database.exists()==false){
+        if (!database.exists()) {
             recordSQLiteHelper.getReadableDatabase();
-            if(!copydatabase(ChartActivity.this)){
+            if (!copydatabase(ChartActivity.this)) {
                 return;
             }
         }
         recordModels = recordSQLiteHelper.getData();
-
 
         gotoTable = findViewById(R.id.gotoTable);
         findViewById(R.id.gotoTable).setOnClickListener(onClickListener);
@@ -119,13 +120,13 @@ public class ChartActivity extends AppCompatActivity {
     public void graphInitSetting4() {
         ArrayList<String> jsonList = new ArrayList<>(); // ArrayList 선언
         ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
-        for(int i=0;i<recordModels.size();i++){
+        for (int i = 0; i < recordModels.size(); i++) {
             jsonList.add(recordModels.get(i).getScore());
             labelList.add(recordModels.get(i).getDate());
         }
 
         BarChartGraph(labelList, jsonList);
-        LineGraph(labelList,jsonList);
+        LineGraph(labelList, jsonList);
 
     }
 
@@ -140,7 +141,7 @@ public class ChartActivity extends AppCompatActivity {
         labelList.add(recordModels.get(3).getDate());
         labelList.add(recordModels.get(4).getDate());
         BarChartGraph(labelList, jsonList);
-        LineGraph(labelList,jsonList);
+        LineGraph(labelList, jsonList);
     }
 
     /**
@@ -195,7 +196,7 @@ public class ChartActivity extends AppCompatActivity {
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.gotoTable:
                     //myStartActivity(TableActivity.class);
                     if (tableLayout.getVisibility() == View.VISIBLE) {
@@ -226,23 +227,23 @@ public class ChartActivity extends AppCompatActivity {
 
     //임시 데이터 생성
     //String id, String date, int correctNum, float timer, float score
-    private List<RecordModel> getList(){
+    private List<RecordModel> getList() {
 
 
         return recordModels;
     }
 
-    public Boolean copydatabase(Context context){
+    public Boolean copydatabase(Context context) {
         try {
             InputStream inputStream = context.getAssets().open(RecordSQLiteHelper.DATABASE_NAME);
-            String OutFileName = RecordSQLiteHelper.DBLOCAION+RecordSQLiteHelper.DATABASE_NAME;
+            String OutFileName = RecordSQLiteHelper.DBLOCAION + RecordSQLiteHelper.DATABASE_NAME;
             File f = new File(OutFileName);
             f.getParentFile().mkdirs();
             OutputStream outputStream = new FileOutputStream(OutFileName);
 
             byte[] buffer = new byte[1024];
             int length = 0;
-            while((length = inputStream.read(buffer))>0){
+            while ((length = inputStream.read(buffer)) > 0) {
                 outputStream.write(buffer, 0, length);
             }
             outputStream.flush();
@@ -255,10 +256,10 @@ public class ChartActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onUserLeaveHint(){
+    public void onUserLeaveHint() {
         super.onUserLeaveHint();
 
-        if(mediaPlayer.isPlaying()){
+        if (mediaPlayer.isPlaying()) {
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
         }
@@ -266,21 +267,21 @@ public class ChartActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         mediaPlayer.seekTo(currentPosition);
-        if(DashboardActivity.ismute){
+        if (DashboardActivity.ismute) {
             mediaPlayer.start();
-        }else {
+        } else {
             mediaPlayer.pause();
         }
 
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
-        if(mediaPlayer.isPlaying()){
+        if (mediaPlayer.isPlaying()) {
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
         }

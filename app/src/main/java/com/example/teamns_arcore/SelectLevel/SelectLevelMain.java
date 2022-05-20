@@ -65,15 +65,16 @@ public class SelectLevelMain extends AppCompatActivity {
         EmailHolder = userNameintent.getStringExtra(MainActivity.UserId);
         // TextView에 이름 넣어주기
         select();
-        Name.setText("어서오세요. "+select()+" 님");
+        Name.setText("어서오세요. " + select() + " 님");
         //Name.setText("어서오세요. 아무개 님");
         //
     }
+
     // 이름 가져오기
     public String select() {
         sqLiteDatabaseObj = openOrCreateDatabase(SQLiteHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
         // SELECT name from UserTable WHERE email = 'test';
-        Cursor mCursor = sqLiteDatabaseObj.rawQuery("SELECT * FROM " + SQLiteHelper.TABLE_NAME + " WHERE "+ SQLiteHelper.Table_Column_2_Email +" = '"+ EmailHolder+"';", null);
+        Cursor mCursor = sqLiteDatabaseObj.rawQuery("SELECT * FROM " + SQLiteHelper.TABLE_NAME + " WHERE " + SQLiteHelper.Table_Column_2_Email + " = '" + EmailHolder + "';", null);
         // Android android.database.CursorIndexOutOfBoundsException 에러 방지
         // cursor의 위치가 처음에 위치하고 있지 않았을 때 나는 에러
         // 값을 가지고 있으나 Position이 잘못된 경우 값을 재대로 가지고 올 수 없다.
@@ -111,6 +112,9 @@ public class SelectLevelMain extends AppCompatActivity {
         Intent levelintent = new Intent(this, c);
         levelintent.putExtra("choice", (int) i);
         startActivity(levelintent);
+
+        Intent levelcount = new Intent(SelectLevelMain.this, GameActivity.class);
+        levelcount.putExtra("Level", i);
         finish();
     }
     //
