@@ -61,7 +61,6 @@ public class SelectLevelMain extends AppCompatActivity {
         Name = (TextView) findViewById(R.id.textView1);
         Intent userNameintent = getIntent();
         sqLiteHelper = new SQLiteHelper(SelectLevelMain.this);
-        EmailHolder = userNameintent.getStringExtra(MainActivity.UserId);
         // MainActivity에서 유저id 받기
         EmailHolder = userNameintent.getStringExtra(MainActivity.UserId);
         // TextView에 이름 넣어주기
@@ -93,19 +92,15 @@ public class SelectLevelMain extends AppCompatActivity {
             switch (v.getId()) {
                 case R.id.level1Btn:
                     setCount_view(SelectLevelActivity.class, 1);
-                    levelActivity(GameActivity.class, 1);
                     break;
                 case R.id.level2Btn:
                     setCount_view(SelectLevelActivity.class, 2);
-                    levelActivity(GameActivity.class, 2);
                     break;
                 case R.id.level3Btn:
                     setCount_view(SelectLevelActivity.class, 3);
-                    levelActivity(GameActivity.class, 3);
                     break;
                 case R.id.level4Btn:
                     setCount_view(SelectLevelActivity.class, 4);
-                    levelActivity(GameActivity.class, 4);
                     break;
             }
         }

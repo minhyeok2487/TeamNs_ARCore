@@ -1,8 +1,10 @@
 package com.example.teamns_arcore.game;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.display.DisplayManager;
@@ -36,7 +38,9 @@ import com.example.teamns_arcore.DashboardActivity;
 import com.example.teamns_arcore.MainActivity;
 import com.example.teamns_arcore.R;
 import com.example.teamns_arcore.Record.ChartActivity;
+import com.example.teamns_arcore.Record.RecordSQLiteHelper;
 import com.example.teamns_arcore.Record.TableActivity;
+import com.example.teamns_arcore.SQLiteHelper;
 import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
 import com.example.teamns_arcore.SelectLevel.Model.StractEn;
 import com.example.teamns_arcore.SelectLevel.SelectLevelMain;
@@ -110,6 +114,8 @@ public class GameActivity extends AppCompatActivity {
     int answerCount = 0;
     int incorrectCount = 0;
     int levelNum = 0;
+
+    SQLiteDatabase database;
 
     LocalDate localDate = LocalDate.now();
     LocalTime localTime = LocalTime.now();
@@ -193,7 +199,7 @@ public class GameActivity extends AppCompatActivity {
     int[] ranNum = new int[MAX];
 
     // 입력을 넣을 String
-    String insertText="";
+    String insertText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -524,21 +530,8 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
-//        if ((answerCount + incorrectCount) == 10) {
-//            Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요.", Toast.LENGTH_SHORT).show();
-//            dialogView = View.inflate(GameActivity.this, R.layout.activity_result_dialog, null);
-//            AlertDialog.Builder resultDialogBuilder = new AlertDialog.Builder(GameActivity.this);
-//            AlertDialog resultDialog = resultDialogBuilder.create();
-//            resultDialog.setView(dialogView);
-//            resultDialog.show();
-//            resultDialog.setCancelable(false);
-//            correctTxtView_count = dialogView.findViewById(R.id.correctTxtView_count);
-//            incorrectTxtView_count = dialogView.findViewById(R.id.incorrectTxtView_count);
-//            correctTxtView_count.setText(answerCount);
-//            incorrectTxtView_count.setText(incorrectCount);
-//
-//            Log.d("정답갯수 : ", (answerCount + incorrectCount) + "");
-//        }
+        RecordSQLiteHelper recordSQLite = new RecordSQLiteHelper(getApplicationContext());
+        database = recordSQLite.getWritableDatabase();
 
 
     }
@@ -667,7 +660,6 @@ public class GameActivity extends AppCompatActivity {
         }
         return false;
     }
-
 
 
     void randomNum() {
@@ -801,14 +793,25 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GameActivity.this, TableActivity.class);
-                intent.putExtra("Date", currentTime);
-                intent.putExtra("CorrectNum", answerCount);
-                intent.putExtra("Timer", timerValue);
+//                intent.putExtra("Date", currentTime);
+//                intent.putExtra("CorrectNum", answerCount);
+//                intent.putExtra("Timer", timerValue);
 //                intent.putExtra("Score", answerCount);
-                intent.putExtra("Level", levelNum);
+//                intent.putExtra("Level", levelNum);
                 startActivity(intent);
+                insertData("테스트", currentTime, answerCount, timerValue, answerCount, levelNum);
+
             }
         });
+
+    }
+
+    void insertData(String ID, String Date, int CorrectNum, int Timer, int Score, int Level) {
+        if (database != null) {
+            String query = "INSERT INTO Record_data("+ID+","+Date+","+CorrectNum+","+Timer+","+Score+","+Level+") VALUE(?, ?, ?, ?, ?, ?)";
+            Object[] params = {ID, Date, CorrectNum, Timer, Score, Level};
+            database.execSQL(query, params);
+        }
 
     }
 }
