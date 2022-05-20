@@ -26,7 +26,8 @@ public class DashboardActivity extends AppCompatActivity {
     SQLiteHelper sqLiteHelper;
     String EmailHolder;
     //TextView Name;
-    Button LogOUT, NameChg ;
+    ImageButton LogOUT, NameChg ;
+    //Button LogOUT, NameChg ;
 
     // inpublic static final String UserEmail = "";
     //다이얼로그
@@ -51,8 +52,8 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         //Name = (TextView)findViewById(R.id.textView1);
-        LogOUT = (Button)findViewById(R.id.button1);
-        NameChg = (Button)findViewById(R.id.namechg);
+        LogOUT = (ImageButton)findViewById(R.id.button1);
+        NameChg = (ImageButton)findViewById(R.id.namechg);
 
         // /* 원래 main에 있던 정보들  */
         // 버튼 리스너
@@ -153,10 +154,10 @@ public class DashboardActivity extends AppCompatActivity {
                 case R.id.muteBtn:
                     if(ismute){
                         ismute = false;
-                        muteBtn.setImageResource(R.drawable.music_off);
+                        muteBtn.setImageResource(R.drawable.music_icon_off);
                     } else {
                         ismute = true;
-                        muteBtn.setImageResource(R.drawable.music_note);
+                        muteBtn.setImageResource(R.drawable.music_icon);
                     }
                     break;
             }
