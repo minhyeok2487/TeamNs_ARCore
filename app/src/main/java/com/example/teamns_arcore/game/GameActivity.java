@@ -193,6 +193,9 @@ public class GameActivity extends AppCompatActivity {
     //    ArrayList<Integer> ranNum = new ArrayList<>();
     int[] ranNum = new int[MAX];
 
+    // 입력을 넣을 String
+    String insertText="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -415,10 +418,11 @@ public class GameActivity extends AppCompatActivity {
                         nearPoint(pose.tx(), pose.ty(), pose.tz());
 
                         float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
-                        mRenderer.picObjColor(picColor, minIDX);
                         if (tooFar) {
                             tooFar = false;
-                            mRenderer.picObjColor(picColor, minIDX);
+                            //mRenderer.picObjColor(picColor, minIDX);
+                            insertText += String.valueOf(minIDX);
+                            answerTxtView.setText(insertText);
                         }
                     }
                 }
