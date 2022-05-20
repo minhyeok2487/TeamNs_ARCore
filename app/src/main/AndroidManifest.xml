@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TeamNs_ARCore">
         <activity
-            android:name=".Result_Dialog"
+            android:name=".game.Result_Dialog"
             android:exported="false" />
         <activity
             android:name=".game.HintDialog"

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +39,7 @@ public class DashboardActivity extends AppCompatActivity {
     //
 
     public static Boolean ismute =true;
-    Button muteBtn;
+    ImageButton muteBtn;
 
     // 마지막으로 뒤로 가기 버튼을 눌렀던 시간 저장
     private long backKeyPressedTime = 0;
@@ -152,10 +153,10 @@ public class DashboardActivity extends AppCompatActivity {
                 case R.id.muteBtn:
                     if(ismute){
                         ismute = false;
-                        muteBtn.setText("음소거 해제");
+                        muteBtn.setImageResource(R.drawable.music_off);
                     } else {
                         ismute = true;
-                        muteBtn.setText("음소거");
+                        muteBtn.setImageResource(R.drawable.music_note);
                     }
                     break;
             }
