@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        insert(1,"테스트", "test", "1111"); // 테스트를 위한 데이터 미리넣어놓기
+        //insert(1,"테스트", "test", "1111"); // 테스트를 위한 데이터 미리넣어놓기
         
         // 로그인 회원가입 버튼
         LogInButton = (Button)findViewById(R.id.buttonLogin);
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             // Opening SQLite database write permission.
             sqLiteDatabaseObj = sqLiteHelper.getWritableDatabase();
 
-            cursor = sqLiteDatabaseObj.query(SQLiteHelper.TABLE_NAME, null, " " + SQLiteHelper.Table_Column_2_Email + "=?", new String[]{EmailHolder}, null, null, null);
+            cursor = sqLiteDatabaseObj.query(SQLiteHelper.TABLE_NAME, null, " " + SQLiteHelper.Table_Column_2_Email + "= ?", new String[]{EmailHolder}, null, null, null);
 
             while (cursor.moveToNext()) {
                 if (cursor.isFirst()) {
@@ -106,21 +106,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    // 테스트를 위한 데이터 저장 insert
-    public void insert(int id, String name, String email, String password){
-        // 미리 데이터 넣어놓기
-        sqLiteHelper = new SQLiteHelper(this);
-        //sqLiteDatabaseObj = openOrCreateDatabase(SQLiteHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
-        sqLiteDatabaseObj = sqLiteHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        // db.insert의 매개변수인 values가 ContentValues 변수이므로 그에 맞춤
-        // 데이터의 삽입은 put을 이용한다.
-        values.put("id", id);
-        values.put("name", name);
-        values.put("email", email);
-        values.put("password", password);
-        sqLiteDatabaseObj.insert("UserTable", null, values); // 테이블/널컬럼핵/데이터(널컬럼핵=디폴트)
-    }
+    // 테스트를 위한 데이터 저장 insert // -> 테스트용으로
+//    public void insert(int id, String name, String email, String password){
+//        // 미리 데이터 넣어놓기
+//        sqLiteHelper = new SQLiteHelper(this);
+//        //sqLiteDatabaseObj = openOrCreateDatabase(SQLiteHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
+//        sqLiteDatabaseObj = sqLiteHelper.getWritableDatabase();
+//        ContentValues values = new ContentValues();
+//        // db.insert의 매개변수인 values가 ContentValues 변수이므로 그에 맞춤
+//        // 데이터의 삽입은 put을 이용한다.
+//        values.put("id", id);
+//        values.put("name", name);
+//        values.put("email", email);
+//        values.put("password", password);
+//        sqLiteDatabaseObj.insert("UserTable", null, values); // 테이블/널컬럼핵/데이터(널컬럼핵=디폴트)
+//    }
 
     // EditText를 비어있는지 확인하는 용도
     public void CheckEditTextStatus(){

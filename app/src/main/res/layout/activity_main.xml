@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="20dp"
     android:background="@drawable/main_page"
     tools:context=".MainActivity">
 
@@ -22,8 +22,9 @@
         android:fontFamily="@font/fontstyle"
         android:gravity="center"
         android:text="로그인"
-        android:textColor="@color/black"
-        android:textSize="60dp" />
+        android:textColor="#000C7B"
+        android:layout_marginBottom="10dp"
+        android:textSize="80dp" />
 
     <EditText
         android:id="@+id/editEmail"
@@ -36,8 +37,11 @@
         android:gravity="center"
         android:hint="아이디를 입력하세요"
         android:inputType="textEmailAddress"
-        android:text="test"
-        android:textColor="#000" />
+        android:paddingBottom="18dp"
+        android:textColor="#fff"
+        android:textColorHint="#fff"
+        android:backgroundTint="#fff"
+        android:textSize="20dp" />
 
     <EditText
         android:id="@+id/editPassword"
@@ -49,17 +53,21 @@
         android:ems="10"
         android:gravity="center"
         android:hint="비밀번호를 입력하세요"
+        android:textColorHint="#fff"
         android:inputType="textPassword"
-        android:text="1111"
-        android:textColor="#000" />
+        android:paddingBottom="18dp"
+        android:backgroundTint="#fff"
+        android:textSize="20dp"
+        android:textColor="#fff" />
 
     <android.widget.Button
         android:id="@+id/buttonLogin"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editPassword"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/border_round_fill"
+        android:layout_marginTop="30dp"
+        android:textSize="18dp"
+        android:background="@drawable/border_round_thin"
         android:text="로그인" />
 
     <android.widget.Button
@@ -68,7 +76,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonLogin"
         android:layout_marginTop="20dp"
+        android:textSize="18dp"
         android:background="@drawable/border_round_thin"
+        android:layout_marginBottom="30dp"
         android:text="회원가입" />
 
     <!-- 추가된 사항 끝 -->
