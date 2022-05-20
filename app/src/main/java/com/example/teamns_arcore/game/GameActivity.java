@@ -799,7 +799,7 @@ public class GameActivity extends AppCompatActivity {
 //                intent.putExtra("Score", answerCount);
 //                intent.putExtra("Level", levelNum);
                 startActivity(intent);
-                insertData("테스트", currentTime, answerCount, timerValue, answerCount, levelNum);
+                insertData("테스트", "2022-01-01", 2, 5, 90, 1);
 
             }
         });
@@ -807,11 +807,21 @@ public class GameActivity extends AppCompatActivity {
     }
 
     void insertData(String ID, String Date, int CorrectNum, int Timer, int Score, int Level) {
-        if (database != null) {
-            String query = "INSERT INTO Record_data("+ID+","+Date+","+CorrectNum+","+Timer+","+Score+","+Level+") VALUE(?, ?, ?, ?, ?, ?)";
-            Object[] params = {ID, Date, CorrectNum, Timer, Score, Level};
-            database.execSQL(query, params);
-        }
+//        if (database != null) {
+//            String query = "INSERT INTO Record_data(" + RecordSQLiteHelper.Table_Column_ID + "," + RecordSQLiteHelper.Table_Column_1_Date + "," + RecordSQLiteHelper.Table_Column_2_CorrectNum + "," + RecordSQLiteHelper.Table_Column_3_Timer + "," + RecordSQLiteHelper.Table_Column_4_Score + "," + RecordSQLiteHelper.Table_Column_5_Level + ") VALUE(ID, Date, CorrectNum, Timer, Score, Level)";
+//            Object[] params = {ID, Date, CorrectNum, Timer, Score, Level};
+//            database.execSQL(query, params);
+//        }
+
+        ContentValues values = new ContentValues();
+        values.put(RecordSQLiteHelper.Table_Column_ID, ID);
+        values.put(RecordSQLiteHelper.Table_Column_1_Date, Date);
+        values.put(RecordSQLiteHelper.Table_Column_2_CorrectNum, CorrectNum);
+        values.put(RecordSQLiteHelper.Table_Column_3_Timer, Timer);
+        values.put(RecordSQLiteHelper.Table_Column_4_Score, Score);
+        values.put(RecordSQLiteHelper.Table_Column_5_Level, Level);
+
+        database.insert(RecordSQLiteHelper.TABLE_NAME, null, values);
 
     }
 }
