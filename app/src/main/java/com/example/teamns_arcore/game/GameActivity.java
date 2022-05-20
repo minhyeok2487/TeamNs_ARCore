@@ -90,9 +90,7 @@ public class GameActivity extends AppCompatActivity {
     Session mSession;
     Config mConfig;
 
-    boolean mUserRequestedInstall = true, isModelInit = false, mCatched = false, flag = true, poseFlag = true;
-
-    float poseXX, poseYY, poseZZ;
+    boolean mUserRequestedInstall = true, isModelInit = false, mCatched = false, flag = true;
 
     float mCurrentX, mCurrentY, mCatchX, mCatchY;
 
@@ -135,58 +133,57 @@ public class GameActivity extends AppCompatActivity {
 //    float [] modelMatrix = new float[16];
 
     float[][] modelArrayMatrix = new float[MAX][16];
-    float[][] modelTransArrayMatrix = new float[MAX][16];
 
 
     float[][] pixedMatrix = new float[][]{
             {0.3f, 3.2f, 2.3f},
             {0.4f, 1.4f, -3.1f},
-            {0.5f, -2.2f, 3.3f},
-            {0.7f, -0.2f, -0.3f},
+            {0.5f, 2.2f, 3.3f},
+            {0.7f, 0.2f, -0.3f},
             {0.9f, 1.2f, 1.3f},
             {1.1f, 2.4f, -1.6f},
-            {1.3f, -2.5f, 0.3f},
-            {1.5f, -1.4f, -2.4f},
+            {1.3f, 2.5f, 0.3f},
+            {1.5f, 1.4f, -2.4f},
             {1.8f, 0.2f, 2.4f},
             {1.9f, 1.8f, -2.9f},
-            {2.3f, -2.2f, 1.7f},
-            {2.4f, -1.3f, -0.4f},
+            {2.3f, 2.2f, 1.7f},
+            {2.4f, 1.3f, -0.4f},
             {2.7f, 0.1f, 1.3f},
             {2.8f, 2.4f, -0.7f},
-            {3.1f, -0.6f, 1.9f},
-            {3.3f, -1.9f, -2.5f},
+            {3.1f, 0.6f, 1.9f},
+            {3.3f, 1.9f, -2.5f},
             {3.4f, 1.5f, 2.5f},
             {3.6f, 3.0f, -2.7f},
-            {3.8f, -2.3f, 1.2f},
-            {3.9f, -1.2f, -3.2f},
+            {3.8f, 2.3f, 1.2f},
+            {3.9f, 1.2f, -3.2f},
             {4.0f, 2.9f, 2.9f},
             {4.3f, 1.7f, -0.7f},
-            {4.5f, -0.8f, 1.3f},
-            {4.7f, -3.2f, -3.1f},
+            {4.5f, 0.8f, 1.3f},
+            {4.7f, 3.2f, -3.1f},
             {4.1f, 2.7f, 2.7f},
             {-0.1f, 1.3f, -3.1f},
-            {-0.3f, -1.8f, 1.3f},
-            {-0.4f, -2.6f, -2.8f},
+            {-0.3f, 1.8f, 1.3f},
+            {-0.4f, 2.6f, -2.8f},
             {-0.7f, 2.9f, 2.7f},
             {-0.9f, 1.1f, -0.8f},
-            {-1.1f, -0.4f, 0.9f},
-            {-1.3f, -1.8f, -1.3f},
+            {-1.1f, 0.4f, 0.9f},
+            {-1.3f, 1.8f, -1.3f},
             {-1.5f, 1.7f, 2.6f},
             {-1.7f, 2.6f, -2.1f},
-            {-1.9f, -0.7f, 2.2f},
-            {-2.3f, -2.6f, -3.3f},
+            {-1.9f, 0.7f, 2.2f},
+            {-2.3f, 2.6f, -3.3f},
             {-2.4f, 2.5f, 1.7f},
             {-2.6f, 1.3f, -2.6f},
-            {-2.8f, -0.8f, 1.9f},
-            {-3.1f, -1.1f, -1.6f},
+            {-2.8f, 0.8f, 1.9f},
+            {-3.1f, 1.1f, -1.6f},
             {-3.3f, 1.6f, 0.4f},
             {-3.4f, 0.9f, -0.7f},
-            {-3.6f, -2.5f, 1.4f},
-            {-3.7f, -1.9f, -1.8f},
+            {-3.6f, 2.5f, 1.4f},
+            {-3.7f, 1.9f, -1.8f},
             {-3.9f, 0.7f, 0.7f},
             {-4.1f, 1.7f, -3.3f},
-            {-4.3f, -3.1f, 3.3f},
-            {-4.4f, -2.6f, -2.8f},
+            {-4.3f, 3.1f, 3.3f},
+            {-4.4f, 2.6f, -2.8f},
             {-4.6f, 2.2f, 2.8f},
             {-4.2f, 0.8f, -1.7f}
     };
@@ -332,9 +329,9 @@ public class GameActivity extends AppCompatActivity {
                                     pixedMatrix[ranNum[i]][0], pixedMatrix[ranNum[i]][1], pixedMatrix[ranNum[i]][2]);
 
                             // 변경된 좌표를 알기 위한 변수
-                            modelTransArrayMatrix[i][0] = pose.tx() + pixedMatrix[ranNum[i]][0];
-                            modelTransArrayMatrix[i][1] = pose.ty() + pixedMatrix[ranNum[i]][1];
-                            modelTransArrayMatrix[i][2] = pose.tz() + pixedMatrix[ranNum[i]][2];
+//                            modelTransArrayMatrix[i][0] = pose.tx() + pixedMatrix[ranNum[i]][0];
+//                            modelTransArrayMatrix[i][1] = pose.ty() + pixedMatrix[ranNum[i]][1];
+//                            modelTransArrayMatrix[i][2] = pose.tz() + pixedMatrix[ranNum[i]][2];
                         }
                     }
                     LightEstimate estimate = frame.getLightEstimate();
@@ -661,9 +658,9 @@ public class GameActivity extends AppCompatActivity {
             float[] maxPoint = resAll[1];
 
             // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
-            if (x >= minPoint[0] - 0.1f && x <= maxPoint[0] + 0.1f &&
-                    y >= minPoint[1] - 0.1f && y <= maxPoint[1] + 0.1f &&
-                    z >= minPoint[2] - 0.1f && z <= maxPoint[2] + 0.1f) {
+            if (x >= minPoint[0] - 1.1f && x <= maxPoint[0] + 1.1f &&
+                    y >= minPoint[1] - 1.1f && y <= maxPoint[1] + 1.1f &&
+                    z >= minPoint[2] - 1.1f && z <= maxPoint[2] + 1.1f) {
                 return true;
             }
         }
