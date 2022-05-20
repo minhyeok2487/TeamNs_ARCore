@@ -30,6 +30,7 @@ public class SelectLevelMain extends AppCompatActivity {
     RelativeLayout count_view_layout;
 
     CountDownTimer countDownTimer;
+    boolean isrunning = false;
     // 로그인 add
     SQLiteDatabase sqLiteDatabaseObj; // == private SQLiteDatabase db;
     SQLiteHelper sqLiteHelper;
@@ -142,10 +143,12 @@ public class SelectLevelMain extends AppCompatActivity {
                 // 초단위
                 String second = String.valueOf((getMin % (60 * 1000)) / 1000 +1); // 나머지
                 count_view.setText(second);
+                isrunning = true;
             }
             public void onFinish() {
                 levelActivity(SelectLevelActivity.class,selectLevel);
                 count_view.setText("시작~!");
+                isrunning = true;
             }
         };
 
@@ -158,7 +161,9 @@ public class SelectLevelMain extends AppCompatActivity {
         if(mediaPlayer.isPlaying()){
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
-            countDownTimer.cancel();
+            if(isrunning){
+                countDownTimer.cancel();
+            }
         }
 
     }
@@ -171,7 +176,10 @@ public class SelectLevelMain extends AppCompatActivity {
             mediaPlayer.start();
         }else {
             mediaPlayer.pause();
-            countDownTimer.cancel();
+            if(isrunning){
+                countDownTimer.cancel();
+            }
+
         }
 
     }
@@ -182,7 +190,9 @@ public class SelectLevelMain extends AppCompatActivity {
         if(mediaPlayer.isPlaying()){
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
-            countDownTimer.cancel();
+            if(isrunning){
+                countDownTimer.cancel();
+            }
         }
     }
 
