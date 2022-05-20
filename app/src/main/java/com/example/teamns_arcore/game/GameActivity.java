@@ -115,9 +115,8 @@ public class GameActivity extends AppCompatActivity {
 
     int hour = localTime.getHour();
     int min = localTime.getMinute();
-    int sec = localTime.getSecond();
 
-    String currentTime = String.format("%s %d:%d:%d", localDate, hour, min, sec);
+    String currentTime = String.format("%s %d:%d", localDate, hour, min);
 
     float[][] colorCorrections = new float[][]{
             {0.8f, 0.8f, 0.8f, 0.8f},
@@ -134,58 +133,57 @@ public class GameActivity extends AppCompatActivity {
 //    float [] modelMatrix = new float[16];
 
     float[][] modelArrayMatrix = new float[MAX][16];
-    float[][] modelTransArrayMatrix = new float[MAX][16];
 
 
     float[][] pixedMatrix = new float[][]{
             {0.3f, 3.2f, 2.3f},
             {0.4f, 1.4f, -3.1f},
-            {0.5f, -2.2f, 3.3f},
-            {0.7f, -0.2f, -0.3f},
+            {0.5f, 2.2f, 3.3f},
+            {0.7f, 0.2f, -0.3f},
             {0.9f, 1.2f, 1.3f},
             {1.1f, 2.4f, -1.6f},
-            {1.3f, -2.5f, 0.3f},
-            {1.5f, -1.4f, -2.4f},
+            {1.3f, 2.5f, 0.3f},
+            {1.5f, 1.4f, -2.4f},
             {1.8f, 0.2f, 2.4f},
             {1.9f, 1.8f, -2.9f},
-            {2.3f, -2.2f, 1.7f},
-            {2.4f, -1.3f, -0.4f},
+            {2.3f, 2.2f, 1.7f},
+            {2.4f, 1.3f, -0.4f},
             {2.7f, 0.1f, 1.3f},
             {2.8f, 2.4f, -0.7f},
-            {3.1f, -0.6f, 1.9f},
-            {3.3f, -1.9f, -2.5f},
+            {3.1f, 0.6f, 1.9f},
+            {3.3f, 1.9f, -2.5f},
             {3.4f, 1.5f, 2.5f},
             {3.6f, 3.0f, -2.7f},
-            {3.8f, -2.3f, 1.2f},
-            {3.9f, -1.2f, -3.2f},
+            {3.8f, 2.3f, 1.2f},
+            {3.9f, 1.2f, -3.2f},
             {4.0f, 2.9f, 2.9f},
             {4.3f, 1.7f, -0.7f},
-            {4.5f, -0.8f, 1.3f},
-            {4.7f, -3.2f, -3.1f},
+            {4.5f, 0.8f, 1.3f},
+            {4.7f, 3.2f, -3.1f},
             {4.1f, 2.7f, 2.7f},
             {-0.1f, 1.3f, -3.1f},
-            {-0.3f, -1.8f, 1.3f},
-            {-0.4f, -2.6f, -2.8f},
+            {-0.3f, 1.8f, 1.3f},
+            {-0.4f, 2.6f, -2.8f},
             {-0.7f, 2.9f, 2.7f},
             {-0.9f, 1.1f, -0.8f},
-            {-1.1f, -0.4f, 0.9f},
-            {-1.3f, -1.8f, -1.3f},
+            {-1.1f, 0.4f, 0.9f},
+            {-1.3f, 1.8f, -1.3f},
             {-1.5f, 1.7f, 2.6f},
             {-1.7f, 2.6f, -2.1f},
-            {-1.9f, -0.7f, 2.2f},
-            {-2.3f, -2.6f, -3.3f},
+            {-1.9f, 0.7f, 2.2f},
+            {-2.3f, 2.6f, -3.3f},
             {-2.4f, 2.5f, 1.7f},
             {-2.6f, 1.3f, -2.6f},
-            {-2.8f, -0.8f, 1.9f},
-            {-3.1f, -1.1f, -1.6f},
+            {-2.8f, 0.8f, 1.9f},
+            {-3.1f, 1.1f, -1.6f},
             {-3.3f, 1.6f, 0.4f},
             {-3.4f, 0.9f, -0.7f},
-            {-3.6f, -2.5f, 1.4f},
-            {-3.7f, -1.9f, -1.8f},
+            {-3.6f, 2.5f, 1.4f},
+            {-3.7f, 1.9f, -1.8f},
             {-3.9f, 0.7f, 0.7f},
             {-4.1f, 1.7f, -3.3f},
-            {-4.3f, -3.1f, 3.3f},
-            {-4.4f, -2.6f, -2.8f},
+            {-4.3f, 3.1f, 3.3f},
+            {-4.4f, 2.6f, -2.8f},
             {-4.6f, 2.2f, 2.8f},
             {-4.2f, 0.8f, -1.7f}
     };
@@ -334,9 +332,9 @@ public class GameActivity extends AppCompatActivity {
                                     pixedMatrix[ranNum[i]][0], pixedMatrix[ranNum[i]][1], pixedMatrix[ranNum[i]][2]);
 
                             // 변경된 좌표를 알기 위한 변수
-                            modelTransArrayMatrix[i][0] = pose.tx() + pixedMatrix[ranNum[i]][0];
-                            modelTransArrayMatrix[i][1] = pose.ty() + pixedMatrix[ranNum[i]][1];
-                            modelTransArrayMatrix[i][2] = pose.tz() + pixedMatrix[ranNum[i]][2];
+//                            modelTransArrayMatrix[i][0] = pose.tx() + pixedMatrix[ranNum[i]][0];
+//                            modelTransArrayMatrix[i][1] = pose.ty() + pixedMatrix[ranNum[i]][1];
+//                            modelTransArrayMatrix[i][2] = pose.tz() + pixedMatrix[ranNum[i]][2];
                         }
                     }
                     LightEstimate estimate = frame.getLightEstimate();
@@ -396,33 +394,27 @@ public class GameActivity extends AppCompatActivity {
 
                 if (mCatched) {
                     mCatched = false;
-
                     results = frame.hitTest(mCatchX, mCatchY);
 
-                    String msg = "터키터키~";
+//                    String msg = "터키터키~";
 //                    answerTxtView.setText(msg);
 
                     for (HitResult result : results) {
                         Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
 
-//                        if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
-//                            msg = "터키터키~";
-//                            answerTxtView.setText(msg);
-//                            Log.d("터치함", "좌표 : " + pose.tx() + pose.ty() + pose.tz());
-//                        } else {
-//                            msg = "못잡겠쥐~?";
-//                            answerTxtView.setText(msg);
-//                            Log.d("터치안함", "좌표 : " + pose.tx() + pose.ty() + pose.tz());
-//                        }
+                
+       
+                        if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
 
-                        nearPoint(pose.tx(), pose.ty(), pose.tz());
-
-                        float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
-                        if (tooFar) {
-                            tooFar = false;
+                            // 클릭확인용
+                            float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
+                            mRenderer.picObjColor(picColor, catchIDX);
+                             tooFar = false;
                             //mRenderer.picObjColor(picColor, minIDX);
                             insertText += String.valueOf(minIDX);
                             answerTxtView.setText(insertText);
+                        } else {
+
                         }
                     }
                 }
@@ -657,45 +649,34 @@ public class GameActivity extends AppCompatActivity {
         // 위임해서 정보를 받아옴
         mGestureDetector.onTouchEvent(event);
 
-//        if(event.getAction() == MotionEvent.ACTION_DOWN){
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
 //            mTouched = true;
-//            mCurrentX = event.getX();
-//            mCurrentY = event.getY();
-//        }
+            mCurrentX = event.getX();
+            mCurrentY = event.getY();
+        }
         return true;
     }
 
-//    boolean catchCheck(float x, float y, float z) {
-//
-//        float[][] resAll = mRenderer.getMinMaxPoint();
-//        float[] minPoint = resAll[0];
-//        float[] maxPoint = resAll[1];
-////        float [] minPoint = new float[]{-0.5f,-2.5f,-10.5f};
-////        float [] maxPoint = new float[]{0.5f,2.5f,10.5f};
-//
-//        // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
-//        if (x >= minPoint[0] - 0.0f && x <= maxPoint[0] + 0.0f &&
-//                y >= minPoint[1] - 0.0f && y <= maxPoint[1] + 0.0f &&
-//                z >= minPoint[2] - 0.0f && z <= maxPoint[2] + 0.0f) {
-//            return true;
-//        }
-//
-//        return false;
-//    }
+    int catchIDX;
 
-    float[][] catchCheck() {
+    boolean catchCheck(float x, float y, float z) {
 
+        for (catchIDX = 0; catchIDX < MAX; catchIDX++) {
 
-        float[][][] resAll = mRenderer.getMinMaxPoint();
-        float[][] resXYZ = new float[MAX][3];
+            float[][] resAll = mRenderer.arrayObj.get(catchIDX).getMinMaxPoint();
+            float[] minPoint = resAll[0];
+            float[] maxPoint = resAll[1];
 
-        for (int i = 0; i < MAX; i++) {
-            resXYZ[i][0] = (resAll[i][1][0] - resAll[i][0][0]) / 2; // i번째 obj x의 중간값
-            resXYZ[i][1] = (resAll[i][1][1] - resAll[i][0][1]) / 2; // i번째 obj y의 중간값
-            resXYZ[i][2] = (resAll[i][1][2] - resAll[i][0][2]) / 2; // i번째 obj y의 중간값
+            // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
+            if (x >= minPoint[0] - 1.1f && x <= maxPoint[0] + 1.1f &&
+                    y >= minPoint[1] - 1.1f && y <= maxPoint[1] + 1.1f &&
+                    z >= minPoint[2] - 1.1f && z <= maxPoint[2] + 1.1f) {
+                return true;
+            }
         }
-        return resXYZ;
+        return false;
     }
+
 
     void randomNum() {
         int random;
@@ -710,25 +691,6 @@ public class GameActivity extends AppCompatActivity {
             }
         }
     }
-
-//    public void rand() {
-//        int count = 10; // 난수 생성 갯수
-//        int a[] = new int[count];
-//        Random r = new Random();
-//
-//        for (int i = 0; i < count; i++) {
-//            a[i] = r.nextInt(100); // 0~20까지의 난수
-//            for (int j = 0; j < i; j++) {
-//                if (a[i] == a[j]) {
-//                    i--;
-//                }
-//            }
-//        }
-//
-//        for (int i = 0; i < 10; i++) {
-//            intRandom[i] = a[i];
-//        }
-//    }
 
     int i = 0;
 
@@ -757,49 +719,6 @@ public class GameActivity extends AppCompatActivity {
         }
 
         return seconds + (minutes * 60) + (hours * 3600);
-    }
-
-    int minIDX = 0;
-    boolean tooFar = false;
-
-    void nearPoint(float clickX, float clickY, float clickZ) {
-
-        // modelTransArrayMatrix 여기서 중간값 찾기
-
-        minIDX = 0;
-        PointXYZ pointAll = new PointXYZ(0, 0, 0);
-        PointXYZ pointClick = new PointXYZ(clickX, clickY, clickZ);
-
-        float minDistance = 100, newMinDistance = 0;
-        float[][] resXYZ = catchCheck();
-
-        for (int i = 0; i < MAX; i++) {
-            Log.d("최근좌표 catchCheck", "요기" + resXYZ[i][0] + "," + resXYZ[i][1] + "," + resXYZ[i][2]);
-        }
-
-        for (int i = 0; i < MAX; i++) {
-            pointAll.pointX = modelTransArrayMatrix[i][0];
-            pointAll.pointY = modelTransArrayMatrix[i][1];
-            pointAll.pointZ = modelTransArrayMatrix[i][2];
-
-            newMinDistance = getDistPoint(pointAll, pointClick);
-            if (minDistance > newMinDistance) {
-                minIDX = i;
-                Log.d("최근좌표 if 들어옴 minIDX", "요기" + minIDX);
-                minDistance = newMinDistance;
-                if (minIDX <= 12.0f) {
-                    tooFar = true;
-                }
-            }
-        }
-        Log.d("최근좌표", "요기" + minIDX);
-    }
-
-    // 두 점 사이 거리의 제곱 계산 함수
-    public float getDistPoint(PointXYZ p, PointXYZ q) {
-        float near = (p.pointX - q.pointX) * (p.pointX - q.pointX) + (p.pointY - q.pointY) * (p.pointY - q.pointY) + (p.pointZ - q.pointZ) * (p.pointZ - q.pointZ);
-        Log.d("최근좌표 near", "요기" + near);
-        return near;
     }
 
     @Override
