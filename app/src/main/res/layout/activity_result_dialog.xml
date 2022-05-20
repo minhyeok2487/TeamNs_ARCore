@@ -97,7 +97,7 @@
         android:orientation="horizontal">
 
         <android.widget.Button
-            android:id="@+id/hintBtn"
+            android:id="@+id/repeatBtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="5dp"
@@ -108,13 +108,13 @@
 
 
         <android.widget.Button
-            android:id="@+id/submitBtn"
+            android:id="@+id/returnRecordBtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="5dp"
             android:background="@drawable/border_round_fill"
             android:padding="10dp"
-            android:text="메인화면"
+            android:text="기록보기"
             android:textColor="@color/white" />
 
     </LinearLayout>
