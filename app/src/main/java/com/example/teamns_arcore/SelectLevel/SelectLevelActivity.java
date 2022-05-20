@@ -34,7 +34,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+
 import static android.speech.tts.TextToSpeech.ERROR;
+
 public class SelectLevelActivity extends AppCompatActivity {
 
     ArrayList<StractEn> arrayList = new ArrayList<StractEn>();
@@ -46,10 +48,11 @@ public class SelectLevelActivity extends AppCompatActivity {
 
     // 버튼 정보 가져오기
     Intent levelintent;
-    int lv1,lv2,lv3,lv4;
+    public static int lv1, lv2, lv3, lv4;
     DatabaseHelper mDBHELPER;
 
     private TextToSpeech tts;// TTS 변수 선언
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,29 +64,29 @@ public class SelectLevelActivity extends AppCompatActivity {
 
         // lv에 따른 intent값 다르게 받기
         lv1 = levelintent.getIntExtra("choice", 1);
-        System.out.println("SelectLevelActivity.lv1 : "+lv1);
+        System.out.println("SelectLevelActivity.lv1 : " + lv1);
         lv2 = levelintent.getIntExtra("choice", 2);
-        System.out.println("SelectLevelActivity.lv2 : "+lv2);
+        System.out.println("SelectLevelActivity.lv2 : " + lv2);
         lv3 = levelintent.getIntExtra("choice", 3);
         lv4 = levelintent.getIntExtra("choice", 4);
-        if(lv1==1){ // 같으면 자기 db table 가지고 와주라 // -> 이거 문제 생김
-            mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelone","lv_one_quiz");
-        }else if(lv2==2){
-            mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "leveltwo","lv_one_quiz");
+        if (lv1 == 1) { // 같으면 자기 db table 가지고 와주라 // -> 이거 문제 생김
+            mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelone", "lv_one_quiz");
+        } else if (lv2 == 2) {
+            mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "leveltwo", "lv_one_quiz");
             System.out.println("lv2로 들어왔습니다.");
-        }else if(lv3==3){
-            mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelthree","lv_one_quiz");
-        }else if(lv4==4){
-            mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelfour","lv_one_quiz");
-        }else{
+        } else if (lv3 == 3) {
+            mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelthree", "lv_one_quiz");
+        } else if (lv4 == 4) {
+            mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelfour", "lv_one_quiz");
+        } else {
             System.out.println("어떤 버튼을 눌렀는지 모릅니다.");
         }
 
         File database = getApplicationContext().getDatabasePath(DatabaseHelper.DBNAME);
 
-        if(database.exists()==false){
+        if (!database.exists()) {
             mDBHELPER.getReadableDatabase();
-            if(!copydatabase(SelectLevelActivity.this)){
+            if (!copydatabase(SelectLevelActivity.this)) {
                 return;
             }
         }
@@ -96,7 +99,7 @@ public class SelectLevelActivity extends AppCompatActivity {
                 if (status != ERROR) {
                     // 언어를 선택한다.
                     tts.setLanguage(Locale.ENGLISH);
-                    tts.setSpeechRate((float)0.8); // 음성 속도 지정
+                    tts.setSpeechRate((float) 0.8); // 음성 속도 지정
                 }
             }
         });
@@ -115,7 +118,7 @@ public class SelectLevelActivity extends AppCompatActivity {
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.button:
                     gogogo();
                     break;
@@ -128,9 +131,10 @@ public class SelectLevelActivity extends AppCompatActivity {
             }
         }
     };
+
     //
     ///
-    public void gogogo(){
+    public void gogogo() {
         ArrayList<StractEn> arrayList2 = new ArrayList<StractEn>();
 
         //rand(arrayList2);
@@ -145,12 +149,12 @@ public class SelectLevelActivity extends AppCompatActivity {
         englist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                tts.speak(arrayList2.get(position).english,TextToSpeech.QUEUE_FLUSH, null);
+                tts.speak(arrayList2.get(position).english, TextToSpeech.QUEUE_FLUSH, null);
             }
         });
         String[] ranWordsKor = new String[arrayList2.size()];
         String[] ranWordsEng = new String[arrayList2.size()];
-        for (int i = 0; i < arrayList2.size(); i++){
+        for (int i = 0; i < arrayList2.size(); i++) {
             ranWordsKor[i] = arrayList2.get(i).getMeans();
             ranWordsEng[i] = arrayList2.get(i).getEnglish();
 //            Log.d("랜덤랜덤임", ranWords[i] + "");
@@ -158,26 +162,36 @@ public class SelectLevelActivity extends AppCompatActivity {
         Intent intentGame = new Intent(this, GameActivity.class);
         intentGame.putExtra("RandomKor", ranWordsKor);
         intentGame.putExtra("RandomEng", ranWordsEng);
+        if (lv1 == 1) {
+            intentGame.putExtra("Level", 1);
+        } else if (lv2 == 2) {
+            intentGame.putExtra("Level", 2);
+        } else if (lv3 == 3) {
+            intentGame.putExtra("Level", 3);
+        } else {
+            intentGame.putExtra("Level", 4);
+        }
         startActivity(intentGame);
         finish();
 
     }
-    public void newarr( ArrayList<StractEn> arrayList2){
+
+    public void newarr(ArrayList<StractEn> arrayList2) {
         Map<StractEn, Double> w = new HashMap<StractEn, Double>();
-        for(int a = 0; a<arrayList.size(); a++){
-            w.put(arrayList.get(a),Double.valueOf(arrayList.get(a).getFlagtime()));
+        for (int a = 0; a < arrayList.size(); a++) {
+            w.put(arrayList.get(a), Double.valueOf(arrayList.get(a).getFlagtime()));
         }
         int[] len = new int[10];
         // 중복검사 안함
         Random rand = new Random();
-        for(int i =0; i<10;i++) {
+        for (int i = 0; i < 10; i++) {
             boolean overlap = false;
             int num = 0;
 
             StractEn res = getWeightedRandom(w, rand);
 
-            for(int k=0;k<arrayList.size();k++){
-                if(res.getEnglish().equals(arrayList.get(k).getEnglish())){
+            for (int k = 0; k < arrayList.size(); k++) {
+                if (res.getEnglish().equals(arrayList.get(k).getEnglish())) {
                     num = k;
                     break;
                 }
@@ -188,10 +202,10 @@ public class SelectLevelActivity extends AppCompatActivity {
                     overlap = true;
                 }
             }
-            if(!overlap){
+            if (!overlap) {
                 arrayList2.add(res);
                 Log.d("가중치 랜덤 뽑기", res.getEnglish());
-                Double resFlag = Double.valueOf(res.getFlagtime())/2;
+                Double resFlag = Double.valueOf(res.getFlagtime()) / 2;
                 arrayList.get(num).setFlagtime(String.valueOf(resFlag));
             }
         }
@@ -199,7 +213,6 @@ public class SelectLevelActivity extends AppCompatActivity {
 
     }
     ///
-
 
 
     public static <E> E getWeightedRandom(Map<E, Double> weights, Random random) {
@@ -215,40 +228,40 @@ public class SelectLevelActivity extends AppCompatActivity {
         }
         return result;
     }
+
     ////
-    public void rand( ArrayList<StractEn> arrayList2){
+    public void rand(ArrayList<StractEn> arrayList2) {
         int count = 10; // 난수 생성 갯수
         int a[] = new int[count];
         Random r = new Random();
 
-        for(int i=0; i<count; i++){
+        for (int i = 0; i < count; i++) {
             a[i] = r.nextInt(20); // 0~20까지의 난수
-            for(int j=0; j<i; j++){
-                if(a[i] == a[j]){
+            for (int j = 0; j < i; j++) {
+                if (a[i] == a[j]) {
                     i--;
                 }
             }
         }
 
-        for(int i = 0; i<10; i++){
+        for (int i = 0; i < 10; i++) {
             newrand[i] = a[i];
-            System.out.println("랜덤수"+newrand[i]);
+            System.out.println("랜덤수" + newrand[i]);
         }
     }
 
 
-
-    public Boolean copydatabase(Context context){
+    public Boolean copydatabase(Context context) {
         try {
             InputStream inputStream = context.getAssets().open(DatabaseHelper.DBNAME);
-            String OutFileName = DatabaseHelper.DBLOCAION+DatabaseHelper.DBNAME;
+            String OutFileName = DatabaseHelper.DBLOCAION + DatabaseHelper.DBNAME;
             File f = new File(OutFileName);
             f.getParentFile().mkdirs();
             OutputStream outputStream = new FileOutputStream(OutFileName);
 
             byte[] buffer = new byte[1024];
             int length = 0;
-            while((length = inputStream.read(buffer))>0){
+            while ((length = inputStream.read(buffer)) > 0) {
                 outputStream.write(buffer, 0, length);
             }
             outputStream.flush();
@@ -264,7 +277,6 @@ public class SelectLevelActivity extends AppCompatActivity {
         Intent myStartintent = new Intent(this, c);
         startActivity(myStartintent);
     }
-
 
 
 }

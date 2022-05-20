@@ -38,11 +38,13 @@ import com.example.teamns_arcore.DashboardActivity;
 import com.example.teamns_arcore.MainActivity;
 import com.example.teamns_arcore.R;
 import com.example.teamns_arcore.Record.ChartActivity;
+import com.example.teamns_arcore.Record.Model.RecordModel;
 import com.example.teamns_arcore.Record.RecordSQLiteHelper;
 import com.example.teamns_arcore.Record.TableActivity;
 import com.example.teamns_arcore.SQLiteHelper;
 import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
 import com.example.teamns_arcore.SelectLevel.Model.StractEn;
+import com.example.teamns_arcore.SelectLevel.SelectLevelActivity;
 import com.example.teamns_arcore.SelectLevel.SelectLevelMain;
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
@@ -113,7 +115,7 @@ public class GameActivity extends AppCompatActivity {
 
     int answerCount = 0;
     int incorrectCount = 0;
-    int levelNum = 0;
+    int levelNum;
 
     SQLiteDatabase database;
 
@@ -435,10 +437,9 @@ public class GameActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String[] ranNumEng = intent.getStringArrayExtra("RandomEng");
         String[] ranNumKor = intent.getStringArrayExtra("RandomKor");
-        levelNum = intent.getIntExtra("choice", 0);
+        levelNum = intent.getIntExtra("Level", 0);
 
         questionTxtView.setText(String.format("[ %s ]", ranNumKor[0]));
-
 
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -792,14 +793,9 @@ public class GameActivity extends AppCompatActivity {
         returnRecordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GameActivity.this, TableActivity.class);
-//                intent.putExtra("Date", currentTime);
-//                intent.putExtra("CorrectNum", answerCount);
-//                intent.putExtra("Timer", timerValue);
-//                intent.putExtra("Score", answerCount);
-//                intent.putExtra("Level", levelNum);
+                Intent intent = new Intent(GameActivity.this, ChartActivity.class);
                 startActivity(intent);
-                insertData("테스트", "2022-01-01", 2, 5, 90, 1);
+                insertData(RecordSQLiteHelper.Table_Column_ID, currentTime, answerCount, timerValue, 90, levelNum);
 
             }
         });
@@ -807,11 +803,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     void insertData(String ID, String Date, int CorrectNum, int Timer, int Score, int Level) {
-//        if (database != null) {
-//            String query = "INSERT INTO Record_data(" + RecordSQLiteHelper.Table_Column_ID + "," + RecordSQLiteHelper.Table_Column_1_Date + "," + RecordSQLiteHelper.Table_Column_2_CorrectNum + "," + RecordSQLiteHelper.Table_Column_3_Timer + "," + RecordSQLiteHelper.Table_Column_4_Score + "," + RecordSQLiteHelper.Table_Column_5_Level + ") VALUE(ID, Date, CorrectNum, Timer, Score, Level)";
-//            Object[] params = {ID, Date, CorrectNum, Timer, Score, Level};
-//            database.execSQL(query, params);
-//        }
 
         ContentValues values = new ContentValues();
         values.put(RecordSQLiteHelper.Table_Column_ID, ID);
