@@ -36,8 +36,10 @@ import com.example.teamns_arcore.DashboardActivity;
 import com.example.teamns_arcore.MainActivity;
 import com.example.teamns_arcore.R;
 import com.example.teamns_arcore.Record.ChartActivity;
+import com.example.teamns_arcore.Record.TableActivity;
 import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
 import com.example.teamns_arcore.SelectLevel.Model.StractEn;
+import com.example.teamns_arcore.SelectLevel.SelectLevelMain;
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
 import com.google.ar.core.Config;
@@ -52,6 +54,8 @@ import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
 import com.google.ar.core.exceptions.CameraNotAvailableException;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -95,16 +99,25 @@ public class GameActivity extends AppCompatActivity {
 
     DatabaseHelper databaseHelper;
 
-    Button colorBtn, skipBtn, hintBtn, submitBtn;
+    Button colorBtn, skipBtn, hintBtn, submitBtn, repeatBtn, returnRecordBtn;
 
     ArrayList<StractEn> seArrList;
 
-    View dialogView, resultDialogView;
+    View hintDialogView, resultDialogView;
 
     int count = 0;
 
     int answerCount = 0;
     int incorrectCount = 0;
+
+    LocalDate localDate = LocalDate.now();
+    LocalTime localTime = LocalTime.now();
+
+    int hour = localTime.getHour();
+    int min = localTime.getMinute();
+    int sec = localTime.getSecond();
+
+    String currentTime = String.format("%s %d:%d:%d", localDate, hour, min, sec);
 
     float[][] colorCorrections = new float[][]{
             {0.8f, 0.8f, 0.8f, 0.8f},
@@ -201,7 +214,6 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         mSurfaceView = findViewById(R.id.gl_surface_view);
 
@@ -433,31 +445,22 @@ public class GameActivity extends AppCompatActivity {
 
         String[] ranNumKor = intent.getStringArrayExtra("RandomKor");
 
-        questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
+        questionTxtView.setText(String.format("[ %s ]", ranNumKor[0]));
 
 
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 count++;
+
                 if (count < ranNumKor.length) {
                     questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
                     incorrectCount++;
-                    Log.d("정답틀림 : ", incorrectCount + "");
+                    Log.d("답틀림 : ", incorrectCount + "");
+//                    Log.d("ranNumKor[count-1] : ", ranNumKor[count-1] + "");
                 } else {
-                    Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요.", Toast.LENGTH_SHORT).show();
-                    resultDialogView = View.inflate(GameActivity.this, R.layout.activity_result_dialog, null);
-                    AlertDialog.Builder resultDialogBuilder = new AlertDialog.Builder(GameActivity.this);
-                    AlertDialog resultDialog = resultDialogBuilder.create();
-                    resultDialog.setView(resultDialogView);
-                    resultDialog.show();
-                    resultDialog.setCancelable(false);
-                    correctTxtView_count = resultDialogView.findViewById(R.id.correctTxtView_count);
-                    incorrectTxtView_count = resultDialogView.findViewById(R.id.incorrectTxtView_count);
-                    correctTxtView_count.setText(String.valueOf(answerCount));
-                    incorrectTxtView_count.setText(String.valueOf(incorrectCount));
-
-                    Log.d("정답갯수 : ", (answerCount + incorrectCount) + "");
+                    incorrectCount++;
+                    gameResultDialog();
                 }
             }
         });
@@ -467,10 +470,10 @@ public class GameActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 mediaPlayer.setVolume(0.1f, 0.1f);
-                dialogView = View.inflate(GameActivity.this, R.layout.activity_hint_dialog, null);
+                hintDialogView = View.inflate(GameActivity.this, R.layout.activity_hint_dialog, null);
                 AlertDialog.Builder hintDialogBuilder = new AlertDialog.Builder(GameActivity.this);
                 AlertDialog hintDialog = hintDialogBuilder.create();
-                hintDialog.setView(dialogView);
+                hintDialog.setView(hintDialogView);
                 hintDialog.show();
 
                 String word = ranNumEng[count];
@@ -488,7 +491,7 @@ public class GameActivity extends AppCompatActivity {
                 stringBuffer.replace(1, word.length() - 1, mosaicBuffer.toString());
 
 
-                hintTxtView = dialogView.findViewById(R.id.hintTxtView);
+                hintTxtView = hintDialogView.findViewById(R.id.hintTxtView);
                 hintTxtView.setText(String.format("[ %s ]", stringBuffer));
                 tts.speak(ranNumEng[count], TextToSpeech.QUEUE_FLUSH, null);
 
@@ -524,21 +527,10 @@ public class GameActivity extends AppCompatActivity {
                         questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
                         answerTxtView.setText("");
                         answerCount++;
-                        Log.d("정답맞힘 : ", answerCount + "");
+                        Log.d("답맞힘 : ", answerCount + "");
                     } else {
-                        Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요.", Toast.LENGTH_SHORT).show();
-                        resultDialogView = View.inflate(GameActivity.this, R.layout.activity_result_dialog, null);
-                        AlertDialog.Builder resultDialogBuilder = new AlertDialog.Builder(GameActivity.this);
-                        AlertDialog resultDialog = resultDialogBuilder.create();
-                        resultDialog.setView(resultDialogView);
-                        resultDialog.show();
-                        resultDialog.setCancelable(false);
-                        correctTxtView_count = resultDialogView.findViewById(R.id.correctTxtView_count);
-                        incorrectTxtView_count = resultDialogView.findViewById(R.id.incorrectTxtView_count);
-                        correctTxtView_count.setText(String.valueOf(answerCount));
-                        incorrectTxtView_count.setText(String.valueOf(incorrectCount));
-
-                        Log.d("정답갯수 : ", (answerCount + incorrectCount) + "");
+                        answerCount++;
+                        gameResultDialog();
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "틀렸어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
@@ -857,5 +849,44 @@ public class GameActivity extends AppCompatActivity {
             toast.show();
             finish();
         }
+    }
+
+    void gameResultDialog() {
+        Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요.", Toast.LENGTH_SHORT).show();
+        Log.d("답갯수 : ", (answerCount + incorrectCount) + "");
+        resultDialogView = View.inflate(GameActivity.this, R.layout.activity_result_dialog, null);
+        AlertDialog.Builder resultDialogBuilder = new AlertDialog.Builder(GameActivity.this);
+        AlertDialog resultDialog = resultDialogBuilder.create();
+        resultDialog.setView(resultDialogView);
+        resultDialog.show();
+        resultDialog.setCancelable(false);
+        correctTxtView_count = resultDialogView.findViewById(R.id.correctTxtView_count);
+        incorrectTxtView_count = resultDialogView.findViewById(R.id.incorrectTxtView_count);
+        correctTxtView_count.setText(String.valueOf(answerCount));
+        incorrectTxtView_count.setText(String.valueOf(incorrectCount));
+        repeatBtn = resultDialogView.findViewById(R.id.repeatBtn);
+        returnRecordBtn = resultDialogView.findViewById(R.id.returnRecordBtn);
+
+        repeatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GameActivity.this, SelectLevelMain.class);
+                startActivity(intent);
+            }
+        });
+
+        returnRecordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GameActivity.this, TableActivity.class);
+                intent.putExtra("Date", currentTime);
+                intent.putExtra("CorrectNum", answerCount);
+//                intent.putExtra("Timer", answerCount);
+//                intent.putExtra("Score", answerCount);
+                intent.putExtra("Level", answerCount);
+                startActivity(intent);
+            }
+        });
+
     }
 }
