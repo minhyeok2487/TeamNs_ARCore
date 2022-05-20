@@ -32,13 +32,10 @@ public class MainRenderer implements GLSurfaceView.Renderer {
     MainRenderer(Context context, RenderCallback callback) {
         mRenderCallback = callback;
         mCamera = new CameraPreview();
-//        mPointCloud = new PointCloudRenderer();
-//        mPlane = new PlaneRenderer(Color.BLUE, 0.7f);
-//        mObj = new ObjRenderer(context, "andy.obj","andy.png");
 
         for (int i = 0; i < MAX; i++) {
-//            arrayObj.add(new ObjRenderer(context, "andy.obj", "andy.png"));
-            arrayObj.add(new ObjRenderer(context, "alphabet"+i+".obj", "andy.png"));
+            arrayObj.add(new ObjRenderer(context, "andy.obj", "andy.png"));
+//            arrayObj.add(new ObjRenderer(context, "alphabet"+i+".obj", "andy.png"));
         }
     }
 
@@ -59,12 +56,9 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         GLES20.glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
 
         mCamera.init();
-//        mPointCloud.init();
-//        mPlane.init();
-//        mObj.init();
 
-        for (int i = 0; i < MAX; i++) {
-            arrayObj.get(i).init();
+        for (ObjRenderer obj :arrayObj ) {
+            obj.init();
         }
 
     }
@@ -89,14 +83,10 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         GLES20.glDepthMask(false);
         mCamera.draw();
         GLES20.glDepthMask(true);
-//        mPointCloud.draw();
-//
-//
-//        mPlane.draw();
-//        mObj.draw();
 
-        for (int i = 0; i < MAX; i++) {
-            arrayObj.get(i).draw();
+
+        for (ObjRenderer obj :arrayObj ) {
+            obj.draw();
         }
     }
 
@@ -110,21 +100,16 @@ public class MainRenderer implements GLSurfaceView.Renderer {
     }
 
     void setProjectionMatrix(float[] matrix) {
-//        mPointCloud.updateProjMatrix(matrix);
-//        mPlane.setProjectionMatrix(matrix);
-//        mObj.setProjectionMatrix(matrix);
-        for (int i = 0; i < MAX; i++) {
-            arrayObj.get(i).setProjectionMatrix(matrix);
+
+        for (ObjRenderer obj :arrayObj ) {
+            obj.setProjectionMatrix(matrix);
         }
     }
 
     void updateViewMatrix(float[] matrix) {
-//        mPointCloud.updateViewMatrix(matrix);
-//        mPlane.setViewMatrix(matrix);
-//        mObj.setViewMatrix(matrix);
 
-        for (int i = 0; i < MAX; i++) {
-            arrayObj.get(i).setViewMatrix(matrix);
+        for (ObjRenderer obj :arrayObj ) {
+            obj.setViewMatrix(matrix);
         }
     }
 
@@ -149,24 +134,8 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         }
     }
 
-//    float[][] getMinMaxPoint() {
-//        float[][] resAll;
-//        for (ObjRenderer mMinMax : arrayObj) {
-//            resAll = mMinMax.getMinMaxPoint();
-//            return resAll;
-//        }
-//        return null;
-//    }
-
     void picObjColor(float[] picColor, int minIDX){
         arrayObj.get(minIDX).setColorCorrection(picColor);
     }
 
-    float[][][] getMinMaxPoint() {
-        float[][][] resAll = new float[MAX][2][3];
-        for (int i=0;i<MAX;i++) {
-            resAll[i] = arrayObj.get(i).getMinMaxPoint();
-        }
-        return resAll;
-    }
 }
