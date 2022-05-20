@@ -191,6 +191,9 @@ public class GameActivity extends AppCompatActivity {
     //    ArrayList<Integer> ranNum = new ArrayList<>();
     int[] ranNum = new int[MAX];
 
+    // 입력을 넣을 String
+    String insertText="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -399,12 +402,19 @@ public class GameActivity extends AppCompatActivity {
                     for (HitResult result : results) {
                         Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
 
+                
+       
                         if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
 
                             // 클릭확인용
                             float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
                             mRenderer.picObjColor(picColor, catchIDX);
+                             tooFar = false;
+                            //mRenderer.picObjColor(picColor, minIDX);
+                            insertText += String.valueOf(minIDX);
+                            answerTxtView.setText(insertText);
                         } else {
+
                         }
                     }
                 }
