@@ -58,7 +58,7 @@ public class SelectLevelMain extends AppCompatActivity {
         findViewById(R.id.level4Btn).setOnClickListener(onClickListener);
 
         // 로그인 add
-        Name = (TextView)findViewById(R.id.textView1);
+        Name = (TextView) findViewById(R.id.textView1);
         Intent userNameintent = getIntent();
         sqLiteHelper = new SQLiteHelper(SelectLevelMain.this);
         EmailHolder = userNameintent.getStringExtra(MainActivity.UserId);
@@ -90,18 +90,22 @@ public class SelectLevelMain extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             //leveltwo = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.level1Btn:
-                    setCount_view(SelectLevelActivity.class,1);
+                    setCount_view(SelectLevelActivity.class, 1);
+                    levelActivity(GameActivity.class, 1);
                     break;
                 case R.id.level2Btn:
-                    setCount_view(SelectLevelActivity.class,2);
+                    setCount_view(SelectLevelActivity.class, 2);
+                    levelActivity(GameActivity.class, 2);
                     break;
                 case R.id.level3Btn:
-                    setCount_view(SelectLevelActivity.class,3);
+                    setCount_view(SelectLevelActivity.class, 3);
+                    levelActivity(GameActivity.class, 3);
                     break;
                 case R.id.level4Btn:
-                    setCount_view(SelectLevelActivity.class,4);
+                    setCount_view(SelectLevelActivity.class, 4);
+                    levelActivity(GameActivity.class, 4);
                     break;
             }
         }
@@ -110,7 +114,7 @@ public class SelectLevelMain extends AppCompatActivity {
     // 레벨 버튼 intent
     private void levelActivity(Class c, int i) {
         Intent levelintent = new Intent(this, c);
-        levelintent.putExtra("choice", (int)i);
+        levelintent.putExtra("choice", (int) i);
         startActivity(levelintent);
         finish();
     }
@@ -118,10 +122,10 @@ public class SelectLevelMain extends AppCompatActivity {
 
 
     //카운트 다운 후 실행할 액티비티 변수
-    private void setCount_view(Class c, int selectLevel){
+    private void setCount_view(Class c, int selectLevel) {
         // 화면에 보일 TextView
-        count_view = (TextView)findViewById(R.id.count_view);
-        count_view_layout = (RelativeLayout)findViewById(R.id.count_view_layout);
+        count_view = (TextView) findViewById(R.id.count_view);
+        count_view_layout = (RelativeLayout) findViewById(R.id.count_view_layout);
 
         //3초 타이머
         String conversionTime = "3";
@@ -139,14 +143,15 @@ public class SelectLevelMain extends AppCompatActivity {
             // 특정 시간마다 뷰 변경
             public void onTick(long millisUntilFinished) {
                 // 분단위
-                long getMin = millisUntilFinished - (millisUntilFinished / (60 * 60 * 1000)) ;
+                long getMin = millisUntilFinished - (millisUntilFinished / (60 * 60 * 1000));
                 // 초단위
-                String second = String.valueOf((getMin % (60 * 1000)) / 1000 +1); // 나머지
+                String second = String.valueOf((getMin % (60 * 1000)) / 1000 + 1); // 나머지
                 count_view.setText(second);
                 isrunning = true;
             }
+
             public void onFinish() {
-                levelActivity(SelectLevelActivity.class,selectLevel);
+                levelActivity(SelectLevelActivity.class, selectLevel);
                 count_view.setText("시작~!");
                 isrunning = true;
             }
@@ -156,12 +161,12 @@ public class SelectLevelMain extends AppCompatActivity {
     }
 
     @Override
-    public void onUserLeaveHint(){
+    public void onUserLeaveHint() {
         super.onUserLeaveHint();
-        if(mediaPlayer.isPlaying()){
+        if (mediaPlayer.isPlaying()) {
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
-            if(isrunning){
+            if (isrunning) {
                 countDownTimer.cancel();
             }
         }
@@ -169,14 +174,14 @@ public class SelectLevelMain extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         mediaPlayer.seekTo(currentPosition);
-        if(DashboardActivity.ismute){
+        if (DashboardActivity.ismute) {
             mediaPlayer.start();
-        }else {
+        } else {
             mediaPlayer.pause();
-            if(isrunning){
+            if (isrunning) {
                 countDownTimer.cancel();
             }
 
@@ -185,12 +190,12 @@ public class SelectLevelMain extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
-        if(mediaPlayer.isPlaying()){
+        if (mediaPlayer.isPlaying()) {
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
-            if(isrunning){
+            if (isrunning) {
                 countDownTimer.cancel();
             }
         }

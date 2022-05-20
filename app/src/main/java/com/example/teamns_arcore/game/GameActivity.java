@@ -70,7 +70,7 @@ public class GameActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     int currentPosition;
 
-    TextView myTextView, myCatchView, questionTxtView, hintTxtView, correctTxtView_count, incorrectTxtView_count;
+    TextView myTextView, myCatchView, questionTxtView, hintTxtView, correctTxtView_count, incorrectTxtView_count, timeOverTxtView_count;
 
     ////타이머 관련 변수//////////
     private Chronometer chronometer;
@@ -109,6 +109,7 @@ public class GameActivity extends AppCompatActivity {
 
     int answerCount = 0;
     int incorrectCount = 0;
+    int levelNum = 0;
 
     LocalDate localDate = LocalDate.now();
     LocalTime localTime = LocalTime.now();
@@ -238,11 +239,6 @@ public class GameActivity extends AppCompatActivity {
             chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
             chronometer.start();
             running = true;
-        } else {
-            chronometer.stop();
-            pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
-            timerValue = getSecondsFromDurationString(chronometer.getText().toString());
-            running = false;
         }
         /////////////
         randomNum();
@@ -432,8 +428,8 @@ public class GameActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String[] ranNumEng = intent.getStringArrayExtra("RandomEng");
-
         String[] ranNumKor = intent.getStringArrayExtra("RandomKor");
+        levelNum = intent.getIntExtra("choice", 0);
 
         questionTxtView.setText(String.format("[ %s ]", ranNumKor[0]));
 
@@ -771,6 +767,10 @@ public class GameActivity extends AppCompatActivity {
     }
 
     void gameResultDialog() {
+        chronometer.stop();
+        pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
+        timerValue = getSecondsFromDurationString(chronometer.getText().toString());
+
         Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요.", Toast.LENGTH_SHORT).show();
         Log.d("답갯수 : ", (answerCount + incorrectCount) + "");
         resultDialogView = View.inflate(GameActivity.this, R.layout.activity_result_dialog, null);
@@ -781,10 +781,13 @@ public class GameActivity extends AppCompatActivity {
         resultDialog.setCancelable(false);
         correctTxtView_count = resultDialogView.findViewById(R.id.correctTxtView_count);
         incorrectTxtView_count = resultDialogView.findViewById(R.id.incorrectTxtView_count);
-        correctTxtView_count.setText(String.valueOf(answerCount));
-        incorrectTxtView_count.setText(String.valueOf(incorrectCount));
+        correctTxtView_count.setText(String.format("%s개", answerCount));
+        incorrectTxtView_count.setText(String.format("%s개", incorrectCount));
         repeatBtn = resultDialogView.findViewById(R.id.repeatBtn);
         returnRecordBtn = resultDialogView.findViewById(R.id.returnRecordBtn);
+        timeOverTxtView_count = resultDialogView.findViewById(R.id.timeOverTxtView_count);
+
+        timeOverTxtView_count.setText(String.format("%s초", timerValue));
 
         repeatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -800,9 +803,9 @@ public class GameActivity extends AppCompatActivity {
                 Intent intent = new Intent(GameActivity.this, TableActivity.class);
                 intent.putExtra("Date", currentTime);
                 intent.putExtra("CorrectNum", answerCount);
-//                intent.putExtra("Timer", answerCount);
+                intent.putExtra("Timer", timerValue);
 //                intent.putExtra("Score", answerCount);
-                intent.putExtra("Level", answerCount);
+                intent.putExtra("Level", levelNum);
                 startActivity(intent);
             }
         });
