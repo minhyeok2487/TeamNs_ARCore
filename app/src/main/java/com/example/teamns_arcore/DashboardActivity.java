@@ -25,12 +25,13 @@ import com.example.teamns_arcore.SelectLevel.SelectLevelMain;
 public class DashboardActivity extends AppCompatActivity {
     SQLiteDatabase sqLiteDatabaseObj; // == private SQLiteDatabase db;
     SQLiteHelper sqLiteHelper;
-    String EmailHolder;
     //TextView Name;
     ImageButton LogOUT, NameChg, GotoRecord ;
     //Button LogOUT, NameChg ;
 
-    // inpublic static final String UserEmail = "";
+    public static final String UserEmail = "";
+    public static final String UserId = "";
+    String EmailHolder;
     //다이얼로그
     EditText chgName;  // 대화상자 입력값 저장
     String txtNickName;
@@ -70,11 +71,9 @@ public class DashboardActivity extends AppCompatActivity {
         findViewById(R.id.muteBtn).setOnClickListener(onClickListener);
         findViewById(R.id.gorecord).setOnClickListener(onClickListener);
         //
-
+        // MainActivity에서 유저id 받기
         Intent intent = getIntent();
         sqLiteHelper = new SQLiteHelper(this);
-
-        // MainActivity에서 유저id 받기
         EmailHolder = intent.getStringExtra(MainActivity.UserId);
         // TextView에 이름 넣어주기
         //select();

@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // 로그인 메서드
                 LoginFunction();
+                
             }
         });
 

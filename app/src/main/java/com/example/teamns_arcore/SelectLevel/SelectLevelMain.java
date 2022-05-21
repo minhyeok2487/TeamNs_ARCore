@@ -1,5 +1,6 @@
 package com.example.teamns_arcore.SelectLevel;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -39,6 +40,9 @@ public class SelectLevelMain extends AppCompatActivity {
     //
     MediaPlayer mediaPlayer;
     int currentPosition = 3000;
+    //
+    String selectName;
+    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,31 +63,38 @@ public class SelectLevelMain extends AppCompatActivity {
 
         // 로그인 add
         Name = (TextView) findViewById(R.id.textView1);
+        // DashboardActivity에서 유저id 받기
         Intent userNameintent = getIntent();
         sqLiteHelper = new SQLiteHelper(SelectLevelMain.this);
-        // MainActivity에서 유저id 받기
-        EmailHolder = userNameintent.getStringExtra(MainActivity.UserId);
+        EmailHolder = userNameintent.getStringExtra(DashboardActivity.UserId);
         // TextView에 이름 넣어주기
-//        select();
-//        Name.setText("어서오세요. " + select() + " 님");
-        Name.setText("어서오세요. 아무개 님");
+        select();
+        Name.setText("어서오세요. " + select() + " 님");
+        //Name.setText("어서오세요. 아무개 님");
         //
     }
 
     // 이름 가져오기
-//    public String select() {
-//        sqLiteDatabaseObj = openOrCreateDatabase(SQLiteHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
-//        // SELECT name from UserTable WHERE email = 'test';
-//        Cursor mCursor = sqLiteDatabaseObj.rawQuery("SELECT * FROM " + SQLiteHelper.TABLE_NAME + " WHERE " + SQLiteHelper.Table_Column_2_Email + " = '" + EmailHolder + "';", null);
-//        // Android android.database.CursorIndexOutOfBoundsException 에러 방지
-//        // cursor의 위치가 처음에 위치하고 있지 않았을 때 나는 에러
-//        // 값을 가지고 있으나 Position이 잘못된 경우 값을 재대로 가지고 올 수 없다.
-//        // cursor.moveToFirst() 를 사용해서 cursor의 위치를 제일 처음으로 바꿔준다.
+    @SuppressLint("Range")
+    public String select() {
+        sqLiteDatabaseObj = openOrCreateDatabase(SQLiteHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
+        System.out.println("셀렉트레벨메인 EmailHolder : "+ EmailHolder);
+        // SELECT name from UserTable WHERE email = 'test';
+        Cursor mCursor = sqLiteDatabaseObj.rawQuery("SELECT * FROM " + SQLiteHelper.TABLE_NAME + " WHERE " + SQLiteHelper.Table_Column_2_Email + " = '" + EmailHolder + "';", null);
+        System.out.println("select()의 mCursor : " + mCursor);
+        // Android android.database.CursorIndexOutOfBoundsException 에러 방지
+        // cursor의 위치가 처음에 위치하고 있지 않았을 때 나는 에러
+        // 값을 가지고 있으나 Position이 잘못된 경우 값을 재대로 가지고 올 수 없다.
+        // cursor.moveToFirst() 를 사용해서 cursor의 위치를 제일 처음으로 바꿔준다.
+        if( mCursor != null && mCursor.moveToFirst() ){
+            selectName = mCursor.getString(mCursor.getColumnIndex("name"));
+            mCursor.close();
+        }
 //        mCursor.moveToFirst();
 //        String selectName = mCursor.getString(1); // name의 위치가 1번째 (0번째는 index)
 //        mCursor.close();
-//        return selectName;
-//    }
+        return selectName;
+    }
 
     //버튼 클릭 리스너
     View.OnClickListener onClickListener = new View.OnClickListener() {
