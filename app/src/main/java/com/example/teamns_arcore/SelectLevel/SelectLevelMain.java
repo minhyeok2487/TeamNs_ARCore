@@ -41,9 +41,6 @@ public class SelectLevelMain extends AppCompatActivity {
     public static final String UserId = "";
     Intent gotouserid;
     //
-    MediaPlayer mediaPlayer;
-    int currentPosition = 3000;
-    //
     String selectName;
     //
 
@@ -146,7 +143,7 @@ public class SelectLevelMain extends AppCompatActivity {
 //        levelcount.putExtra("Level", i);
         // game한테도 닉넴 정보 전달하기
 //        levelcount.putExtra("userid",EmailHolder);
-        finish();
+        //finish();
     }
     //
 
@@ -183,7 +180,8 @@ public class SelectLevelMain extends AppCompatActivity {
             public void onFinish() {
                 levelActivity(SelectLevelActivity.class, selectLevel);
                 count_view.setText("시작~!");
-                isrunning = true;
+                DashboardActivity.mediaPlayer.pause();
+
             }
         };
 
@@ -193,42 +191,33 @@ public class SelectLevelMain extends AppCompatActivity {
     @Override
     public void onUserLeaveHint() {
         super.onUserLeaveHint();
-        if (mediaPlayer.isPlaying()) {
-            currentPosition = mediaPlayer.getCurrentPosition();
-            mediaPlayer.pause();
-            if (isrunning) {
-                countDownTimer.cancel();
-            }
+        if (DashboardActivity.mediaPlayer.isPlaying()) {
+            DashboardActivity.mediaPlayer.pause();
         }
-
+        if (isrunning) {
+            countDownTimer.cancel();
+        }
+        count_view_layout.setVisibility(View.GONE);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mediaPlayer.seekTo(currentPosition);
-        if (DashboardActivity.ismute) {
-            mediaPlayer.start();
-        } else {
-            mediaPlayer.pause();
-            if (isrunning) {
-                countDownTimer.cancel();
-            }
-
+        if (isrunning) {
+            countDownTimer.cancel();
         }
-
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mediaPlayer.isPlaying()) {
-            currentPosition = mediaPlayer.getCurrentPosition();
-            mediaPlayer.pause();
-            if (isrunning) {
-                countDownTimer.cancel();
-            }
+        if (DashboardActivity.mediaPlayer.isPlaying()) {
+            DashboardActivity.mediaPlayer.pause();
         }
+        if (isrunning) {
+            countDownTimer.cancel();
+        }
+        count_view_layout.setVisibility(View.GONE);
     }
 
 }

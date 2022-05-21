@@ -836,13 +836,14 @@ public class GameActivity extends AppCompatActivity {
         timeOverTxtView_count = resultDialogView.findViewById(R.id.timeOverTxtView_count);
 
         timeOverTxtView_count.setText(String.format("%s초", timerValue));
-
+        insertData(RecordSQLiteHelper.Table_Column_ID, currentTime, answerCount, timerValue,answerCount/timerValue*10000 , levelNum);
         repeatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GameActivity.this, SelectLevelMain.class);
-                intent.putExtra(UserEmail,EmailHolder);
-                startActivity(intent);
+//                Intent intent = new Intent(GameActivity.this, SelectLevelMain.class);
+//                intent.putExtra(UserEmail,EmailHolder);
+//                startActivity(intent);
+                finish();
             }
         });
 
@@ -851,7 +852,8 @@ public class GameActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(GameActivity.this, ChartActivity.class);
                 startActivity(intent);
-                insertData(RecordSQLiteHelper.Table_Column_ID, currentTime, answerCount, timerValue, 90, levelNum);
+
+
 
             }
         });
