@@ -91,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(RegisterActivity.this,"회원가입되었습니다.", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
             startActivity(intent);
-
+            finish();
         }
         else {
             // EditText 비어있으면 실행
