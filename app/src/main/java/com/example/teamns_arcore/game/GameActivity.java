@@ -18,6 +18,7 @@ import android.text.InputFilter;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -120,6 +121,9 @@ public class GameActivity extends AppCompatActivity {
     int incorrectCount = 0;
     int levelNum;
 
+    String[] ranNumEng;
+    String[] ranNumKor;
+
     SQLiteDatabase database;
 
     LocalDate localDate = LocalDate.now();
@@ -146,7 +150,7 @@ public class GameActivity extends AppCompatActivity {
             {0.0f, 0.0f, 1.0f, 0.8f}
     };
 
-    String[] alphabetArr = new String[]{"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+    String[] alphabetArr = new String[]{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
 
     float[] colorCorrection = new float[4];
 
@@ -289,9 +293,9 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                if(isModelInit) {
+                if (isModelInit) {
                     splitEnglish();
-                    for(int i=0;i< gljaIndex.size();i++){
+                    for (int i = 0; i < gljaIndex.size(); i++) {
                         Matrix.rotateM(modelArrayMatrix[gljaIndex.get(i)], 0, -distanceX / 5, 0f, 1f, 0f);
                         Matrix.rotateM(modelArrayMatrix[gljaIndex.get(i)], 0, -distanceY / 5, 1f, 0f, 0f);
                     }
@@ -434,12 +438,12 @@ public class GameActivity extends AppCompatActivity {
                     originalPicColor[1] = colorCorrections[i][1];
                     originalPicColor[2] = colorCorrections[i][2];
                     originalPicColor[3] = colorCorrections[i][3];
-                    for(int i=0;i< MAX;i++){
+                    for (int i = 0; i < MAX; i++) {
                         mRenderer.picObjColor(originalPicColor, i);
                     }
                     splitEnglish();
 
-                    for(int i=0;i< gljaIndex.size();i++){
+                    for (int i = 0; i < gljaIndex.size(); i++) {
                         mRenderer.picObjColor(picColor, gljaIndex.get(i));
                     }
 
@@ -464,16 +468,16 @@ public class GameActivity extends AppCompatActivity {
         mSurfaceView.setRenderer(mRenderer);
 
         Intent intent = getIntent();
-        String[] ranNumEng = intent.getStringArrayExtra("RandomEng");
-        String[] ranNumKor = intent.getStringArrayExtra("RandomKor");
+        ranNumEng = intent.getStringArrayExtra("RandomEng");
+        ranNumKor = intent.getStringArrayExtra("RandomKor");
         levelNum = intent.getIntExtra("Level", 0);
         // user정보
         sqLiteHelper = new SQLiteHelper(GameActivity.this);
         EmailHolder = intent.getStringExtra(SelectLevelActivity.UserId);
-        System.out.println("GameActivity EmailHolder : "+ EmailHolder);
+        System.out.println("GameActivity EmailHolder : " + EmailHolder);
         //
 
-        for (String eng: ranNumEng) {
+        for (String eng : ranNumEng) {
             englishSplit.add(eng);
         }
 
@@ -490,7 +494,7 @@ public class GameActivity extends AppCompatActivity {
                     incorrectCount++;
                     Log.d("답틀림 : ", incorrectCount + "");
                     //                    Log.d("ranNumKor[count-1] : ", ranNumKor[count-1] + "");
-                } else if(count ==10) {
+                } else if (count == 10) {
                     incorrectCount++;
                     gameResultDialog();
                 }
@@ -507,6 +511,11 @@ public class GameActivity extends AppCompatActivity {
                 AlertDialog.Builder hintDialogBuilder = new AlertDialog.Builder(GameActivity.this);
                 AlertDialog hintDialog = hintDialogBuilder.create();
                 hintDialog.setView(hintDialogView);
+                if (hintDialog.getWindow() != null) {
+                    hintDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    hintDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                    hintDialog.setCancelable(false);
+                }
                 hintDialog.show();
 
                 String word = ranNumEng[count];
@@ -549,25 +558,20 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
+        submitBtn.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    submit();
+                }
+                return true;
+            }
+        });
+
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (ranNumEng[count].equals(answerTxtView.getText().toString())) {
-                    count++;
-                    if (count < ranNumEng.length) {
-                        Toast.makeText(getApplicationContext(), "정답입니다!!!", Toast.LENGTH_SHORT).show();
-                        questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
-                        answerTxtView.setText("");
-                        answerCount++;
-                        Log.d("답맞힘 : ", answerCount + "");
-                    } else {
-                        answerCount++;
-                        gameResultDialog();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "틀렸어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
-                }
+                submit();
             }
         });
 
@@ -720,16 +724,17 @@ public class GameActivity extends AppCompatActivity {
     int i = 0;
     int bigyoCount = -1;
     boolean colorFlag = false;
+
     void setColorCorrection() {
         i++;
         i %= 4;
         colorCorrection = colorCorrections[i];
 
         mRenderer.setColorCorrection(colorCorrection);
-        if(colorFlag){
+        if (colorFlag) {
             splitEnglish();
 
-            for(int i=0;i< gljaIndex.size();i++){
+            for (int i = 0; i < gljaIndex.size(); i++) {
                 mRenderer.picObjColor(picColor, gljaIndex.get(i));
             }
         }
@@ -819,6 +824,11 @@ public class GameActivity extends AppCompatActivity {
         AlertDialog.Builder resultDialogBuilder = new AlertDialog.Builder(GameActivity.this);
         AlertDialog resultDialog = resultDialogBuilder.create();
         resultDialog.setView(resultDialogView);
+        if (resultDialog.getWindow() != null) {
+            resultDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            resultDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            resultDialog.setCancelable(false);
+        }
         resultDialog.show();
         resultDialog.setCancelable(false);
         correctTxtView_count = resultDialogView.findViewById(R.id.correctTxtView_count);
@@ -830,7 +840,8 @@ public class GameActivity extends AppCompatActivity {
         timeOverTxtView_count = resultDialogView.findViewById(R.id.timeOverTxtView_count);
 
         timeOverTxtView_count.setText(String.format("%s초", timerValue));
-        insertData(RecordSQLiteHelper.Table_Column_ID, currentTime, answerCount, timerValue,answerCount/timerValue*10000 , levelNum);
+        float score = ((float) answerCount / (float) timerValue) * 10000;
+        insertData(RecordSQLiteHelper.Table_Column_ID, currentTime, answerCount, timerValue, (int) score, levelNum);
         repeatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -846,7 +857,6 @@ public class GameActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(GameActivity.this, ChartActivity.class);
                 startActivity(intent);
-
 
 
             }
@@ -870,8 +880,8 @@ public class GameActivity extends AppCompatActivity {
 
     ArrayList<Integer> gljaIndex = new ArrayList<>();
 
-    void splitEnglish(){
-        if(gljaIndex != null) {
+    void splitEnglish() {
+        if (gljaIndex != null) {
             gljaIndex.clear();
         }
 
@@ -881,13 +891,31 @@ public class GameActivity extends AppCompatActivity {
 
         String[] resultGlja = hashSet.toArray(new String[0]);
 
-        for(int i = 0 ; i < resultGlja.length; i++){
-            for(int j = 0; j<alphabetArr.length;j++){
-                if(resultGlja[i].equals(alphabetArr[j])){
+        for (int i = 0; i < resultGlja.length; i++) {
+            for (int j = 0; j < alphabetArr.length; j++) {
+                if (resultGlja[i].equals(alphabetArr[j])) {
                     gljaIndex.add(j);
                     break;
                 }
             }
+        }
+    }
+
+    void submit() {
+        if (ranNumEng[count].equals(answerTxtView.getText().toString())) {
+            count++;
+            if (count < ranNumEng.length) {
+                Toast.makeText(getApplicationContext(), "정답입니다!!!", Toast.LENGTH_SHORT).show();
+                questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
+                answerTxtView.setText("");
+                answerCount++;
+                Log.d("답맞힘 : ", answerCount + "");
+            } else {
+                answerCount++;
+                gameResultDialog();
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), "틀렸어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
         }
     }
 

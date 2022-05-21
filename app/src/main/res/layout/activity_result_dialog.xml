@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#80FFFFFF"
+    android:background="@drawable/border_round_thin"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="20dp"
@@ -23,8 +23,8 @@
             android:layout_marginBottom="50dp"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
-            android:textColor="#000"
             android:text="게임 결과"
+            android:textColor="#000"
             android:textSize="100dp" />
 
         <LinearLayout
@@ -40,9 +40,9 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/fontstyle"
-                android:textColor="#000"
                 android:text="시간 :"
                 android:textAlignment="textEnd"
+                android:textColor="#000"
                 android:textSize="50dp" />
 
             <TextView
@@ -52,9 +52,9 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/fontstyle"
-                android:textColor="#000"
                 android:text="0"
                 android:textAlignment="textStart"
+                android:textColor="#000"
                 android:textSize="50dp" />
 
 
@@ -73,9 +73,9 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/fontstyle"
-                android:textColor="#000"
                 android:text="정답 :"
                 android:textAlignment="textEnd"
+                android:textColor="#000"
                 android:textSize="50dp" />
 
             <TextView
@@ -85,9 +85,9 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/fontstyle"
-                android:textColor="#000"
                 android:text="0"
                 android:textAlignment="textStart"
+                android:textColor="#000"
                 android:textSize="50dp" />
 
 
@@ -105,9 +105,9 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/fontstyle"
-                android:textColor="#000"
                 android:text="오답 :"
                 android:textAlignment="textEnd"
+                android:textColor="#000"
                 android:textSize="50dp" />
 
             <TextView
@@ -117,9 +117,9 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/fontstyle"
-                android:textColor="#000"
                 android:text="0"
                 android:textAlignment="textStart"
+                android:textColor="#000"
                 android:textSize="50dp" />
 
 
@@ -131,6 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="30dp"
         android:gravity="center"
         android:orientation="horizontal">
 
