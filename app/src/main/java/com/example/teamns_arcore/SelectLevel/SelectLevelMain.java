@@ -39,7 +39,6 @@ public class SelectLevelMain extends AppCompatActivity {
     TextView Name;
     public static final String UserEmail = "";
     public static final String UserId = "";
-    Intent gotouserid;
     //
     String selectName;
     //
@@ -49,10 +48,6 @@ public class SelectLevelMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectlevel);
 
-        //배경음악
-        mediaPlayer = MediaPlayer.create(this, R.raw.openning);
-        mediaPlayer.setLooping(true);
-        //mediaPlayer.start();
 
 
         // 버튼 리스너
@@ -107,27 +102,15 @@ public class SelectLevelMain extends AppCompatActivity {
             switch (v.getId()) {
                 case R.id.level1Btn:
                     setCount_view(SelectLevelActivity.class, 1);
-                    gotouserid = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
-                    gotouserid.putExtra(UserEmail,EmailHolder);
-                    startActivity(gotouserid);
                     break;
                 case R.id.level2Btn:
                     setCount_view(SelectLevelActivity.class, 2);
-                    gotouserid = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
-                    gotouserid.putExtra(UserEmail,EmailHolder);
-                    startActivity(gotouserid);
                     break;
                 case R.id.level3Btn:
                     setCount_view(SelectLevelActivity.class, 3);
-                    gotouserid = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
-                    gotouserid.putExtra(UserEmail,EmailHolder);
-                    startActivity(gotouserid);
                     break;
                 case R.id.level4Btn:
                     setCount_view(SelectLevelActivity.class, 4);
-                    gotouserid = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
-                    gotouserid.putExtra(UserEmail,EmailHolder);
-                    startActivity(gotouserid);
                     break;
             }
         }
@@ -136,8 +119,10 @@ public class SelectLevelMain extends AppCompatActivity {
     // 레벨 버튼 intent
     private void levelActivity(Class c, int i) {
         Intent levelintent = new Intent(this, c);
+        levelintent.putExtra(UserEmail,EmailHolder);
         levelintent.putExtra("choice", (int) i);
         startActivity(levelintent);
+        finish();
 
 //        Intent levelcount = new Intent(SelectLevelMain.this, GameActivity.class);
 //        levelcount.putExtra("Level", i);
@@ -166,7 +151,7 @@ public class SelectLevelMain extends AppCompatActivity {
 
         // 첫번쨰 인자 : 원하는 시간 (예를들어 30초면 30 x 1000(주기))
         // 두번쨰 인자 : 주기( 1000 = 1초)
-        countDownTimer = new CountDownTimer(conversionTime2, 1000) {
+        new CountDownTimer(conversionTime2, 1000) {
             // 특정 시간마다 뷰 변경
             public void onTick(long millisUntilFinished) {
                 // 분단위
@@ -181,11 +166,11 @@ public class SelectLevelMain extends AppCompatActivity {
                 levelActivity(SelectLevelActivity.class, selectLevel);
                 count_view.setText("시작~!");
                 DashboardActivity.mediaPlayer.pause();
-
+                isrunning = false;
             }
-        };
+        }.start();
 
-        countDownTimer.start();
+
     }
 
     @Override
@@ -197,15 +182,15 @@ public class SelectLevelMain extends AppCompatActivity {
         if (isrunning) {
             countDownTimer.cancel();
         }
-        count_view_layout.setVisibility(View.GONE);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (isrunning) {
-            countDownTimer.cancel();
-        }
+//        if (isrunning) {
+//            countDownTimer.cancel();
+//        }
     }
 
     @Override
@@ -217,7 +202,6 @@ public class SelectLevelMain extends AppCompatActivity {
         if (isrunning) {
             countDownTimer.cancel();
         }
-        count_view_layout.setVisibility(View.GONE);
     }
 
 }
