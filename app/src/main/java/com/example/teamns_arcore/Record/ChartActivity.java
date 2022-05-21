@@ -38,15 +38,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ChartActivity extends AppCompatActivity {
 
     BarChart barChart;
     LineChart lineChart;
-    String[] items = {"4월", "5월"};
+    String[] Mainitems;
     Spinner spinner;
     TableLayout tableLayout;
     RecyclerView recycler_view;
@@ -86,27 +86,29 @@ public class ChartActivity extends AppCompatActivity {
 
         lineChart = (LineChart) findViewById(R.id.chart);
 
+        Date currentdate = new Date();
+        String[] items = {"1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"};
+        Mainitems = new String[currentdate.getMonth()+1];
+        for(int i=0; i< Mainitems.length;i++){
+            Mainitems[i] = items[i];
+        }
+
 
         spinner = (Spinner) findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, items
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, Mainitems
         );
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        spinner.setSelection(currentdate.getMonth());
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //textView.setText(items[position]);
-                if (items[position].equals("4월")) {
-                    barChart = (BarChart) findViewById(R.id.fragment_bluetooth_chat_barchart);
-                    barChart.setTouchEnabled(false); //확대 방지
-                    graphInitSetting4();       //그래프 기본 세팅
-                } else if (items[position].equals("5월")) {
-                    barChart = (BarChart) findViewById(R.id.fragment_bluetooth_chat_barchart);
-                    barChart.setTouchEnabled(false); //확대 방지
-                    graphInitSetting5();       //그래프 기본 세팅
-                }
+                barChart = (BarChart) findViewById(R.id.fragment_bluetooth_chat_barchart);
+                barChart.setTouchEnabled(false); //확대 방지
+                graphInitSetting(position);       //그래프 기본 세팅
             }
 
             @Override
@@ -117,12 +119,22 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
-    public void graphInitSetting4() {
+    public void graphInitSetting(int position) {
         ArrayList<String> jsonList = new ArrayList<>(); // ArrayList 선언
         ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
-        for (int i = 0; i < recordModels.size(); i++) {
-            jsonList.add(recordModels.get(i).getScore());
-            labelList.add(recordModels.get(i).getDate());
+        ArrayList<RecordModel> MMdate = new ArrayList<>();
+        for(RecordModel model: recordModels){
+            String[] date = model.getDate().split("-");
+            int MM = Integer.parseInt(date[1]);
+            Log.d("흠", MM+"");
+            if(MM == position+1){
+                MMdate.add(model);
+            }
+        }
+
+        for (int i = 0; i < MMdate.size(); i++) {
+            jsonList.add(MMdate.get(i).getScore());
+            labelList.add(MMdate.get(i).getDate());
         }
 
         BarChartGraph(labelList, jsonList);
@@ -130,19 +142,6 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
-    public void graphInitSetting5() {
-        ArrayList<String> jsonList = new ArrayList<>(); // ArrayList 선언
-        ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
-        jsonList.add(recordModels.get(2).getScore());
-        jsonList.add(recordModels.get(3).getScore());
-        jsonList.add(recordModels.get(4).getScore());
-
-        labelList.add(recordModels.get(2).getDate());
-        labelList.add(recordModels.get(3).getDate());
-        labelList.add(recordModels.get(4).getDate());
-        BarChartGraph(labelList, jsonList);
-        LineGraph(labelList, jsonList);
-    }
 
     /**
      * 그래프함수
