@@ -286,6 +286,18 @@ public class GameActivity extends AppCompatActivity {
                 return true;
             }
 
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                if(isModelInit) {
+                    splitEnglish();
+                    for(int i=0;i< gljaIndex.size();i++){
+                        Matrix.rotateM(modelArrayMatrix[gljaIndex.get(i)], 0, -distanceX / 5, 0f, 1f, 0f);
+                        Matrix.rotateM(modelArrayMatrix[gljaIndex.get(i)], 0, -distanceY / 5, 1f, 0f, 0f);
+                    }
+                }
+                return true;
+            }
+
         });
 
         DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
