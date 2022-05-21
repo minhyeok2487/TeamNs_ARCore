@@ -125,10 +125,19 @@ public class GameActivity extends AppCompatActivity {
     LocalDate localDate = LocalDate.now();
     LocalTime localTime = LocalTime.now();
 
-    int hour = localTime.getHour();
-    int min = localTime.getMinute();
+    //int hour = localTime.getHour();
+    //int min = localTime.getMinute();
+    //String currentTime = String.format("%s %d:%d", localDate, hour, min);
 
-    String currentTime = String.format("%s %d:%d", localDate, hour, min);
+    String currentTime = String.format("%s", localDate); // -> data 날짜만 들어가게 변경
+
+    // userid 정보
+    SQLiteDatabase sqLiteDatabaseObj; // == private SQLiteDatabase db;
+    SQLiteHelper sqLiteHelper;
+    public static final String UserEmail = "";
+    public static final String UserId = "";
+    String EmailHolder;
+    //
 
     float[][] colorCorrections = new float[][]{
             {0.8f, 0.8f, 0.8f, 0.8f},
@@ -459,6 +468,11 @@ public class GameActivity extends AppCompatActivity {
         String[] ranNumEng = intent.getStringArrayExtra("RandomEng");
         String[] ranNumKor = intent.getStringArrayExtra("RandomKor");
         levelNum = intent.getIntExtra("Level", 0);
+        // user정보
+        sqLiteHelper = new SQLiteHelper(GameActivity.this);
+        EmailHolder = intent.getStringExtra(SelectLevelActivity.UserId);
+        System.out.println("GameActivity EmailHolder : "+ EmailHolder);
+        //
 
         for (String eng: ranNumEng) {
             englishSplit.add(eng);
@@ -815,6 +829,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GameActivity.this, SelectLevelMain.class);
+                intent.putExtra(UserEmail,EmailHolder);
                 startActivity(intent);
             }
         });
