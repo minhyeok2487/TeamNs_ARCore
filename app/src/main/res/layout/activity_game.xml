@@ -89,6 +89,7 @@
             android:textAlignment="center"
             android:textColor="#905CED"
             android:textSize="50dp"
+            android:inputType="text"
             android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
