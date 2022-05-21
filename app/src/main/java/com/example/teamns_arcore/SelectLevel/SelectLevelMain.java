@@ -38,9 +38,6 @@ public class SelectLevelMain extends AppCompatActivity {
     String EmailHolder;
     TextView Name;
     //
-    MediaPlayer mediaPlayer;
-    int currentPosition = 3000;
-    //
     String selectName;
     //
 
@@ -49,10 +46,7 @@ public class SelectLevelMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectlevel);
 
-        //배경음악
-        mediaPlayer = MediaPlayer.create(this, R.raw.openning);
-        mediaPlayer.setLooping(true);
-        //mediaPlayer.start();
+
 
 
         // 버튼 리스너
@@ -72,6 +66,8 @@ public class SelectLevelMain extends AppCompatActivity {
         Name.setText("어서오세요. " + select() + " 님");
         //Name.setText("어서오세요. 아무개 님");
         //
+
+
     }
 
     // 이름 가져오기
@@ -161,51 +157,37 @@ public class SelectLevelMain extends AppCompatActivity {
             }
 
             public void onFinish() {
-                levelActivity(SelectLevelActivity.class, selectLevel);
+                levelActivity(SelectLevelActivity.class,selectLevel);
                 count_view.setText("시작~!");
-                isrunning = true;
+
             }
         };
 
         countDownTimer.start();
     }
 
+
+
     @Override
     public void onUserLeaveHint() {
         super.onUserLeaveHint();
-        if (mediaPlayer.isPlaying()) {
-            currentPosition = mediaPlayer.getCurrentPosition();
-            mediaPlayer.pause();
             if (isrunning) {
                 countDownTimer.cancel();
             }
-        }
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mediaPlayer.seekTo(currentPosition);
-        if (DashboardActivity.ismute) {
-            mediaPlayer.start();
-        } else {
-            mediaPlayer.pause();
             if (isrunning) {
                 countDownTimer.cancel();
             }
-
-        }
-
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mediaPlayer.isPlaying()) {
-            currentPosition = mediaPlayer.getCurrentPosition();
-            mediaPlayer.pause();
-            if (isrunning) {
+           if (isrunning) {
                 countDownTimer.cancel();
             }
         }
