@@ -46,7 +46,7 @@ public class ChartActivity extends AppCompatActivity {
 
     BarChart barChart;
     LineChart lineChart;
-    String[] items = {"4월", "5월"};
+    String[] items = {"1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"};
     Spinner spinner;
     TableLayout tableLayout;
     RecyclerView recycler_view;
@@ -88,7 +88,7 @@ public class ChartActivity extends AppCompatActivity {
 
 
         spinner = (Spinner) findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, items
         );
 
@@ -98,14 +98,43 @@ public class ChartActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //textView.setText(items[position]);
-                if (items[position].equals("4월")) {
-                    barChart = (BarChart) findViewById(R.id.fragment_bluetooth_chat_barchart);
-                    barChart.setTouchEnabled(false); //확대 방지
-                    graphInitSetting4();       //그래프 기본 세팅
-                } else if (items[position].equals("5월")) {
-                    barChart = (BarChart) findViewById(R.id.fragment_bluetooth_chat_barchart);
-                    barChart.setTouchEnabled(false); //확대 방지
-                    graphInitSetting5();       //그래프 기본 세팅
+//                if (items[position].equals("4월")) {
+//                    barChart = (BarChart) findViewById(R.id.fragment_bluetooth_chat_barchart);
+//                    barChart.setTouchEnabled(false); //확대 방지
+//                    graphInitSetting4();       //그래프 기본 세팅
+//                } else if (items[position].equals("5월")) {
+//                    barChart = (BarChart) findViewById(R.id.fragment_bluetooth_chat_barchart);
+//                    barChart.setTouchEnabled(false); //확대 방지
+//                    graphInitSetting5();       //그래프 기본 세팅
+//                }
+                switch (items[position]) {
+                    case "1월":
+                        barChart = (BarChart) findViewById(R.id.fragment_bluetooth_chat_barchart);
+                        barChart.setTouchEnabled(false); //확대 방지
+                        graphInitSetting();       //그래프 기본 세팅
+                        break;
+                    case "2월":
+                        break;
+                    case "3월":
+                        break;
+                    case "4월":
+                        break;
+                    case "5월":
+                        break;
+                    case "6월":
+                        break;
+                    case "7월":
+                        break;
+                    case "8월":
+                        break;
+                    case "9월":
+                        break;
+                    case "10월":
+                        break;
+                    case "11월":
+                        break;
+                    case "12월":
+                        break;
                 }
             }
 
@@ -117,7 +146,7 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
-    public void graphInitSetting4() {
+    public void graphInitSetting() {
         ArrayList<String> jsonList = new ArrayList<>(); // ArrayList 선언
         ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
         for (int i = 0; i < recordModels.size(); i++) {
@@ -130,19 +159,19 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
-    public void graphInitSetting5() {
-        ArrayList<String> jsonList = new ArrayList<>(); // ArrayList 선언
-        ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
-        jsonList.add(recordModels.get(2).getScore());
-        jsonList.add(recordModels.get(3).getScore());
-        jsonList.add(recordModels.get(4).getScore());
-
-        labelList.add(recordModels.get(2).getDate());
-        labelList.add(recordModels.get(3).getDate());
-        labelList.add(recordModels.get(4).getDate());
-        BarChartGraph(labelList, jsonList);
-        LineGraph(labelList, jsonList);
-    }
+//    public void graphInitSetting5() {
+//        ArrayList<String> jsonList = new ArrayList<>(); // ArrayList 선언
+//        ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
+//        jsonList.add(recordModels.get(2).getScore());
+//        jsonList.add(recordModels.get(3).getScore());
+//        jsonList.add(recordModels.get(4).getScore());
+//
+//        labelList.add(recordModels.get(2).getDate());
+//        labelList.add(recordModels.get(3).getDate());
+//        labelList.add(recordModels.get(4).getDate());
+//        BarChartGraph(labelList, jsonList);
+//        LineGraph(labelList, jsonList);
+//    }
 
     /**
      * 그래프함수
