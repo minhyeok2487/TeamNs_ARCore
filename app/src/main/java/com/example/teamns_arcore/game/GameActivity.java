@@ -210,6 +210,8 @@ public class GameActivity extends AppCompatActivity {
             {-2.5f, 0.9f, -0.05f}
     };
 
+    float[] picColor = new float[]{1.0f, 1.0f, 1.0f, 1.0f};
+
     //    ArrayList<Integer> ranNum = new ArrayList<>();
     int[] ranNum = new int[MAX];
 
@@ -374,7 +376,7 @@ public class GameActivity extends AppCompatActivity {
                     colorBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            setColorCorrection(estimate);
+                            setColorCorrection();
                         }
                     });
 
@@ -426,6 +428,7 @@ public class GameActivity extends AppCompatActivity {
 
                 if (mCatched) {
                     mCatched = false;
+                    colorFlag = true;
 
                     originalPicColor[0] = colorCorrections[i][0];
                     originalPicColor[1] = colorCorrections[i][1];
@@ -437,7 +440,6 @@ public class GameActivity extends AppCompatActivity {
                     splitEnglish();
 
                     for(int i=0;i< gljaIndex.size();i++){
-                        float[] picColor = new float[]{1.0f, 1.0f, 1.0f, 1.0f};
                         mRenderer.picObjColor(picColor, gljaIndex.get(i));
                     }
 
@@ -716,16 +718,21 @@ public class GameActivity extends AppCompatActivity {
     }
 
     int i = 0;
-
-    void setColorCorrection(LightEstimate estimate) {
+    int bigyoCount = -1;
+    boolean colorFlag = false;
+    void setColorCorrection() {
         i++;
         i %= 4;
         colorCorrection = colorCorrections[i];
 
         mRenderer.setColorCorrection(colorCorrection);
+        if(colorFlag){
+            splitEnglish();
 
-
-
+            for(int i=0;i< gljaIndex.size();i++){
+                mRenderer.picObjColor(picColor, gljaIndex.get(i));
+            }
+        }
     }
 
     //타이머 변환 메서드
