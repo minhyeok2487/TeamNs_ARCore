@@ -37,6 +37,7 @@
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="표로보기"
+                android:textColor="#3E9CFC"
                 android:textSize="30dp" />
         </LinearLayout>
 
