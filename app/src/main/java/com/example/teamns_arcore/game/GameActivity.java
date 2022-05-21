@@ -63,7 +63,9 @@ import com.google.ar.core.exceptions.CameraNotAvailableException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -98,7 +100,8 @@ public class GameActivity extends AppCompatActivity {
 
     boolean mUserRequestedInstall = true, isModelInit = false, mCatched = false, flag = true;
 
-    float mCurrentX, mCurrentY, mCatchX, mCatchY;
+    float mCurrentX, mCurrentY;
+//    float mCatchX, mCatchY;
 
     //이동, 회전 이벤트 처리할 객체
     GestureDetector mGestureDetector;
@@ -134,6 +137,8 @@ public class GameActivity extends AppCompatActivity {
             {0.0f, 0.0f, 1.0f, 0.8f}
 
     };
+
+    String[] alphabetArr = new String[]{"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
 
     float[] colorCorrection = new float[4];
 
@@ -203,6 +208,8 @@ public class GameActivity extends AppCompatActivity {
     // 입력을 넣을 String
     String insertText = "";
 
+    ArrayList<String> englishSplit = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -263,10 +270,10 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public boolean onSingleTapUp(MotionEvent event) {
                 mCatched = true;
-                mCatchX = event.getX();
-                mCatchY = event.getY();
-
-                Log.d("확인 한번", event.getX() + " , " + event.getY());
+//                mCatchX = event.getX();
+//                mCatchY = event.getY();
+//
+//                Log.d("확인 한번", event.getX() + " , " + event.getY());
                 return true;
             }
 
@@ -395,26 +402,40 @@ public class GameActivity extends AppCompatActivity {
 //                        mRenderer.mPlane.update(plane);
                     }
                 }
+                float[] originalPicColor = new float[]{0.8f, 0.8f, 0.8f, 0.8f};
 
                 if (mCatched) {
                     mCatched = false;
-                    results = frame.hitTest(mCatchX, mCatchY);
 
-//                    String msg = "터키터키~";
-//                    answerTxtView.setText(msg);
-
-                    for (HitResult result : results) {
-                        Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
-                        if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
-                            // 클릭확인용
-                            float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
-                            mRenderer.picObjColor(picColor, catchIDX);
-                            insertText += String.valueOf(catchIDX);
-                            answerTxtView.setText(insertText);
-                        } else {
-
-                        }
+                    for(int i=0;i< MAX;i++){
+                        mRenderer.picObjColor(originalPicColor, i);
                     }
+
+
+
+                    splitEnglish();
+
+                    for(int i=0;i< gljaIndex.size();i++){
+                        float[] picColor = new float[]{1.0f, 0.0f, 0.0f, 1.0f};
+                        mRenderer.picObjColor(picColor, gljaIndex.get(i));
+                    }
+
+
+
+//                    results = frame.hitTest(mCatchX, mCatchY);
+//
+//                    for (HitResult result : results) {
+//                        Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
+//                        if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
+//                            // 클릭확인용
+//                            float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
+//                            mRenderer.picObjColor(picColor, catchIDX);
+//                            insertText += String.valueOf(catchIDX);
+//                            answerTxtView.setText(insertText);
+//                        } else {
+//
+//                        }
+//                    }
                 }
 
                 // 카메라 세팅
@@ -438,6 +459,10 @@ public class GameActivity extends AppCompatActivity {
         String[] ranNumEng = intent.getStringArrayExtra("RandomEng");
         String[] ranNumKor = intent.getStringArrayExtra("RandomKor");
         levelNum = intent.getIntExtra("Level", 0);
+
+        for (String eng: ranNumEng) {
+            englishSplit.add(eng);
+        }
 
         questionTxtView.setText(String.format("[ %s ]", ranNumKor[0]));
 
@@ -641,26 +666,26 @@ public class GameActivity extends AppCompatActivity {
         return true;
     }
 
-    int catchIDX;
+//    int catchIDX;
 
 
-    boolean catchCheck(float x, float y, float z) {
-
-        for (catchIDX = 0; catchIDX < MAX; catchIDX++) {
-
-            float[][] resAll = mRenderer.arrayObj.get(catchIDX).getMinMaxPoint();
-            float[] minPoint = resAll[0];
-            float[] maxPoint = resAll[1];
-
-            // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
-            if (x >= minPoint[0] - 0.2f && x <= maxPoint[0] + 0.2f &&
-                    y >= minPoint[1] - 0.2f && y <= maxPoint[1] + 0.2f &&
-                    z >= minPoint[2] - 0.2f && z <= maxPoint[2] + 0.2f) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    boolean catchCheck(float x, float y, float z) {
+//
+//        for (catchIDX = 0; catchIDX < MAX; catchIDX++) {
+//
+//            float[][] resAll = mRenderer.arrayObj.get(catchIDX).getMinMaxPoint();
+//            float[] minPoint = resAll[0];
+//            float[] maxPoint = resAll[1];
+//
+//            // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
+//            if (x >= minPoint[0] - 100.0f && x <= maxPoint[0] + 100.0f &&
+//                    y >= minPoint[1] - 100.0f && y <= maxPoint[1] + 100.0f &&
+//                    z >= minPoint[2] - 100.0f && z <= maxPoint[2] + 100.0f) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
 
     void randomNum() {
@@ -764,6 +789,8 @@ public class GameActivity extends AppCompatActivity {
         pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
         timerValue = getSecondsFromDurationString(chronometer.getText().toString());
 
+        englishSplit.clear();
+
         Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요.", Toast.LENGTH_SHORT).show();
         Log.d("답갯수 : ", (answerCount + incorrectCount) + "");
         resultDialogView = View.inflate(GameActivity.this, R.layout.activity_result_dialog, null);
@@ -814,5 +841,27 @@ public class GameActivity extends AppCompatActivity {
 
         database.insert(RecordSQLiteHelper.TABLE_NAME, null, values);
 
+    }
+
+    ArrayList<Integer> gljaIndex = new ArrayList<>();
+
+    void splitEnglish(){
+        if(gljaIndex != null) {
+            gljaIndex.clear();
+        }
+
+        String[] glja = englishSplit.get(count).split("");
+
+        HashSet<String> hashSet = new HashSet<>(Arrays.asList(glja));
+
+        String[] resultGlja = hashSet.toArray(new String[0]);
+
+        for(int i = 0 ; i < resultGlja.length; i++){
+            for(int j = 0; j<alphabetArr.length;j++){
+                if(resultGlja[i].equals(alphabetArr[j])){
+                    gljaIndex.add(j);
+                }
+            }
+        }
     }
 }
