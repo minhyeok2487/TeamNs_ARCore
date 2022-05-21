@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/main_page">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,11 +19,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="30dp"
             android:gravity="center"
-            android:text="여기는 닉네임자리"
-            android:textColor="#000"
-            android:textSize="20dp" />
+            android:text="어서오세요. 아무개님"
+            android:fontFamily="@font/fontstyle"
+            android:textColor="#000C7B"
+            android:textSize="50dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,6 +41,7 @@
                 android:fontFamily="@font/fontstyle"
                 android:padding="10dp"
                 android:text="level1"
+                android:textStyle="bold"
                 android:textColor="@color/teal_200"
                 android:textSize="35dp" />
 
@@ -49,7 +54,8 @@
                 android:fontFamily="@font/fontstyle"
                 android:padding="10dp"
                 android:text="level2"
-                android:textColor="#F4E347"
+                android:textColor="#FEC619"
+                android:textStyle="bold"
                 android:textSize="35dp" />
 
         </LinearLayout>
@@ -71,6 +77,7 @@
                 android:padding="10dp"
                 android:text="level3"
                 android:textColor="#FF5722"
+                android:textStyle="bold"
                 android:textSize="35dp" />
 
             <android.widget.Button
@@ -83,6 +90,7 @@
                 android:padding="10dp"
                 android:text="level4"
                 android:textColor="#E91E63"
+                android:textStyle="bold"
                 android:textSize="35dp" />
 
         </LinearLayout>

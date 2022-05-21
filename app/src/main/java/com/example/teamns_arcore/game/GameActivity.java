@@ -1,8 +1,10 @@
 package com.example.teamns_arcore.game;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.display.DisplayManager;
@@ -36,9 +38,13 @@ import com.example.teamns_arcore.DashboardActivity;
 import com.example.teamns_arcore.MainActivity;
 import com.example.teamns_arcore.R;
 import com.example.teamns_arcore.Record.ChartActivity;
+import com.example.teamns_arcore.Record.Model.RecordModel;
+import com.example.teamns_arcore.Record.RecordSQLiteHelper;
 import com.example.teamns_arcore.Record.TableActivity;
+import com.example.teamns_arcore.SQLiteHelper;
 import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
 import com.example.teamns_arcore.SelectLevel.Model.StractEn;
+import com.example.teamns_arcore.SelectLevel.SelectLevelActivity;
 import com.example.teamns_arcore.SelectLevel.SelectLevelMain;
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
@@ -57,7 +63,9 @@ import com.google.ar.core.exceptions.CameraNotAvailableException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -70,7 +78,7 @@ public class GameActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     int currentPosition;
 
-    TextView myTextView, myCatchView, questionTxtView, hintTxtView, correctTxtView_count, incorrectTxtView_count;
+    TextView myTextView, myCatchView, questionTxtView, hintTxtView, correctTxtView_count, incorrectTxtView_count, timeOverTxtView_count;
 
     ////타이머 관련 변수//////////
     private Chronometer chronometer;
@@ -92,7 +100,8 @@ public class GameActivity extends AppCompatActivity {
 
     boolean mUserRequestedInstall = true, isModelInit = false, mCatched = false, flag = true;
 
-    float mCurrentX, mCurrentY, mCatchX, mCatchY;
+    float mCurrentX, mCurrentY;
+//    float mCatchX, mCatchY;
 
     //이동, 회전 이벤트 처리할 객체
     GestureDetector mGestureDetector;
@@ -109,6 +118,9 @@ public class GameActivity extends AppCompatActivity {
 
     int answerCount = 0;
     int incorrectCount = 0;
+    int levelNum;
+
+    SQLiteDatabase database;
 
     LocalDate localDate = LocalDate.now();
     LocalTime localTime = LocalTime.now();
@@ -126,6 +138,8 @@ public class GameActivity extends AppCompatActivity {
 
     };
 
+    String[] alphabetArr = new String[]{"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+
     float[] colorCorrection = new float[4];
 
     final int MAX = 26;
@@ -136,63 +150,65 @@ public class GameActivity extends AppCompatActivity {
 
 
     float[][] pixedMatrix = new float[][]{
-            {0.3f, 3.2f, 2.3f},
-            {0.4f, 1.4f, -3.1f},
-            {0.5f, 2.2f, 3.3f},
-            {0.7f, 0.2f, -0.3f},
-            {0.9f, 1.2f, 1.3f},
-            {1.1f, 2.4f, -1.6f},
-            {1.3f, 2.5f, 0.3f},
-            {1.5f, 1.4f, -2.4f},
-            {1.8f, 0.2f, 2.4f},
-            {1.9f, 1.8f, -2.9f},
-            {2.3f, 2.2f, 1.7f},
-            {2.4f, 1.3f, -0.4f},
-            {2.7f, 0.1f, 1.3f},
-            {2.8f, 2.4f, -0.7f},
-            {3.1f, 0.6f, 1.9f},
-            {3.3f, 1.9f, -2.5f},
-            {3.4f, 1.5f, 2.5f},
-            {3.6f, 3.0f, -2.7f},
-            {3.8f, 2.3f, 1.2f},
-            {3.9f, 1.2f, -3.2f},
-            {4.0f, 2.9f, 2.9f},
-            {4.3f, 1.7f, -0.7f},
-            {4.5f, 0.8f, 1.3f},
-            {4.7f, 3.2f, -3.1f},
-            {4.1f, 2.7f, 2.7f},
-            {-0.1f, 1.3f, -3.1f},
-            {-0.3f, 1.8f, 1.3f},
-            {-0.4f, 2.6f, -2.8f},
-            {-0.7f, 2.9f, 2.7f},
-            {-0.9f, 1.1f, -0.8f},
-            {-1.1f, 0.4f, 0.9f},
-            {-1.3f, 1.8f, -1.3f},
-            {-1.5f, 1.7f, 2.6f},
-            {-1.7f, 2.6f, -2.1f},
-            {-1.9f, 0.7f, 2.2f},
-            {-2.3f, 2.6f, -3.3f},
-            {-2.4f, 2.5f, 1.7f},
-            {-2.6f, 1.3f, -2.6f},
-            {-2.8f, 0.8f, 1.9f},
-            {-3.1f, 1.1f, -1.6f},
-            {-3.3f, 1.6f, 0.4f},
-            {-3.4f, 0.9f, -0.7f},
-            {-3.6f, 2.5f, 1.4f},
-            {-3.7f, 1.9f, -1.8f},
-            {-3.9f, 0.7f, 0.7f},
-            {-4.1f, 1.7f, -3.3f},
-            {-4.3f, 3.1f, 3.3f},
-            {-4.4f, 2.6f, -2.8f},
-            {-4.6f, 2.2f, 2.8f},
-            {-4.2f, 0.8f, -1.7f}
+            {0.0f, 0.0f, 0.0f},
+            {0.1f, 0.1f, -2.4f},
+            {0.2f, 0.2f, 2.4f},
+            {0.3f, 0.3f, -2.3f},
+            {0.4f, 0.4f, 2.3f},
+            {0.5f, 0.5f, -2.2f},
+            {0.6f, 0.6f, 2.2f},
+            {0.7f, 0.7f, -2.1f},
+            {0.8f, 0.8f, 2.1f},
+            {0.9f, 0.9f, -2.0f},
+            {1.0f, -0.0f, 2.0f},
+            {1.1f, -0.1f, -1.9f},
+            {1.2f, -0.2f, 1.9f},
+            {1.3f, -0.3f, -1.8f},
+            {1.4f, -0.4f, 1.8f},
+            {1.5f, -0.5f, -1.7f},
+            {1.6f, -0.6f, 1.7f},
+            {1.7f, -0.7f, -1.6f},
+            {1.8f, -0.8f, 1.6f},
+            {1.9f, -0.9f, -1.5f},
+            {2.0f, 0.0f, 1.5f},
+            {2.1f, 0.1f, -1.4f},
+            {2.2f, 0.2f, 1.4f},
+            {2.3f, 0.3f, -1.3f},
+            {2.4f, 0.4f, 1.3f},
+            {-0.1f, 0.5f, -1.2f},
+            {-0.2f, 0.6f, 1.2f},
+            {-0.3f, 0.7f, -1.1f},
+            {-0.4f, 0.8f, 1.1f},
+            {-0.5f, 0.9f, -1.0f},
+            {-0.6f, 0.0f, 1.0f},
+            {-0.7f, -0.1f, -0.9f},
+            {-0.8f, -0.2f, 0.9f},
+            {-0.9f, -0.3f, -0.8f},
+            {-1.0f, -0.4f, 0.8f},
+            {-1.1f, -0.5f, -0.7f},
+            {-1.2f, -0.6f, 0.7f},
+            {-1.3f, -0.7f, -0.6f},
+            {-1.4f, -0.8f, 0.6f},
+            {-1.5f, -0.9f, -0.5f},
+            {-1.6f, -0.0f, 0.5f},
+            {-1.7f, 0.1f, -0.4f},
+            {-1.8f, 0.2f, 0.4f},
+            {-1.9f, 0.3f, -0.3f},
+            {-2.0f, 0.4f, 0.3f},
+            {-2.1f, 0.5f, -0.2f},
+            {-2.2f, 0.6f, 0.2f},
+            {-2.3f, 0.7f, -0.1f},
+            {-2.4f, 0.8f, 0.1f},
+            {-2.5f, 0.9f, -0.05f}
     };
 
     //    ArrayList<Integer> ranNum = new ArrayList<>();
     int[] ranNum = new int[MAX];
 
     // 입력을 넣을 String
-    String insertText="";
+    String insertText = "";
+
+    ArrayList<String> englishSplit = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,11 +254,6 @@ public class GameActivity extends AppCompatActivity {
             chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
             chronometer.start();
             running = true;
-        } else {
-            chronometer.stop();
-            pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
-            timerValue = getSecondsFromDurationString(chronometer.getText().toString());
-            running = false;
         }
         /////////////
         randomNum();
@@ -259,10 +270,10 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public boolean onSingleTapUp(MotionEvent event) {
                 mCatched = true;
-                mCatchX = event.getX();
-                mCatchY = event.getY();
-
-                Log.d("확인 한번", event.getX() + " , " + event.getY());
+//                mCatchX = event.getX();
+//                mCatchY = event.getY();
+//
+//                Log.d("확인 한번", event.getX() + " , " + event.getY());
                 return true;
             }
 
@@ -391,26 +402,40 @@ public class GameActivity extends AppCompatActivity {
 //                        mRenderer.mPlane.update(plane);
                     }
                 }
+                float[] originalPicColor = new float[]{0.8f, 0.8f, 0.8f, 0.8f};
 
                 if (mCatched) {
                     mCatched = false;
-                    results = frame.hitTest(mCatchX, mCatchY);
 
-//                    String msg = "터키터키~";
-//                    answerTxtView.setText(msg);
-
-                    for (HitResult result : results) {
-                        Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
-                        if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
-                            // 클릭확인용
-                            float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
-                            mRenderer.picObjColor(picColor, catchIDX);
-                            insertText += String.valueOf(catchIDX);
-                            answerTxtView.setText(insertText);
-                        } else {
-
-                        }
+                    for(int i=0;i< MAX;i++){
+                        mRenderer.picObjColor(originalPicColor, i);
                     }
+
+
+
+                    splitEnglish();
+
+                    for(int i=0;i< gljaIndex.size();i++){
+                        float[] picColor = new float[]{1.0f, 0.0f, 0.0f, 1.0f};
+                        mRenderer.picObjColor(picColor, gljaIndex.get(i));
+                    }
+
+
+
+//                    results = frame.hitTest(mCatchX, mCatchY);
+//
+//                    for (HitResult result : results) {
+//                        Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
+//                        if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
+//                            // 클릭확인용
+//                            float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
+//                            mRenderer.picObjColor(picColor, catchIDX);
+//                            insertText += String.valueOf(catchIDX);
+//                            answerTxtView.setText(insertText);
+//                        } else {
+//
+//                        }
+//                    }
                 }
 
                 // 카메라 세팅
@@ -432,11 +457,14 @@ public class GameActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String[] ranNumEng = intent.getStringArrayExtra("RandomEng");
-
         String[] ranNumKor = intent.getStringArrayExtra("RandomKor");
+        levelNum = intent.getIntExtra("Level", 0);
+
+        for (String eng: ranNumEng) {
+            englishSplit.add(eng);
+        }
 
         questionTxtView.setText(String.format("[ %s ]", ranNumKor[0]));
-
 
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -528,21 +556,8 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
-//        if ((answerCount + incorrectCount) == 10) {
-//            Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요.", Toast.LENGTH_SHORT).show();
-//            dialogView = View.inflate(GameActivity.this, R.layout.activity_result_dialog, null);
-//            AlertDialog.Builder resultDialogBuilder = new AlertDialog.Builder(GameActivity.this);
-//            AlertDialog resultDialog = resultDialogBuilder.create();
-//            resultDialog.setView(dialogView);
-//            resultDialog.show();
-//            resultDialog.setCancelable(false);
-//            correctTxtView_count = dialogView.findViewById(R.id.correctTxtView_count);
-//            incorrectTxtView_count = dialogView.findViewById(R.id.incorrectTxtView_count);
-//            correctTxtView_count.setText(answerCount);
-//            incorrectTxtView_count.setText(incorrectCount);
-//
-//            Log.d("정답갯수 : ", (answerCount + incorrectCount) + "");
-//        }
+        RecordSQLiteHelper recordSQLite = new RecordSQLiteHelper(getApplicationContext());
+        database = recordSQLite.getWritableDatabase();
 
 
     }
@@ -651,25 +666,26 @@ public class GameActivity extends AppCompatActivity {
         return true;
     }
 
-    int catchIDX;
+//    int catchIDX;
 
-    boolean catchCheck(float x, float y, float z) {
 
-        for (catchIDX = 0; catchIDX < MAX; catchIDX++) {
-
-            float[][] resAll = mRenderer.arrayObj.get(catchIDX).getMinMaxPoint();
-            float[] minPoint = resAll[0];
-            float[] maxPoint = resAll[1];
-
-            // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
-            if (x >= minPoint[0] - 1.1f && x <= maxPoint[0] + 1.1f &&
-                    y >= minPoint[1] - 1.1f && y <= maxPoint[1] + 1.1f &&
-                    z >= minPoint[2] - 1.1f && z <= maxPoint[2] + 1.1f) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    boolean catchCheck(float x, float y, float z) {
+//
+//        for (catchIDX = 0; catchIDX < MAX; catchIDX++) {
+//
+//            float[][] resAll = mRenderer.arrayObj.get(catchIDX).getMinMaxPoint();
+//            float[] minPoint = resAll[0];
+//            float[] maxPoint = resAll[1];
+//
+//            // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
+//            if (x >= minPoint[0] - 100.0f && x <= maxPoint[0] + 100.0f &&
+//                    y >= minPoint[1] - 100.0f && y <= maxPoint[1] + 100.0f &&
+//                    z >= minPoint[2] - 100.0f && z <= maxPoint[2] + 100.0f) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
 
     void randomNum() {
@@ -769,6 +785,12 @@ public class GameActivity extends AppCompatActivity {
     }
 
     void gameResultDialog() {
+        chronometer.stop();
+        pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
+        timerValue = getSecondsFromDurationString(chronometer.getText().toString());
+
+        englishSplit.clear();
+
         Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요.", Toast.LENGTH_SHORT).show();
         Log.d("답갯수 : ", (answerCount + incorrectCount) + "");
         resultDialogView = View.inflate(GameActivity.this, R.layout.activity_result_dialog, null);
@@ -779,10 +801,13 @@ public class GameActivity extends AppCompatActivity {
         resultDialog.setCancelable(false);
         correctTxtView_count = resultDialogView.findViewById(R.id.correctTxtView_count);
         incorrectTxtView_count = resultDialogView.findViewById(R.id.incorrectTxtView_count);
-        correctTxtView_count.setText(String.valueOf(answerCount));
-        incorrectTxtView_count.setText(String.valueOf(incorrectCount));
+        correctTxtView_count.setText(String.format("%s개", answerCount));
+        incorrectTxtView_count.setText(String.format("%s개", incorrectCount));
         repeatBtn = resultDialogView.findViewById(R.id.repeatBtn);
         returnRecordBtn = resultDialogView.findViewById(R.id.returnRecordBtn);
+        timeOverTxtView_count = resultDialogView.findViewById(R.id.timeOverTxtView_count);
+
+        timeOverTxtView_count.setText(String.format("%s초", timerValue));
 
         repeatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -795,15 +820,48 @@ public class GameActivity extends AppCompatActivity {
         returnRecordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GameActivity.this, TableActivity.class);
-                intent.putExtra("Date", currentTime);
-                intent.putExtra("CorrectNum", answerCount);
-//                intent.putExtra("Timer", answerCount);
-//                intent.putExtra("Score", answerCount);
-                intent.putExtra("Level", answerCount);
+                Intent intent = new Intent(GameActivity.this, ChartActivity.class);
                 startActivity(intent);
+                insertData(RecordSQLiteHelper.Table_Column_ID, currentTime, answerCount, timerValue, 90, levelNum);
+
             }
         });
 
+    }
+
+    void insertData(String ID, String Date, int CorrectNum, int Timer, int Score, int Level) {
+
+        ContentValues values = new ContentValues();
+        values.put(RecordSQLiteHelper.Table_Column_ID, ID);
+        values.put(RecordSQLiteHelper.Table_Column_1_Date, Date);
+        values.put(RecordSQLiteHelper.Table_Column_2_CorrectNum, CorrectNum);
+        values.put(RecordSQLiteHelper.Table_Column_3_Timer, Timer);
+        values.put(RecordSQLiteHelper.Table_Column_4_Score, Score);
+        values.put(RecordSQLiteHelper.Table_Column_5_Level, Level);
+
+        database.insert(RecordSQLiteHelper.TABLE_NAME, null, values);
+
+    }
+
+    ArrayList<Integer> gljaIndex = new ArrayList<>();
+
+    void splitEnglish(){
+        if(gljaIndex != null) {
+            gljaIndex.clear();
+        }
+
+        String[] glja = englishSplit.get(count).split("");
+
+        HashSet<String> hashSet = new HashSet<>(Arrays.asList(glja));
+
+        String[] resultGlja = hashSet.toArray(new String[0]);
+
+        for(int i = 0 ; i < resultGlja.length; i++){
+            for(int j = 0; j<alphabetArr.length;j++){
+                if(resultGlja[i].equals(alphabetArr[j])){
+                    gljaIndex.add(j);
+                }
+            }
+        }
     }
 }

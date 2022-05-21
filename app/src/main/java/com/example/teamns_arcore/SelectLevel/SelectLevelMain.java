@@ -1,5 +1,6 @@
 package com.example.teamns_arcore.SelectLevel;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -37,6 +38,8 @@ public class SelectLevelMain extends AppCompatActivity {
     String EmailHolder;
     TextView Name;
     //
+    String selectName;
+    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,52 +56,59 @@ public class SelectLevelMain extends AppCompatActivity {
         findViewById(R.id.level4Btn).setOnClickListener(onClickListener);
 
         // 로그인 add
-        Name = (TextView)findViewById(R.id.textView1);
+        Name = (TextView) findViewById(R.id.textView1);
+        // DashboardActivity에서 유저id 받기
         Intent userNameintent = getIntent();
         sqLiteHelper = new SQLiteHelper(SelectLevelMain.this);
-        EmailHolder = userNameintent.getStringExtra(MainActivity.UserId);
-        // MainActivity에서 유저id 받기
-        EmailHolder = userNameintent.getStringExtra(MainActivity.UserId);
+        EmailHolder = userNameintent.getStringExtra(DashboardActivity.UserId);
         // TextView에 이름 넣어주기
-//        select();
-//        Name.setText("어서오세요. "+select()+" 님");
-        Name.setText("어서오세요. 아무개 님");
+        select();
+        Name.setText("어서오세요. " + select() + " 님");
+        //Name.setText("어서오세요. 아무개 님");
         //
 
 
     }
+
     // 이름 가져오기
-//    public String select() {
-//        sqLiteDatabaseObj = openOrCreateDatabase(SQLiteHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
-//        // SELECT name from UserTable WHERE email = 'test';
-//        Cursor mCursor = sqLiteDatabaseObj.rawQuery("SELECT * FROM " + SQLiteHelper.TABLE_NAME + " WHERE "+ SQLiteHelper.Table_Column_2_Email +" = '"+ EmailHolder+"';", null);
-//        // Android android.database.CursorIndexOutOfBoundsException 에러 방지
-//        // cursor의 위치가 처음에 위치하고 있지 않았을 때 나는 에러
-//        // 값을 가지고 있으나 Position이 잘못된 경우 값을 재대로 가지고 올 수 없다.
-//        // cursor.moveToFirst() 를 사용해서 cursor의 위치를 제일 처음으로 바꿔준다.
+    @SuppressLint("Range")
+    public String select() {
+        sqLiteDatabaseObj = openOrCreateDatabase(SQLiteHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
+        System.out.println("셀렉트레벨메인 EmailHolder : "+ EmailHolder);
+        // SELECT name from UserTable WHERE email = 'test';
+        Cursor mCursor = sqLiteDatabaseObj.rawQuery("SELECT * FROM " + SQLiteHelper.TABLE_NAME + " WHERE " + SQLiteHelper.Table_Column_2_Email + " = '" + EmailHolder + "';", null);
+        System.out.println("select()의 mCursor : " + mCursor);
+        // Android android.database.CursorIndexOutOfBoundsException 에러 방지
+        // cursor의 위치가 처음에 위치하고 있지 않았을 때 나는 에러
+        // 값을 가지고 있으나 Position이 잘못된 경우 값을 재대로 가지고 올 수 없다.
+        // cursor.moveToFirst() 를 사용해서 cursor의 위치를 제일 처음으로 바꿔준다.
+        if( mCursor != null && mCursor.moveToFirst() ){
+            selectName = mCursor.getString(mCursor.getColumnIndex("name"));
+            mCursor.close();
+        }
 //        mCursor.moveToFirst();
 //        String selectName = mCursor.getString(1); // name의 위치가 1번째 (0번째는 index)
 //        mCursor.close();
-//        return selectName;
-//    }
+        return selectName;
+    }
 
     //버튼 클릭 리스너
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             //leveltwo = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.level1Btn:
-                    setCount_view(SelectLevelActivity.class,1);
+                    setCount_view(SelectLevelActivity.class, 1);
                     break;
                 case R.id.level2Btn:
-                    setCount_view(SelectLevelActivity.class,2);
+                    setCount_view(SelectLevelActivity.class, 2);
                     break;
                 case R.id.level3Btn:
-                    setCount_view(SelectLevelActivity.class,3);
+                    setCount_view(SelectLevelActivity.class, 3);
                     break;
                 case R.id.level4Btn:
-                    setCount_view(SelectLevelActivity.class,4);
+                    setCount_view(SelectLevelActivity.class, 4);
                     break;
             }
         }
@@ -107,18 +117,21 @@ public class SelectLevelMain extends AppCompatActivity {
     // 레벨 버튼 intent
     private void levelActivity(Class c, int i) {
         Intent levelintent = new Intent(this, c);
-        levelintent.putExtra("choice", (int)i);
+        levelintent.putExtra("choice", (int) i);
         startActivity(levelintent);
+
+        Intent levelcount = new Intent(SelectLevelMain.this, GameActivity.class);
+        levelcount.putExtra("Level", i);
         finish();
     }
     //
 
 
     //카운트 다운 후 실행할 액티비티 변수
-    private void setCount_view(Class c, int selectLevel){
+    private void setCount_view(Class c, int selectLevel) {
         // 화면에 보일 TextView
-        count_view = (TextView)findViewById(R.id.count_view);
-        count_view_layout = (RelativeLayout)findViewById(R.id.count_view_layout);
+        count_view = (TextView) findViewById(R.id.count_view);
+        count_view_layout = (RelativeLayout) findViewById(R.id.count_view_layout);
 
         //3초 타이머
         String conversionTime = "3";
@@ -136,19 +149,15 @@ public class SelectLevelMain extends AppCompatActivity {
             // 특정 시간마다 뷰 변경
             public void onTick(long millisUntilFinished) {
                 // 분단위
-                long getMin = millisUntilFinished - (millisUntilFinished / (60 * 60 * 1000)) ;
+                long getMin = millisUntilFinished - (millisUntilFinished / (60 * 60 * 1000));
                 // 초단위
-                String second = String.valueOf((getMin % (60 * 1000)) / 1000 +1); // 나머지
+                String second = String.valueOf((getMin % (60 * 1000)) / 1000 + 1); // 나머지
                 count_view.setText(second);
                 isrunning = true;
             }
+
             public void onFinish() {
-<<<<<<< Updated upstream
                 levelActivity(SelectLevelActivity.class,selectLevel);
-=======
-                levelActivity(SelectLevelActivity.class, selectLevel);
-                DashboardActivity.mediaPlayer.pause();
->>>>>>> Stashed changes
                 count_view.setText("시작~!");
 
             }
@@ -160,54 +169,27 @@ public class SelectLevelMain extends AppCompatActivity {
 
 
     @Override
-    public void onUserLeaveHint(){
+    public void onUserLeaveHint() {
         super.onUserLeaveHint();
-<<<<<<< Updated upstream
-        if(mediaPlayer.isPlaying()){
-            currentPosition = mediaPlayer.getCurrentPosition();
-            mediaPlayer.pause();
-            if(isrunning){
-=======
             if (isrunning) {
->>>>>>> Stashed changes
                 countDownTimer.cancel();
             }
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-<<<<<<< Updated upstream
-        mediaPlayer.seekTo(currentPosition);
-        if(DashboardActivity.ismute){
-            mediaPlayer.start();
-        }else {
-            mediaPlayer.pause();
-            if(isrunning){
+            if (isrunning) {
                 countDownTimer.cancel();
             }
-
-=======
-        if (isrunning) {
-            countDownTimer.cancel();
->>>>>>> Stashed changes
-        }
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
-<<<<<<< Updated upstream
-        if(mediaPlayer.isPlaying()){
-            currentPosition = mediaPlayer.getCurrentPosition();
-            mediaPlayer.pause();
-            if(isrunning){
+           if (isrunning) {
                 countDownTimer.cancel();
             }
-=======
-        if (isrunning) {
-            countDownTimer.cancel();
->>>>>>> Stashed changes
         }
     }
 

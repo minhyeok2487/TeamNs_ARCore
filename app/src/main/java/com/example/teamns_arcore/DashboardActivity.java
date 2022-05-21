@@ -20,16 +20,19 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.teamns_arcore.Record.ChartActivity;
 import com.example.teamns_arcore.SelectLevel.SelectLevelMain;
 
 public class DashboardActivity extends AppCompatActivity {
     SQLiteDatabase sqLiteDatabaseObj; // == private SQLiteDatabase db;
     SQLiteHelper sqLiteHelper;
-    String EmailHolder;
     //TextView Name;
-    Button LogOUT, NameChg ;
+    ImageButton LogOUT, NameChg, GotoRecord ;
+    //Button LogOUT, NameChg ;
 
-    // inpublic static final String UserEmail = "";
+    public static final String UserEmail = "";
+    public static final String UserId = "";
+    String EmailHolder;
     //다이얼로그
     EditText chgName;  // 대화상자 입력값 저장
     String txtNickName;
@@ -61,8 +64,9 @@ public class DashboardActivity extends AppCompatActivity {
         mediaPlayer.setLooping(true);
 
         //Name = (TextView)findViewById(R.id.textView1);
-        LogOUT = (Button)findViewById(R.id.button1);
-        NameChg = (Button)findViewById(R.id.namechg);
+        LogOUT = (ImageButton)findViewById(R.id.button1);
+        NameChg = (ImageButton)findViewById(R.id.namechg);
+        GotoRecord = (ImageButton)findViewById(R.id.gorecord);
 
         // /* 원래 main에 있던 정보들  */
         // 버튼 리스너
@@ -75,12 +79,11 @@ public class DashboardActivity extends AppCompatActivity {
         findViewById(R.id.StartBtn).setOnClickListener(onClickListener);
         findViewById(R.id.EndBtn).setOnClickListener(onClickListener);
         findViewById(R.id.muteBtn).setOnClickListener(onClickListener);
+        findViewById(R.id.gorecord).setOnClickListener(onClickListener);
         //
-
+        // MainActivity에서 유저id 받기
         Intent intent = getIntent();
         sqLiteHelper = new SQLiteHelper(this);
-
-        // MainActivity에서 유저id 받기
         EmailHolder = intent.getStringExtra(MainActivity.UserId);
         // TextView에 이름 넣어주기
         //select();
@@ -154,22 +157,19 @@ public class DashboardActivity extends AppCompatActivity {
                     finish();
                     break;
                 case R.id.muteBtn:
-                    if(ismute){
+                    if (ismute) {
                         ismute = false;
-<<<<<<< Updated upstream
-                        muteBtn.setImageResource(R.drawable.music_off);
-                    } else {
-                        ismute = true;
-                        muteBtn.setImageResource(R.drawable.music_note);
-=======
                         mediaPlayer.pause();
                         muteBtn.setImageResource(R.drawable.music_icon_off);
                     } else {
                         ismute = true;
                         mediaPlayer.start();
                         muteBtn.setImageResource(R.drawable.music_icon);
->>>>>>> Stashed changes
                     }
+                    break;
+                case R.id.gorecord:
+                    Intent gotorecord = new Intent(DashboardActivity.this, ChartActivity.class);
+                    startActivity(gotorecord);
                     break;
             }
         }
