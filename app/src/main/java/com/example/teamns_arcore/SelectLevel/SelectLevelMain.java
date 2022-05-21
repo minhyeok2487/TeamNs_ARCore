@@ -50,8 +50,8 @@ public class SelectLevelMain extends AppCompatActivity {
         setContentView(R.layout.activity_selectlevel);
 
         //배경음악
-        mediaPlayer = MediaPlayer.create(this, R.raw.openning);
-        mediaPlayer.setLooping(true);
+//        mediaPlayer = MediaPlayer.create(this, R.raw.openning);
+//        mediaPlayer.setLooping(true);
         //mediaPlayer.start();
 
 

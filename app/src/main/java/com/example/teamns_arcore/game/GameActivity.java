@@ -144,7 +144,6 @@ public class GameActivity extends AppCompatActivity {
             {1.0f, 0.0f, 0.0f, 0.8f},
             {0.0f, 1.0f, 0.0f, 0.8f},
             {0.0f, 0.0f, 1.0f, 0.8f}
-
     };
 
     String[] alphabetArr = new String[]{"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
@@ -438,7 +437,7 @@ public class GameActivity extends AppCompatActivity {
                     splitEnglish();
 
                     for(int i=0;i< gljaIndex.size();i++){
-                        float[] picColor = new float[]{1.0f, 1.0f, 0.0f, 1.0f};
+                        float[] picColor = new float[]{1.0f, 1.0f, 1.0f, 1.0f};
                         mRenderer.picObjColor(picColor, gljaIndex.get(i));
                     }
 
@@ -719,12 +718,14 @@ public class GameActivity extends AppCompatActivity {
     int i = 0;
 
     void setColorCorrection(LightEstimate estimate) {
+        i++;
+        i %= 4;
         colorCorrection = colorCorrections[i];
 
         mRenderer.setColorCorrection(colorCorrection);
 
-        i++;
-        i %= 4;
+
+
     }
 
     //타이머 변환 메서드
