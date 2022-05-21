@@ -36,7 +36,7 @@
         <activity android:name=".game.TimerActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".DashboardActivity" />
-
+        <service android:name=".MusicService" />
         <meta-data
             android:name="com.google.ar.core"
             android:value="required" />

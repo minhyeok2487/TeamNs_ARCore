@@ -37,18 +37,13 @@ public class SelectLevelMain extends AppCompatActivity {
     String EmailHolder;
     TextView Name;
     //
-    MediaPlayer mediaPlayer;
-    int currentPosition = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectlevel);
 
-        //배경음악
-        mediaPlayer = MediaPlayer.create(this, R.raw.openning);
-        mediaPlayer.setLooping(true);
-        //mediaPlayer.start();
+
 
 
         // 버튼 리스너
@@ -69,6 +64,8 @@ public class SelectLevelMain extends AppCompatActivity {
 //        Name.setText("어서오세요. "+select()+" 님");
         Name.setText("어서오세요. 아무개 님");
         //
+
+
     }
     // 이름 가져오기
 //    public String select() {
@@ -146,31 +143,41 @@ public class SelectLevelMain extends AppCompatActivity {
                 isrunning = true;
             }
             public void onFinish() {
+<<<<<<< Updated upstream
                 levelActivity(SelectLevelActivity.class,selectLevel);
+=======
+                levelActivity(SelectLevelActivity.class, selectLevel);
+                DashboardActivity.mediaPlayer.pause();
+>>>>>>> Stashed changes
                 count_view.setText("시작~!");
-                isrunning = true;
+
             }
         };
 
         countDownTimer.start();
     }
 
+
+
     @Override
     public void onUserLeaveHint(){
         super.onUserLeaveHint();
+<<<<<<< Updated upstream
         if(mediaPlayer.isPlaying()){
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
             if(isrunning){
+=======
+            if (isrunning) {
+>>>>>>> Stashed changes
                 countDownTimer.cancel();
             }
-        }
-
     }
 
     @Override
     public void onResume(){
         super.onResume();
+<<<<<<< Updated upstream
         mediaPlayer.seekTo(currentPosition);
         if(DashboardActivity.ismute){
             mediaPlayer.start();
@@ -180,19 +187,27 @@ public class SelectLevelMain extends AppCompatActivity {
                 countDownTimer.cancel();
             }
 
+=======
+        if (isrunning) {
+            countDownTimer.cancel();
+>>>>>>> Stashed changes
         }
-
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
+<<<<<<< Updated upstream
         if(mediaPlayer.isPlaying()){
             currentPosition = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
             if(isrunning){
                 countDownTimer.cancel();
             }
+=======
+        if (isrunning) {
+            countDownTimer.cancel();
+>>>>>>> Stashed changes
         }
     }
 
