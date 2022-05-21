@@ -2,6 +2,7 @@ package com.example.teamns_arcore.SelectLevel;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.speech.tts.TextToSpeech;
@@ -16,8 +17,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.teamns_arcore.DashboardActivity;
 import com.example.teamns_arcore.R;
 import com.example.teamns_arcore.Record.ChartActivity;
+import com.example.teamns_arcore.SQLiteHelper;
 import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
 import com.example.teamns_arcore.SelectLevel.Model.StractEn;
 import com.example.teamns_arcore.SelectLevel.adapter.EnglishAdapter;
@@ -53,11 +56,27 @@ public class SelectLevelActivity extends AppCompatActivity {
 
     private TextToSpeech tts;// TTS 변수 선언
 
+    // userid 정보
+    SQLiteDatabase sqLiteDatabaseObj; // == private SQLiteDatabase db;
+    SQLiteHelper sqLiteHelper;
+    public static final String UserEmail = "";
+    public static final String UserId = "";
+    String EmailHolder;
+    //
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selectlevel_list);
         englist = findViewById(R.id.englist);
+
+        // SelectLevelMain 유저id 받기
+        Intent gouserintent = getIntent();
+        sqLiteHelper = new SQLiteHelper(SelectLevelActivity.this);
+        EmailHolder = gouserintent.getStringExtra(SelectLevelMain.UserId);
+        System.out.println("SelectLevelActivity EmailHolder : "+ EmailHolder);
+
+
         // SelectLevelMain.java에서 보낸 파이어베이스에 저장된 정보가져오기
         //intent = getIntent();
         levelintent = getIntent();
@@ -171,6 +190,7 @@ public class SelectLevelActivity extends AppCompatActivity {
         } else {
             intentGame.putExtra("Level", 4);
         }
+        intentGame.putExtra(UserEmail,EmailHolder);
         startActivity(intentGame);
         finish();
 

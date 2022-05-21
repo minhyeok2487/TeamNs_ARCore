@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -49,19 +48,10 @@ public class DashboardActivity extends AppCompatActivity {
     private long backKeyPressedTime = 0;
     // 첫 번째 뒤로 가기 버튼을 누를 때 표시
     private Toast toast;
-
-    //
-    public static MediaPlayer mediaPlayer;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
-        //배경음악
-        mediaPlayer = MediaPlayer.create(this, R.raw.openning);
-        mediaPlayer.seekTo(3000);
-        mediaPlayer.setLooping(true);
 
         //Name = (TextView)findViewById(R.id.textView1);
         LogOUT = (ImageButton)findViewById(R.id.button1);
@@ -101,7 +91,7 @@ public class DashboardActivity extends AppCompatActivity {
                 Logout();
             }
         });
-        
+
         // 이름 변경 버튼
         NameChg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,23 +137,27 @@ public class DashboardActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+//                case R.id.regnicknameBtn:
+//                    RegNickname();
+//                    currentnickname.setText("현재 닉네임 : " + pname);
+//                    break;
                 case R.id.StartBtn:
+                    //난이도 선택
+                    //myStartActivity(SelectLevelMain.class);
                     Intent userNameintent = new Intent(DashboardActivity.this, SelectLevelMain.class);
-                    userNameintent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
                     userNameintent.putExtra(UserEmail, EmailHolder);
                     startActivity(userNameintent);
                     break;
                 case R.id.EndBtn:
+                    //게임종료메서드
                     finish();
                     break;
                 case R.id.muteBtn:
-                    if (ismute) {
+                    if(ismute){
                         ismute = false;
-                        mediaPlayer.pause();
                         muteBtn.setImageResource(R.drawable.music_icon_off);
                     } else {
                         ismute = true;
-                        mediaPlayer.start();
                         muteBtn.setImageResource(R.drawable.music_icon);
                     }
                     break;
@@ -202,34 +196,6 @@ public class DashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
-        }
-    }
-
-    @Override
-    public void onUserLeaveHint() {
-        super.onUserLeaveHint();
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-        }
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (ismute) {
-            mediaPlayer.start();
-        } else {
-            mediaPlayer.pause();
-        }
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
         }
     }
 }
