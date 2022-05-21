@@ -75,6 +75,7 @@ import java.util.TimerTask;
 
 import static android.speech.tts.TextToSpeech.ERROR;
 
+
 public class GameActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     int currentPosition;
@@ -905,12 +906,14 @@ public class GameActivity extends AppCompatActivity {
         if (ranNumEng[count].equals(answerTxtView.getText().toString())) {
             count++;
             if (count < ranNumEng.length) {
+                tts.speak(ranNumEng[count-1], TextToSpeech.QUEUE_FLUSH, null);
                 Toast.makeText(getApplicationContext(), "정답입니다!!!", Toast.LENGTH_SHORT).show();
                 questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
                 answerTxtView.setText("");
                 answerCount++;
                 Log.d("답맞힘 : ", answerCount + "");
             } else {
+                tts.speak(ranNumEng[count-1], TextToSpeech.QUEUE_FLUSH, null);
                 answerCount++;
                 gameResultDialog();
             }
@@ -918,5 +921,7 @@ public class GameActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "틀렸어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
         }
     }
+
+}
 
 }
