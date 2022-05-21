@@ -141,7 +141,7 @@
             android:layout_marginHorizontal="5dp"
             android:background="@drawable/border_round_fill"
             android:padding="10dp"
-            android:text="다시하기"
+            android:text="처음으로"
             android:textColor="@color/white" />
 
 
