@@ -87,7 +87,7 @@
             android:maxLines="1"
             android:hint="여기에 답을 입력하세요"
             android:textAlignment="center"
-            android:textColor="#905CED"
+            android:textColor="#3E9CFC"
             android:textSize="50dp"
             android:inputType="text"
             android:layout_marginBottom="20dp"
