@@ -349,7 +349,7 @@ public class GameActivity extends AppCompatActivity {
                 }
 
 
-                List<HitResult> results = frame.hitTest(600.0f, 600.0f);
+                List<HitResult> results = frame.hitTest(200.0f, 200.0f);
                 for (HitResult result : results) {
                     Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
 //                        float [] modelMatrix = new float[16];
@@ -423,41 +423,27 @@ public class GameActivity extends AppCompatActivity {
 //                        mRenderer.mPlane.update(plane);
                     }
                 }
-                float[] originalPicColor = new float[]{0.8f, 0.8f, 0.8f, 0.8f};
+                float[] originalPicColor = new float[4];
 
                 if (mCatched) {
                     mCatched = false;
 
+                    originalPicColor[0] = colorCorrections[i][0];
+                    originalPicColor[1] = colorCorrections[i][1];
+                    originalPicColor[2] = colorCorrections[i][2];
+                    originalPicColor[3] = colorCorrections[i][3];
                     for(int i=0;i< MAX;i++){
                         mRenderer.picObjColor(originalPicColor, i);
                     }
-
-
-
                     splitEnglish();
 
                     for(int i=0;i< gljaIndex.size();i++){
-                        float[] picColor = new float[]{1.0f, 0.0f, 0.0f, 1.0f};
+                        float[] picColor = new float[]{1.0f, 1.0f, 0.0f, 1.0f};
                         mRenderer.picObjColor(picColor, gljaIndex.get(i));
                     }
 
-
-
-//                    results = frame.hitTest(mCatchX, mCatchY);
-//
-//                    for (HitResult result : results) {
-//                        Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
-//                        if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
-//                            // 클릭확인용
-//                            float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
-//                            mRenderer.picObjColor(picColor, catchIDX);
-//                            insertText += String.valueOf(catchIDX);
-//                            answerTxtView.setText(insertText);
-//                        } else {
-//
-//                        }
-//                    }
                 }
+
 
                 // 카메라 세팅
                 Camera camera = frame.getCamera();
@@ -891,8 +877,10 @@ public class GameActivity extends AppCompatActivity {
             for(int j = 0; j<alphabetArr.length;j++){
                 if(resultGlja[i].equals(alphabetArr[j])){
                     gljaIndex.add(j);
+                    break;
                 }
             }
         }
     }
+
 }
