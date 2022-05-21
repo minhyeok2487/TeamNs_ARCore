@@ -559,11 +559,15 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
-        submitBtn.setOnKeyListener(new View.OnKeyListener() {
+        answerTxtView.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    submit();
+                switch (keyCode){
+                    case KeyEvent.KEYCODE_ENTER:
+                        submit();
+                        break;
+                    default:
+                        return false;
                 }
                 return true;
             }
@@ -921,4 +925,5 @@ public class GameActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "틀렸어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
         }
     }
+
 }
