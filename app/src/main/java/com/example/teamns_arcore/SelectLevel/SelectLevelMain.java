@@ -47,8 +47,6 @@ public class SelectLevelMain extends AppCompatActivity {
         setContentView(R.layout.activity_selectlevel);
 
 
-
-
         // 버튼 리스너
         findViewById(R.id.level1Btn).setOnClickListener(onClickListener);
         findViewById(R.id.level2Btn).setOnClickListener(onClickListener);
@@ -74,7 +72,7 @@ public class SelectLevelMain extends AppCompatActivity {
     @SuppressLint("Range")
     public String select() {
         sqLiteDatabaseObj = openOrCreateDatabase(SQLiteHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
-        System.out.println("셀렉트레벨메인 EmailHolder : "+ EmailHolder);
+        System.out.println("셀렉트레벨메인 EmailHolder : " + EmailHolder);
         // SELECT name from UserTable WHERE email = 'test';
         Cursor mCursor = sqLiteDatabaseObj.rawQuery("SELECT * FROM " + SQLiteHelper.TABLE_NAME + " WHERE " + SQLiteHelper.Table_Column_2_Email + " = '" + EmailHolder + "';", null);
         System.out.println("select()의 mCursor : " + mCursor);
@@ -82,7 +80,7 @@ public class SelectLevelMain extends AppCompatActivity {
         // cursor의 위치가 처음에 위치하고 있지 않았을 때 나는 에러
         // 값을 가지고 있으나 Position이 잘못된 경우 값을 재대로 가지고 올 수 없다.
         // cursor.moveToFirst() 를 사용해서 cursor의 위치를 제일 처음으로 바꿔준다.
-        if( mCursor != null && mCursor.moveToFirst() ){
+        if (mCursor != null && mCursor.moveToFirst()) {
             selectName = mCursor.getString(mCursor.getColumnIndex("name"));
             mCursor.close();
         }
@@ -157,7 +155,8 @@ public class SelectLevelMain extends AppCompatActivity {
             }
 
             public void onFinish() {
-                levelActivity(SelectLevelActivity.class,selectLevel);
+                levelActivity(SelectLevelActivity.class, selectLevel);
+                DashboardActivity.mediaPlayer.pause();
                 count_view.setText("시작~!");
 
             }
@@ -167,30 +166,28 @@ public class SelectLevelMain extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onUserLeaveHint() {
         super.onUserLeaveHint();
-            if (isrunning) {
-                countDownTimer.cancel();
-            }
+        if (isrunning) {
+            countDownTimer.cancel();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-            if (isrunning) {
-                countDownTimer.cancel();
-            }
+        if (isrunning) {
+            countDownTimer.cancel();
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-           if (isrunning) {
-                countDownTimer.cancel();
-            }
+        if (isrunning) {
+            countDownTimer.cancel();
         }
     }
-
 }
+
