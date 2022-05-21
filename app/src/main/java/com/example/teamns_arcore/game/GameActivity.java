@@ -144,7 +144,6 @@ public class GameActivity extends AppCompatActivity {
             {1.0f, 0.0f, 0.0f, 0.8f},
             {0.0f, 1.0f, 0.0f, 0.8f},
             {0.0f, 0.0f, 1.0f, 0.8f}
-
     };
 
     String[] alphabetArr = new String[]{"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
@@ -210,6 +209,8 @@ public class GameActivity extends AppCompatActivity {
             {-2.4f, 0.8f, 0.1f},
             {-2.5f, 0.9f, -0.05f}
     };
+
+    float[] picColor = new float[]{1.0f, 1.0f, 1.0f, 1.0f};
 
     //    ArrayList<Integer> ranNum = new ArrayList<>();
     int[] ranNum = new int[MAX];
@@ -349,7 +350,7 @@ public class GameActivity extends AppCompatActivity {
                 }
 
 
-                List<HitResult> results = frame.hitTest(600.0f, 600.0f);
+                List<HitResult> results = frame.hitTest(200.0f, 200.0f);
                 for (HitResult result : results) {
                     Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
 //                        float [] modelMatrix = new float[16];
@@ -375,7 +376,7 @@ public class GameActivity extends AppCompatActivity {
                     colorBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            setColorCorrection(estimate);
+                            setColorCorrection();
                         }
                     });
 
@@ -423,41 +424,27 @@ public class GameActivity extends AppCompatActivity {
 //                        mRenderer.mPlane.update(plane);
                     }
                 }
-                float[] originalPicColor = new float[]{0.8f, 0.8f, 0.8f, 0.8f};
+                float[] originalPicColor = new float[4];
 
                 if (mCatched) {
                     mCatched = false;
+                    colorFlag = true;
 
+                    originalPicColor[0] = colorCorrections[i][0];
+                    originalPicColor[1] = colorCorrections[i][1];
+                    originalPicColor[2] = colorCorrections[i][2];
+                    originalPicColor[3] = colorCorrections[i][3];
                     for(int i=0;i< MAX;i++){
                         mRenderer.picObjColor(originalPicColor, i);
                     }
-
-
-
                     splitEnglish();
 
                     for(int i=0;i< gljaIndex.size();i++){
-                        float[] picColor = new float[]{1.0f, 0.0f, 0.0f, 1.0f};
                         mRenderer.picObjColor(picColor, gljaIndex.get(i));
                     }
 
-
-
-//                    results = frame.hitTest(mCatchX, mCatchY);
-//
-//                    for (HitResult result : results) {
-//                        Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
-//                        if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
-//                            // 클릭확인용
-//                            float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
-//                            mRenderer.picObjColor(picColor, catchIDX);
-//                            insertText += String.valueOf(catchIDX);
-//                            answerTxtView.setText(insertText);
-//                        } else {
-//
-//                        }
-//                    }
                 }
+
 
                 // 카메라 세팅
                 Camera camera = frame.getCamera();
@@ -731,14 +718,21 @@ public class GameActivity extends AppCompatActivity {
     }
 
     int i = 0;
-
-    void setColorCorrection(LightEstimate estimate) {
+    int bigyoCount = -1;
+    boolean colorFlag = false;
+    void setColorCorrection() {
+        i++;
+        i %= 4;
         colorCorrection = colorCorrections[i];
 
         mRenderer.setColorCorrection(colorCorrection);
+        if(colorFlag){
+            splitEnglish();
 
-        i++;
-        i %= 4;
+            for(int i=0;i< gljaIndex.size();i++){
+                mRenderer.picObjColor(picColor, gljaIndex.get(i));
+            }
+        }
     }
 
     //타이머 변환 메서드
@@ -891,8 +885,10 @@ public class GameActivity extends AppCompatActivity {
             for(int j = 0; j<alphabetArr.length;j++){
                 if(resultGlja[i].equals(alphabetArr[j])){
                     gljaIndex.add(j);
+                    break;
                 }
             }
         }
     }
+
 }
