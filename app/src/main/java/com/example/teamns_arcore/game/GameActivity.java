@@ -921,7 +921,4 @@ public class GameActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "틀렸어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
         }
     }
-
-}
-
 }
