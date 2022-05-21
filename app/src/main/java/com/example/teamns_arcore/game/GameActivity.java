@@ -524,14 +524,19 @@ public class GameActivity extends AppCompatActivity {
                 String mosaic = "*";
 
                 StringBuffer mosaicBuffer = new StringBuffer();
-
-                for (int i = 2; i < word.length(); i++) {
-                    mosaicBuffer.append(mosaic);
+                int num = (int) (Math.random()*word.length())+2;
+                int [] numaaa = new int[num];
+                for (int i = 0; i < num; i++) {
+                    //mosaicBuffer.append(mosaic);
+                    numaaa[i] = (int) (Math.random()*word.length());
                 }
 
                 StringBuffer stringBuffer = new StringBuffer();
                 stringBuffer.append(word);
-                stringBuffer.replace(1, word.length() - 1, mosaicBuffer.toString());
+                for(int i=0;i<numaaa.length;i++){
+                    stringBuffer.replace(numaaa[i], numaaa[i]+1, "*");
+                }
+
 
 
                 hintTxtView = hintDialogView.findViewById(R.id.hintTxtView);
