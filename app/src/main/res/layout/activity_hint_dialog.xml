@@ -5,20 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:gravity="center"
     android:background="@drawable/border_round_thin"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".game.HintDialog">
 
     <TextView
         android:id="@+id/hintTxtView"
-        android:padding="20dp"
-        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:fontFamily="@font/fontstyle"
         android:gravity="center"
+        android:padding="20dp"
         android:text="힌트~"
+        android:textColor="#3E9CFC"
         android:textSize="50dp" />
 
 </LinearLayout>

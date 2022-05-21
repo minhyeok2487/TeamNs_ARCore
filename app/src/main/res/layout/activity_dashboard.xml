@@ -12,8 +12,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:gravity="right"
+        android:orientation="horizontal"
         android:padding="20dp">
 
         <ImageButton
@@ -21,8 +21,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentLeft="true"
-            android:backgroundTint="#00FFFFFF"
             android:layout_marginRight="15dp"
+            android:backgroundTint="#00FFFFFF"
             android:src="@drawable/music_icon" />
         <!-- 기존 음소거 아이콘 -->
         <!--<ImageButton
@@ -40,8 +40,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentLeft="true"
-            android:backgroundTint="#00FFFFFF"
             android:layout_marginRight="15dp"
+            android:backgroundTint="#00FFFFFF"
             android:src="@drawable/main_user" />
 
         <ImageButton
@@ -49,8 +49,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentLeft="true"
-            android:backgroundTint="#00FFFFFF"
             android:layout_marginRight="15dp"
+            android:backgroundTint="#00FFFFFF"
             android:src="@drawable/main_record" />
 
         <ImageButton
@@ -96,6 +96,7 @@
             android:background="@drawable/border_round_thin"
             android:fontFamily="@font/fontstyle"
             android:text="시작하기"
+            android:textColor="#3E9CFC"
             android:textSize="30dp" />
 
         <android.widget.Button
@@ -107,6 +108,7 @@
             android:background="@drawable/border_round_thin"
             android:fontFamily="@font/fontstyle"
             android:text="게임종료"
+            android:textColor="#3E9CFC"
             android:textSize="30dp" />
 
     </LinearLayout>
