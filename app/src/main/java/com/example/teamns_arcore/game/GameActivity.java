@@ -479,24 +479,24 @@ public class GameActivity extends AppCompatActivity {
 
         questionTxtView.setText(String.format("[ %s ]", ranNumKor[0]));
 
-        if (count < 10) {
-            skipBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    count++;
 
-                    if (count < ranNumKor.length) {
-                        questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
-                        incorrectCount++;
-                        Log.d("답틀림 : ", incorrectCount + "");
-    //                    Log.d("ranNumKor[count-1] : ", ranNumKor[count-1] + "");
-                    } else {
-                        incorrectCount++;
-                        gameResultDialog();
-                    }
+        skipBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                count++;
+
+                if (count < ranNumKor.length) {
+                    questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
+                    incorrectCount++;
+                    Log.d("답틀림 : ", incorrectCount + "");
+                    //                    Log.d("ranNumKor[count-1] : ", ranNumKor[count-1] + "");
+                } else if(count ==10) {
+                    incorrectCount++;
+                    gameResultDialog();
                 }
-            });
-        }
+            }
+        });
+
 
         hintBtn.setOnClickListener(new View.OnClickListener() {
             @Override
