@@ -85,7 +85,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/fontstyle"
             android:maxLines="1"
-            android:text=""
+            android:hint="여기에 답을 입력하세요"
             android:textAlignment="center"
             android:textColor="#905CED"
             android:textSize="50dp"
