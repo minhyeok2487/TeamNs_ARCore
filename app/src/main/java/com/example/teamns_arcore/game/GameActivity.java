@@ -125,10 +125,19 @@ public class GameActivity extends AppCompatActivity {
     LocalDate localDate = LocalDate.now();
     LocalTime localTime = LocalTime.now();
 
-    int hour = localTime.getHour();
-    int min = localTime.getMinute();
+    //int hour = localTime.getHour();
+    //int min = localTime.getMinute();
+    //String currentTime = String.format("%s %d:%d", localDate, hour, min);
 
-    String currentTime = String.format("%s %d:%d", localDate, hour, min);
+    String currentTime = String.format("%s", localDate); // -> data 날짜만 들어가게 변경
+
+    // userid 정보
+    SQLiteDatabase sqLiteDatabaseObj; // == private SQLiteDatabase db;
+    SQLiteHelper sqLiteHelper;
+    public static final String UserEmail = "";
+    public static final String UserId = "";
+    String EmailHolder;
+    //
 
     float[][] colorCorrections = new float[][]{
             {0.8f, 0.8f, 0.8f, 0.8f},
@@ -274,6 +283,18 @@ public class GameActivity extends AppCompatActivity {
 //                mCatchY = event.getY();
 //
 //                Log.d("확인 한번", event.getX() + " , " + event.getY());
+                return true;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                if(isModelInit) {
+                    splitEnglish();
+                    for(int i=0;i< gljaIndex.size();i++){
+                        Matrix.rotateM(modelArrayMatrix[gljaIndex.get(i)], 0, -distanceX / 5, 0f, 1f, 0f);
+                        Matrix.rotateM(modelArrayMatrix[gljaIndex.get(i)], 0, -distanceY / 5, 1f, 0f, 0f);
+                    }
+                }
                 return true;
             }
 
@@ -459,6 +480,11 @@ public class GameActivity extends AppCompatActivity {
         String[] ranNumEng = intent.getStringArrayExtra("RandomEng");
         String[] ranNumKor = intent.getStringArrayExtra("RandomKor");
         levelNum = intent.getIntExtra("Level", 0);
+        // user정보
+        sqLiteHelper = new SQLiteHelper(GameActivity.this);
+        EmailHolder = intent.getStringExtra(SelectLevelActivity.UserId);
+        System.out.println("GameActivity EmailHolder : "+ EmailHolder);
+        //
 
         for (String eng: ranNumEng) {
             englishSplit.add(eng);
@@ -466,22 +492,24 @@ public class GameActivity extends AppCompatActivity {
 
         questionTxtView.setText(String.format("[ %s ]", ranNumKor[0]));
 
-        skipBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                count++;
+        if (count < 10) {
+            skipBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    count++;
 
-                if (count < ranNumKor.length) {
-                    questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
-                    incorrectCount++;
-                    Log.d("답틀림 : ", incorrectCount + "");
-//                    Log.d("ranNumKor[count-1] : ", ranNumKor[count-1] + "");
-                } else {
-                    incorrectCount++;
-                    gameResultDialog();
+                    if (count < ranNumKor.length) {
+                        questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
+                        incorrectCount++;
+                        Log.d("답틀림 : ", incorrectCount + "");
+    //                    Log.d("ranNumKor[count-1] : ", ranNumKor[count-1] + "");
+                    } else {
+                        incorrectCount++;
+                        gameResultDialog();
+                    }
                 }
-            }
-        });
+            });
+        }
 
         hintBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -813,6 +841,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GameActivity.this, SelectLevelMain.class);
+                intent.putExtra(UserEmail,EmailHolder);
                 startActivity(intent);
             }
         });

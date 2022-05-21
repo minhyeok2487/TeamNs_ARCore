@@ -10,43 +10,48 @@
     <TableRow>
 
         <TextView
+            android:layout_width="25dp"
             android:layout_column="1"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
             android:text="날짜"
-            android:textSize="16dp"
+            android:textSize="22dp"
             android:textStyle="bold" />
 
         <TextView
+            android:layout_width="25dp"
             android:layout_column="1"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
-            android:text="맞춘정답개수"
-            android:textSize="16dp"
+            android:text="정답 개수"
+            android:textSize="22dp"
             android:textStyle="bold" />
 
         <TextView
+            android:layout_width="25dp"
             android:layout_column="1"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
-            android:text="타이머"
-            android:textSize="16dp"
+            android:text="걸린 시간"
+            android:textSize="22dp"
             android:textStyle="bold" />
 
         <TextView
+            android:layout_width="25dp"
             android:layout_column="1"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
             android:text="점수"
-            android:textSize="16dp"
+            android:textSize="22dp"
             android:textStyle="bold" />
 
         <TextView
+            android:layout_width="25dp"
             android:layout_column="1"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
             android:text="난이도"
-            android:textSize="16dp"
+            android:textSize="22dp"
             android:textStyle="bold" />
 
 

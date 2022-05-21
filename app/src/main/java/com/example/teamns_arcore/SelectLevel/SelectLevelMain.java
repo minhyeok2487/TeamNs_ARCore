@@ -37,6 +37,12 @@ public class SelectLevelMain extends AppCompatActivity {
     SQLiteHelper sqLiteHelper;
     String EmailHolder;
     TextView Name;
+    public static final String UserEmail = "";
+    public static final String UserId = "";
+    Intent gotouserid;
+    //
+    MediaPlayer mediaPlayer;
+    int currentPosition = 3000;
     //
     String selectName;
     //
@@ -45,6 +51,11 @@ public class SelectLevelMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectlevel);
+
+        //배경음악
+        mediaPlayer = MediaPlayer.create(this, R.raw.openning);
+        mediaPlayer.setLooping(true);
+        //mediaPlayer.start();
 
 
         // 버튼 리스너
@@ -59,20 +70,22 @@ public class SelectLevelMain extends AppCompatActivity {
         Intent userNameintent = getIntent();
         sqLiteHelper = new SQLiteHelper(SelectLevelMain.this);
         EmailHolder = userNameintent.getStringExtra(DashboardActivity.UserId);
+
+        // GameActivity에서 유저id 받기
+        Intent gameuserNameintent = getIntent();
+        sqLiteHelper = new SQLiteHelper(SelectLevelMain.this);
+        EmailHolder = gameuserNameintent.getStringExtra(GameActivity.UserId);
         // TextView에 이름 넣어주기
         select();
         Name.setText("어서오세요. " + select() + " 님");
         //Name.setText("어서오세요. 아무개 님");
-        //
-
-
     }
 
     // 이름 가져오기
     @SuppressLint("Range")
     public String select() {
         sqLiteDatabaseObj = openOrCreateDatabase(SQLiteHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
-        System.out.println("셀렉트레벨메인 EmailHolder : " + EmailHolder);
+        System.out.println("셀렉트레벨메인 EmailHolder : "+ EmailHolder);
         // SELECT name from UserTable WHERE email = 'test';
         Cursor mCursor = sqLiteDatabaseObj.rawQuery("SELECT * FROM " + SQLiteHelper.TABLE_NAME + " WHERE " + SQLiteHelper.Table_Column_2_Email + " = '" + EmailHolder + "';", null);
         System.out.println("select()의 mCursor : " + mCursor);
@@ -80,7 +93,7 @@ public class SelectLevelMain extends AppCompatActivity {
         // cursor의 위치가 처음에 위치하고 있지 않았을 때 나는 에러
         // 값을 가지고 있으나 Position이 잘못된 경우 값을 재대로 가지고 올 수 없다.
         // cursor.moveToFirst() 를 사용해서 cursor의 위치를 제일 처음으로 바꿔준다.
-        if (mCursor != null && mCursor.moveToFirst()) {
+        if( mCursor != null && mCursor.moveToFirst() ){
             selectName = mCursor.getString(mCursor.getColumnIndex("name"));
             mCursor.close();
         }
@@ -94,19 +107,30 @@ public class SelectLevelMain extends AppCompatActivity {
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //leveltwo = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
             switch (v.getId()) {
                 case R.id.level1Btn:
                     setCount_view(SelectLevelActivity.class, 1);
+                    gotouserid = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
+                    gotouserid.putExtra(UserEmail,EmailHolder);
+                    startActivity(gotouserid);
                     break;
                 case R.id.level2Btn:
                     setCount_view(SelectLevelActivity.class, 2);
+                    gotouserid = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
+                    gotouserid.putExtra(UserEmail,EmailHolder);
+                    startActivity(gotouserid);
                     break;
                 case R.id.level3Btn:
                     setCount_view(SelectLevelActivity.class, 3);
+                    gotouserid = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
+                    gotouserid.putExtra(UserEmail,EmailHolder);
+                    startActivity(gotouserid);
                     break;
                 case R.id.level4Btn:
                     setCount_view(SelectLevelActivity.class, 4);
+                    gotouserid = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
+                    gotouserid.putExtra(UserEmail,EmailHolder);
+                    startActivity(gotouserid);
                     break;
             }
         }
@@ -118,8 +142,10 @@ public class SelectLevelMain extends AppCompatActivity {
         levelintent.putExtra("choice", (int) i);
         startActivity(levelintent);
 
-        Intent levelcount = new Intent(SelectLevelMain.this, GameActivity.class);
-        levelcount.putExtra("Level", i);
+//        Intent levelcount = new Intent(SelectLevelMain.this, GameActivity.class);
+//        levelcount.putExtra("Level", i);
+        // game한테도 닉넴 정보 전달하기
+//        levelcount.putExtra("userid",EmailHolder);
         finish();
     }
     //
@@ -156,38 +182,53 @@ public class SelectLevelMain extends AppCompatActivity {
 
             public void onFinish() {
                 levelActivity(SelectLevelActivity.class, selectLevel);
-                DashboardActivity.mediaPlayer.pause();
                 count_view.setText("시작~!");
-
+                isrunning = true;
             }
         };
 
         countDownTimer.start();
     }
 
-
     @Override
     public void onUserLeaveHint() {
         super.onUserLeaveHint();
-        if (isrunning) {
-            countDownTimer.cancel();
+        if (mediaPlayer.isPlaying()) {
+            currentPosition = mediaPlayer.getCurrentPosition();
+            mediaPlayer.pause();
+            if (isrunning) {
+                countDownTimer.cancel();
+            }
         }
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (isrunning) {
-            countDownTimer.cancel();
+        mediaPlayer.seekTo(currentPosition);
+        if (DashboardActivity.ismute) {
+            mediaPlayer.start();
+        } else {
+            mediaPlayer.pause();
+            if (isrunning) {
+                countDownTimer.cancel();
+            }
+
         }
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (isrunning) {
-            countDownTimer.cancel();
+        if (mediaPlayer.isPlaying()) {
+            currentPosition = mediaPlayer.getCurrentPosition();
+            mediaPlayer.pause();
+            if (isrunning) {
+                countDownTimer.cancel();
+            }
         }
     }
-}
 
+}
