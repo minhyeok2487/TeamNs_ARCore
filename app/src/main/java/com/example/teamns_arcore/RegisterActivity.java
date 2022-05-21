@@ -2,6 +2,7 @@ package com.example.teamns_arcore;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -88,6 +89,8 @@ public class RegisterActivity extends AppCompatActivity {
             sqLiteDatabaseObj.close();
 
             Toast.makeText(RegisterActivity.this,"회원가입되었습니다.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+            startActivity(intent);
 
         }
         else {
