@@ -39,6 +39,7 @@ public class SelectLevelMain extends AppCompatActivity {
     TextView Name;
     public static final String UserEmail = "";
     public static final String UserId = "";
+    Intent gotouserid;
     //
     MediaPlayer mediaPlayer;
     int currentPosition = 3000;
@@ -109,18 +110,27 @@ public class SelectLevelMain extends AppCompatActivity {
             switch (v.getId()) {
                 case R.id.level1Btn:
                     setCount_view(SelectLevelActivity.class, 1);
-                    Intent gotouserid = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
+                    gotouserid = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
                     gotouserid.putExtra(UserEmail,EmailHolder);
                     startActivity(gotouserid);
                     break;
                 case R.id.level2Btn:
                     setCount_view(SelectLevelActivity.class, 2);
+                    gotouserid = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
+                    gotouserid.putExtra(UserEmail,EmailHolder);
+                    startActivity(gotouserid);
                     break;
                 case R.id.level3Btn:
                     setCount_view(SelectLevelActivity.class, 3);
+                    gotouserid = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
+                    gotouserid.putExtra(UserEmail,EmailHolder);
+                    startActivity(gotouserid);
                     break;
                 case R.id.level4Btn:
                     setCount_view(SelectLevelActivity.class, 4);
+                    gotouserid = new Intent(SelectLevelMain.this, SelectLevelActivity.class);
+                    gotouserid.putExtra(UserEmail,EmailHolder);
+                    startActivity(gotouserid);
                     break;
             }
         }
