@@ -51,7 +51,7 @@ public class SelectLevelActivity extends AppCompatActivity {
 
     // 버튼 정보 가져오기
     Intent levelintent;
-    public static int lv1, lv2, lv3, lv4;
+    public static int lv;
     DatabaseHelper mDBHELPER;
 
     private TextToSpeech tts;// TTS 변수 선언
@@ -82,20 +82,16 @@ public class SelectLevelActivity extends AppCompatActivity {
         levelintent = getIntent();
 
         // lv에 따른 intent값 다르게 받기
-        lv1 = levelintent.getIntExtra("choice", 1);
-        System.out.println("SelectLevelActivity.lv1 : " + lv1);
-        lv2 = levelintent.getIntExtra("choice", 2);
-        System.out.println("SelectLevelActivity.lv2 : " + lv2);
-        lv3 = levelintent.getIntExtra("choice", 3);
-        lv4 = levelintent.getIntExtra("choice", 4);
-        if (lv1 == 1) { // 같으면 자기 db table 가지고 와주라 // -> 이거 문제 생김
+        lv = levelintent.getIntExtra("choice", 0);
+        System.out.println("SelectLevelActivity.lv1 : " + lv);
+        if (lv == 1) { // 같으면 자기 db table 가지고 와주라 // -> 이거 문제 생김
             mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelone", "lv_one_quiz");
-        } else if (lv2 == 2) {
+        } else if (lv == 2) {
             mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "leveltwo", "lv_one_quiz");
             System.out.println("lv2로 들어왔습니다.");
-        } else if (lv3 == 3) {
+        } else if (lv == 3) {
             mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelthree", "lv_one_quiz");
-        } else if (lv4 == 4) {
+        } else if (lv == 4) {
             mDBHELPER = new DatabaseHelper(SelectLevelActivity.this, "levelfour", "lv_one_quiz");
         } else {
             System.out.println("어떤 버튼을 눌렀는지 모릅니다.");
@@ -181,11 +177,11 @@ public class SelectLevelActivity extends AppCompatActivity {
         Intent intentGame = new Intent(this, GameActivity.class);
         intentGame.putExtra("RandomKor", ranWordsKor);
         intentGame.putExtra("RandomEng", ranWordsEng);
-        if (lv1 == 1) {
+        if (lv == 1) {
             intentGame.putExtra("Level", 1);
-        } else if (lv2 == 2) {
+        } else if (lv == 2) {
             intentGame.putExtra("Level", 2);
-        } else if (lv3 == 3) {
+        } else if (lv == 3) {
             intentGame.putExtra("Level", 3);
         } else {
             intentGame.putExtra("Level", 4);
