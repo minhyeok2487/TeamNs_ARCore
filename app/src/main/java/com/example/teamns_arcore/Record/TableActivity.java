@@ -17,7 +17,6 @@ import java.util.List;
 public class TableActivity extends AppCompatActivity {
     RecyclerView recycler_view;
     PaymentAdapter adapter;
-
     @Override
     protected void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);

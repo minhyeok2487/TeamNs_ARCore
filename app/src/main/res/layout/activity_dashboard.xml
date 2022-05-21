@@ -45,6 +45,15 @@
             android:src="@drawable/main_user" />
 
         <ImageButton
+            android:id="@+id/gorecord"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentLeft="true"
+            android:backgroundTint="#00FFFFFF"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/main_record" />
+
+        <ImageButton
             android:id="@+id/button1"
             android:layout_width="60dp"
             android:layout_height="60dp"

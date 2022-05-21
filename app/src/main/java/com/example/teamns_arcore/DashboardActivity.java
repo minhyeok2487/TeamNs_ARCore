@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.teamns_arcore.Record.ChartActivity;
 import com.example.teamns_arcore.SelectLevel.SelectLevelMain;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -26,7 +27,7 @@ public class DashboardActivity extends AppCompatActivity {
     SQLiteHelper sqLiteHelper;
     String EmailHolder;
     //TextView Name;
-    ImageButton LogOUT, NameChg ;
+    ImageButton LogOUT, NameChg, GotoRecord ;
     //Button LogOUT, NameChg ;
 
     // inpublic static final String UserEmail = "";
@@ -54,6 +55,7 @@ public class DashboardActivity extends AppCompatActivity {
         //Name = (TextView)findViewById(R.id.textView1);
         LogOUT = (ImageButton)findViewById(R.id.button1);
         NameChg = (ImageButton)findViewById(R.id.namechg);
+        GotoRecord = (ImageButton)findViewById(R.id.gorecord);
 
         // /* 원래 main에 있던 정보들  */
         // 버튼 리스너
@@ -66,6 +68,7 @@ public class DashboardActivity extends AppCompatActivity {
         findViewById(R.id.StartBtn).setOnClickListener(onClickListener);
         findViewById(R.id.EndBtn).setOnClickListener(onClickListener);
         findViewById(R.id.muteBtn).setOnClickListener(onClickListener);
+        findViewById(R.id.gorecord).setOnClickListener(onClickListener);
         //
 
         Intent intent = getIntent();
@@ -159,6 +162,10 @@ public class DashboardActivity extends AppCompatActivity {
                         ismute = true;
                         muteBtn.setImageResource(R.drawable.music_icon);
                     }
+                    break;
+                case R.id.gorecord:
+                    Intent gotorecord = new Intent(DashboardActivity.this, ChartActivity.class);
+                    startActivity(gotorecord);
                     break;
             }
         }
