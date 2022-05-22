@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             // Opening SQLite database write permission.
             sqLiteDatabaseObj = sqLiteHelper.getWritableDatabase();
 
-            cursor = sqLiteDatabaseObj.query(SQLiteHelper.TABLE_NAME, null, " " + SQLiteHelper.Table_Column_2_Email + "= ?", new String[]{EmailHolder}, null, null, null);
+            cursor = sqLiteDatabaseObj.query(SQLiteHelper.TABLE_NAME, null, " " + SQLiteHelper.Table_Column_2_Email + "=?", new String[]{EmailHolder}, null, null, null);
 
             while (cursor.moveToNext()) {
                 if (cursor.isFirst()) {

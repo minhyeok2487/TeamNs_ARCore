@@ -145,7 +145,7 @@ public class RegisterActivity extends AppCompatActivity {
     public void CheckFinalResult(){
         // 이메일 확인
         //if(F_Result.equalsIgnoreCase("Email Found")){
-        if(F_Result.equals("찾았습니다.")){
+        if(F_Result.equals("이미 있는 ID입니다.")){
             // If email is exists then toast msg will display.
             Toast.makeText(RegisterActivity.this,"이미 있는 ID입니다.",Toast.LENGTH_SHORT).show();
 
@@ -153,7 +153,7 @@ public class RegisterActivity extends AppCompatActivity {
             // 이메일이 이미 존재하지 않으면 삽입
             InsertDataIntoSQLiteDatabase();
         }
-        F_Result = "찾지 못했습니다" ;
+        F_Result = "이미 있는 ID입니다." ;
 
     }
     
