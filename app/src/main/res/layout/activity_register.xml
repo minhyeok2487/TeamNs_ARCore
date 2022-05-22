@@ -5,18 +5,18 @@
     android:id="@+id/activity_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/register_page"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp"
-    android:background="@drawable/register_page"
     tools:context=".RegisterActivity">
 
     <!-- 회원가입 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:padding="20dp">
 
         <TextView
@@ -25,75 +25,79 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
             android:text="회원가입"
             android:textColor="#000C7B"
-            android:layout_marginBottom="10dp"
             android:textSize="80dp" />
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:hint="이름을 입력하세요"
-        android:ems="10"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:id="@+id/editName"
-        android:paddingBottom="15dp"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
-        android:textSize="20dp"
-        android:backgroundTint="#fff"
-        android:gravity="center"/>
+        <EditText
+            android:id="@+id/editName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#fff"
+            android:ems="10"
+            android:fontFamily="@font/fontstyle"
+            android:gravity="center"
+            android:hint="이름을 입력하세요"
+            android:inputType="textEmailAddress"
+            android:paddingBottom="15dp"
+            android:textColor="#fff"
+            android:textColorHint="#fff"
+            android:textSize="30dp" />
 
-    <EditText
-        android:id="@+id/editEmail"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="아이디를 입력하세요"
-        android:inputType="textEmailAddress"
-        android:paddingBottom="18dp"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
-        android:backgroundTint="#fff"
-        android:textSize="20dp"/>
+        <EditText
+            android:id="@+id/editEmail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#fff"
+            android:ems="10"
+            android:fontFamily="@font/fontstyle"
+            android:gravity="center"
+            android:hint="아이디를 입력하세요"
+            android:inputType="textEmailAddress"
+            android:paddingBottom="18dp"
+            android:textColor="#fff"
+            android:textColorHint="#fff"
+            android:textSize="30dp" />
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:hint="비밀번호를 입력하세요"
-        android:ems="10"
-        android:layout_below="@+id/editEmail"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:id="@+id/editPassword"
-        android:paddingBottom="18dp"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
-        android:backgroundTint="#fff"
-        android:textSize="20dp"
-        android:gravity="center"/>
+        <EditText
+            android:id="@+id/editPassword"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editEmail"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#fff"
+            android:ems="10"
+            android:fontFamily="@font/fontstyle"
+            android:gravity="center"
+            android:hint="비밀번호를 입력하세요"
+            android:inputType="textPassword"
+            android:paddingBottom="18dp"
+            android:textColor="#fff"
+            android:textColorHint="#fff"
+            android:textSize="30dp" />
 
         <android.widget.Button
             android:id="@+id/buttonRegister"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/editPassword"
-            android:background="@drawable/border_round_fill"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="120dp"
-            android:textSize="18dp"
+            android:background="@drawable/border_round_fill"
+            android:fontFamily="@font/fontstyle"
+            android:text="가입하기"
             android:textColor="#fff"
-            android:text="회원가입" />
+            android:textSize="30dp" />
 
     </LinearLayout>
 

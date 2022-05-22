@@ -14,8 +14,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:layout_marginTop="10dp"
+        android:gravity="center"
         android:orientation="horizontal"
         android:padding="10dp">
 
@@ -26,8 +26,10 @@
             android:layout_gravity="right"
             android:layout_marginHorizontal="10dp"
             android:background="@drawable/border_round_thin"
+            android:fontFamily="@font/fontstyle"
             android:text="SKIP"
-            android:textColor="#3E9CFC" />
+            android:textColor="#3E9CFC"
+            android:textSize="25dp" />
 
         <Chronometer
             android:id="@+id/chronometer"
@@ -49,8 +51,10 @@
             android:layout_gravity="right"
             android:layout_marginHorizontal="10dp"
             android:background="@drawable/border_round_thin"
+            android:fontFamily="@font/fontstyle"
             android:text="색 변경"
-            android:textColor="#3E9CFC" />
+            android:textColor="#3E9CFC"
+            android:textSize="25dp" />
 
 
     </LinearLayout>
@@ -59,18 +63,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:padding="10dp"
         android:layout_marginBottom="10dp"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/questionTxtView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="@font/fontstyle"
             android:layout_marginBottom="10dp"
+            android:fontFamily="@font/fontstyle"
             android:padding="5dp"
             android:text="문제"
             android:textAlignment="center"
@@ -79,18 +83,18 @@
 
         <EditText
             android:id="@+id/answerTxtView"
-            android:layout_marginHorizontal="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="20dp"
             android:ellipsize="end"
             android:fontFamily="@font/fontstyle"
-            android:maxLines="1"
             android:hint="여기에 답을 입력하세요"
+            android:inputType="text"
+            android:maxLines="1"
             android:textAlignment="center"
             android:textColor="#3E9CFC"
             android:textSize="50dp"
-            android:inputType="text"
-            android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -99,31 +103,34 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginHorizontal="10dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <android.widget.Button
                 android:id="@+id/hintBtn"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/border_round_fill"
+                android:fontFamily="@font/fontstyle"
                 android:text="힌트"
-                android:textColor="@color/white" />
-
+                android:textColor="@color/white"
+                android:textSize="25dp" />
 
 
             <android.widget.Button
                 android:id="@+id/submitBtn"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/border_round_fill"
+                android:fontFamily="@font/fontstyle"
                 android:text="제출"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="25dp" />
 
         </LinearLayout>
 
