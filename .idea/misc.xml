@@ -44,6 +44,7 @@
         <entry key="app/src/main/res/drawable/border_round_thin.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.205" />
         <entry key="app/src/main/res/drawable/ic_logo_spell_it_background.xml" value="0.205" />
+        <entry key="app/src/main/res/drawable/music_note.xml" value="0.1275" />
         <entry key="app/src/main/res/layout/activity_chart.xml" value="0.32205128205128203" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.32205128205128203" />
         <entry key="app/src/main/res/layout/activity_game.xml" value="0.31203703703703706" />
