@@ -28,7 +28,7 @@
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
-            android:text="Welcome"
+            android:text="Spell It !!"
             android:textColor="#000C7B"
             android:textSize="80dp" />
 
@@ -41,14 +41,14 @@
             android:layout_marginTop="20dp"
             android:backgroundTint="#fff"
             android:ems="10"
+            android:fontFamily="@font/fontstyle"
             android:gravity="center"
             android:hint="아이디를 입력하세요"
             android:inputType="textEmailAddress"
             android:paddingBottom="18dp"
-            android:text="test"
             android:textColor="#fff"
             android:textColorHint="#fff"
-            android:textSize="20dp" />
+            android:textSize="25dp" />
 
         <EditText
             android:id="@+id/editPassword"
@@ -59,14 +59,14 @@
             android:layout_marginTop="20dp"
             android:backgroundTint="#fff"
             android:ems="10"
+            android:fontFamily="@font/fontstyle"
             android:gravity="center"
             android:hint="비밀번호를 입력하세요"
             android:inputType="textPassword"
             android:paddingBottom="18dp"
-            android:text="1111"
             android:textColor="#fff"
             android:textColorHint="#fff"
-            android:textSize="20dp" />
+            android:textSize="25dp" />
 
         <android.widget.Button
             android:id="@+id/buttonLogin"
