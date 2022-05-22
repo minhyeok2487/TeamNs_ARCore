@@ -123,12 +123,6 @@ public class SelectLevelMain extends AppCompatActivity {
         levelintent.putExtra("choice", (int) i);
         startActivity(levelintent);
         finish();
-
-//        Intent levelcount = new Intent(SelectLevelMain.this, GameActivity.class);
-//        levelcount.putExtra("Level", i);
-        // game한테도 닉넴 정보 전달하기
-//        levelcount.putExtra("userid",EmailHolder);
-        //finish();
     }
     //
 
