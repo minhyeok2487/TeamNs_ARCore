@@ -39,8 +39,11 @@
         <entry key="..\:/Users/Minhyeok/Desktop/Minhyeok/TeamNs_ARCore/app/src/main/res/layout/item_layout.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/Minhyeok/Desktop/Minhyeok/TeamNs_ARCore/app/src/main/res/layout/recorditem.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/Minhyeok/Desktop/Minhyeok/TeamNs_ARCore/app/src/main/res/layout/selectlevel_list.xml" value="0.25364583333333335" />
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1275" />
         <entry key="app/src/main/res/drawable/border_round_fill.xml" value="0.1205" />
         <entry key="app/src/main/res/drawable/border_round_thin.xml" value="0.175" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.205" />
+        <entry key="app/src/main/res/drawable/ic_logo_spell_it_background.xml" value="0.205" />
         <entry key="app/src/main/res/layout/activity_chart.xml" value="0.32205128205128203" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.32205128205128203" />
         <entry key="app/src/main/res/layout/activity_game.xml" value="0.31203703703703706" />
@@ -58,6 +61,8 @@
         <entry key="app/src/main/res/layout/recorditem.xml" value="0.32205128205128203" />
         <entry key="app/src/main/res/layout/rename_dialog.xml" value="0.32708333333333334" />
         <entry key="app/src/main/res/layout/selectlevel_list.xml" value="0.32205128205128203" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_logo_spell_it.xml" value="0.1275" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_logo_spell_it_round.xml" value="0.1275" />
       </map>
     </option>
   </component>
