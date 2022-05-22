@@ -8,55 +8,57 @@
 
         <TextView
             android:id="@+id/Date_Textview"
-            android:text="date"
             android:layout_width="25dp"
             android:layout_column="1"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:text="date"
             android:textSize="20dp" />
 
         <TextView
             android:id="@+id/CorrectNum_Textview"
             android:layout_width="25dp"
-            android:text="맞춘정답"
             android:layout_column="1"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:text="맞춘정답"
             android:textSize="20dp" />
 
         <TextView
             android:id="@+id/Timer_Textview"
             android:layout_width="25dp"
-            android:text="타이머"
             android:layout_column="1"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:text="타이머"
             android:textSize="20dp" />
+
         <TextView
             android:id="@+id/Score_Textview"
             android:layout_width="25dp"
-            android:text="점수"
             android:layout_column="1"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:text="점수"
             android:textSize="20dp" />
+
         <TextView
             android:id="@+id/Level_Textview"
             android:layout_width="25dp"
-            android:text="난이도"
             android:layout_column="1"
             android:fontFamily="@font/fontstyle"
             android:gravity="center"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:text="난이도"
             android:textSize="20dp" />
 
     </TableRow>
