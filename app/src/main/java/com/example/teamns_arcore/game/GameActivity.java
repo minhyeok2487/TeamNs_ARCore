@@ -92,7 +92,12 @@ public class GameActivity extends AppCompatActivity {
     ///////힌트변수///////
     private TextToSpeech tts;
 
-    EditText answerTxtView;
+    String answerString = "";
+    ArrayList<String> answerStringArr = new ArrayList<>();
+
+//    EditText answerTxtView;
+
+    TextView answerTxtView;
 
     GLSurfaceView mSurfaceView;
     MainRenderer mRenderer;
@@ -110,7 +115,7 @@ public class GameActivity extends AppCompatActivity {
 
     DatabaseHelper databaseHelper;
 
-    Button colorBtn, skipBtn, hintBtn, submitBtn, repeatBtn, returnRecordBtn;
+    Button colorBtn, skipBtn, hintBtn, submitBtn, repeatBtn, returnRecordBtn, deleteBtn;
 
     ArrayList<StractEn> seArrList;
 
@@ -251,6 +256,8 @@ public class GameActivity extends AppCompatActivity {
         hintBtn = findViewById(R.id.hintBtn);
 
         submitBtn = findViewById(R.id.submitBtn);
+
+        deleteBtn = findViewById(R.id.deleteBtn);
 
         answerTxtView = findViewById(R.id.answerTxtView);
 
@@ -465,9 +472,12 @@ public class GameActivity extends AppCompatActivity {
 //                            insertText += String.valueOf(catchIDX);
 //                            answerTxtView.setText(insertText);
 
-                            hintTxtView.setText(alphabetArr[catchIDX]);
-                        } else {
-
+                            answerStringArr.add(alphabetArr[catchIDX]);
+                            answerString = "";
+                            for (String word: answerStringArr) {
+                                answerString += word;
+                            }
+                            answerTxtView.setText(answerString);
                         }
                     }
                 }
@@ -583,6 +593,20 @@ public class GameActivity extends AppCompatActivity {
                 th.start();
 
 
+            }
+        });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(answerStringArr.size() >0) {
+                    answerString = "";
+                    answerStringArr.remove(answerStringArr.size() - 1);
+                    for (String word : answerStringArr) {
+                        answerString += word;
+                    }
+                    answerTxtView.setText(answerString);
+                }
             }
         });
 
@@ -848,7 +872,7 @@ public class GameActivity extends AppCompatActivity {
         pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
         timerValue = getSecondsFromDurationString(chronometer.getText().toString());
 
-        englishSplit.clear();
+//        englishSplit.clear();
 
         Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요.", Toast.LENGTH_SHORT).show();
         Log.d("답갯수 : ", (answerCount + incorrectCount) + "");
@@ -934,23 +958,27 @@ public class GameActivity extends AppCompatActivity {
 //    }
 
     void submit() {
+//        if (ranNumEng[count].equals(answerTxtView.getText().toString())) {
         if (ranNumEng[count].equals(answerTxtView.getText().toString())) {
-            count++;
-            if (count < ranNumEng.length) {
-                tts.speak(ranNumEng[count-1], TextToSpeech.QUEUE_FLUSH, null);
-                Toast.makeText(getApplicationContext(), "정답입니다!!!", Toast.LENGTH_SHORT).show();
-                questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
-                answerTxtView.setText("");
-                answerCount++;
-                Log.d("답맞힘 : ", answerCount + "");
+                count++;
+                if (count < ranNumEng.length) {
+                    tts.speak(ranNumEng[count-1], TextToSpeech.QUEUE_FLUSH, null);
+                    Toast.makeText(getApplicationContext(), "정답입니다!!!", Toast.LENGTH_SHORT).show();
+                    questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
+                    answerTxtView.setText("");
+                    answerCount++;
+                    answerStringArr.clear();
+                    answerString = "";
+
+                    Log.d("답맞힘 : ", answerCount + "");
+                } else {
+                    tts.speak(ranNumEng[count-1], TextToSpeech.QUEUE_FLUSH, null);
+                    answerCount++;
+                    gameResultDialog();
+                }
             } else {
-                tts.speak(ranNumEng[count-1], TextToSpeech.QUEUE_FLUSH, null);
-                answerCount++;
-                gameResultDialog();
+                Toast.makeText(getApplicationContext(), "틀렸어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Toast.makeText(getApplicationContext(), "틀렸어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
         }
     }
 
-}
