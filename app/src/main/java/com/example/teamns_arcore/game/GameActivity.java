@@ -627,8 +627,8 @@ public class GameActivity extends AppCompatActivity {
 
             // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
             if (x >= minPoint[0]-0.3f && x <= maxPoint[0]+0.3f  &&
-                    y >= minPoint[1]-0.3f && y <= maxPoint[1]+0.3f  &&
-                    z >= minPoint[2]-0.3f  && z <= maxPoint[2]+0.3f ) {
+                    y >= minPoint[1]-0.5f && y <= maxPoint[1]+0.5f  &&
+                    z >= minPoint[2]-0.8f  && z <= maxPoint[2]+0.8f ) {
                 return true;
             }
         }
