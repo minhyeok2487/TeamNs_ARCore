@@ -81,24 +81,19 @@
             android:textColor="#FEDB67"
             android:textSize="50dp" />
 
-        <EditText
+        <TextView
             android:id="@+id/answerTxtView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="20dp"
-            android:ellipsize="end"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
             android:fontFamily="@font/fontstyle"
-            android:hint="여기에 답을 입력하세요"
-            android:inputType="text"
-            android:maxLines="1"
+            android:padding="5dp"
+            android:text="정답"
             android:textAlignment="center"
-            android:textColor="#3E9CFC"
-            android:textSize="50dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textColor="#FEDB67"
+            android:textSize="50dp" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -119,6 +114,17 @@
                 android:textColor="@color/white"
                 android:textSize="25dp" />
 
+            <android.widget.Button
+                android:id="@+id/deleteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_round_fill"
+                android:fontFamily="@font/fontstyle"
+                android:text="삭제"
+                android:textColor="@color/white"
+                android:textSize="25dp" />
 
             <android.widget.Button
                 android:id="@+id/submitBtn"
