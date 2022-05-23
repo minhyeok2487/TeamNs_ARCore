@@ -137,8 +137,6 @@ public class GameActivity extends AppCompatActivity {
 
     float[][] modelArrayMatrix = new float[MAX][16];
 
-
-
     int[] ranNum = new int[MAX];
 
     float[][] pixedMatrix2;
@@ -151,8 +149,8 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         randomMax_x = 7;
-        randomMax_y = 5;
-        randomMax_z = 6;
+        randomMax_y = 2;
+        randomMax_z = 3;
         randomMax = randomMax_x*randomMax_y*randomMax_z;
         pixedMatrix2 = new float[randomMax][3];
         for(int i=0; i<randomMax;i = i+randomMax_x){
@@ -166,18 +164,12 @@ public class GameActivity extends AppCompatActivity {
         }
         for(int i=0; i<randomMax;i = i+randomMax_y){
             pixedMatrix2[i][1] = 0.0f;
-            pixedMatrix2[i+1][1] = 0.25f;
-            pixedMatrix2[i+2][1] = 0.5f;
-            pixedMatrix2[i+3][1] = 0.75f;
-            pixedMatrix2[i+4][1] = 1.0f;
+            pixedMatrix2[i+1][1] = 1.0f;
         }
         for(int i=0; i<randomMax;i =i+randomMax_z){
-            pixedMatrix2[i][2] = -2.5f;
-            pixedMatrix2[i+1][2] = -1.5f;
-            pixedMatrix2[i+2][2] = -0.5f;
-            pixedMatrix2[i+3][2] = 0.5f;
-            pixedMatrix2[i+4][2] = 1.5f;
-            pixedMatrix2[i+5][2] = 2.5f;
+            pixedMatrix2[i][2] = -3.0f;
+            pixedMatrix2[i+1][2] = 0.0f;
+            pixedMatrix2[i+2][2] = 3.0f;
         }
 
         //배경음악
