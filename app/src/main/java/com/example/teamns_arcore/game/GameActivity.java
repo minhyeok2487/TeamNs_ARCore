@@ -225,11 +225,44 @@ public class GameActivity extends AppCompatActivity {
 
     ArrayList<String> englishSplit = new ArrayList<>();
 
+    float[][] pixedMatrix2;
+    int randomMax, randomMax_x, randomMax_y, randomMax_z;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideStatusBarAndTitleBar();
         setContentView(R.layout.activity_game);
+
+        randomMax_x = 7;
+        randomMax_y = 5;
+        randomMax_z = 6;
+        randomMax = randomMax_x*randomMax_y*randomMax_z;
+        pixedMatrix2 = new float[randomMax][3];
+        for(int i=0; i<randomMax;i = i+randomMax_x){
+            pixedMatrix2[i][0] = -3.0f;
+            pixedMatrix2[i+1][0] = -2.0f;
+            pixedMatrix2[i+2][0] = -1.0f;
+            pixedMatrix2[i+3][0] = 0.0f;
+            pixedMatrix2[i+4][0] = 1.0f;
+            pixedMatrix2[i+5][0] = 2.0f;
+            pixedMatrix2[i+6][0] = 3.0f;
+        }
+        for(int i=0; i<randomMax;i = i+randomMax_y){
+            pixedMatrix2[i][1] = -0.5f;
+            pixedMatrix2[i+1][1] = -0.25f;
+            pixedMatrix2[i+2][1] = 0.0f;
+            pixedMatrix2[i+3][1] = 0.25f;
+            pixedMatrix2[i+4][1] = 0.5f;
+        }
+        for(int i=0; i<randomMax;i =i+randomMax_z){
+            pixedMatrix2[i][2] = -1.5f;
+            pixedMatrix2[i+1][2] = -1.0f;
+            pixedMatrix2[i+2][2] = -0.5f;
+            pixedMatrix2[i+3][2] = 0.5f;
+            pixedMatrix2[i+4][2] = 1.0f;
+            pixedMatrix2[i+5][2] = 1.5f;
+        }
 
         //배경음악
         mediaPlayer = MediaPlayer.create(this, R.raw.game);
@@ -373,7 +406,7 @@ public class GameActivity extends AppCompatActivity {
 //                            pose.toMatrix(modelMatrix, 0); // 좌표를 가지고 matrix 화 함
                             pose.toMatrix(modelArrayMatrix[i], 0);
                             Matrix.translateM(modelArrayMatrix[i], 0,
-                                    pixedMatrix[ranNum[i]][0], pixedMatrix[ranNum[i]][1], pixedMatrix[ranNum[i]][2]);
+                                    pixedMatrix2[ranNum[i]][0], pixedMatrix2[ranNum[i]][1], pixedMatrix2[ranNum[i]][2]);
 
                             // 변경된 좌표를 알기 위한 변수
 //                            modelTransArrayMatrix[i][0] = pose.tx() + pixedMatrix[ranNum[i]][0];
@@ -527,12 +560,14 @@ public class GameActivity extends AppCompatActivity {
                     incorrectCount++;
                     answerStringArr.clear();
                     answerString = "";
+                    answerTxtView.setText(answerString);
                     Log.d("답틀림 : ", incorrectCount + "");
                     //                    Log.d("ranNumKor[count-1] : ", ranNumKor[count-1] + "");
                 } else if (count == 10) {
                     incorrectCount++;
                     answerStringArr.clear();
                     answerString = "";
+                    answerTxtView.setText(answerString);
                     gameResultDialog();
                 }
             }
@@ -759,9 +794,9 @@ public class GameActivity extends AppCompatActivity {
             float[] maxPoint = resAll[1];
 
             // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
-            if (x >= minPoint[0]-0.5f && x <= maxPoint[0]+0.5f  &&
-                    y >= minPoint[1]-0.5f && y <= maxPoint[1]+0.5f  &&
-                    z >= minPoint[2]-1.5f  && z <= maxPoint[2]+1.5f ) {
+            if (x >= minPoint[0]-0.3f && x <= maxPoint[0]+0.3f  &&
+                    y >= minPoint[1]-0.3f && y <= maxPoint[1]+0.3f  &&
+                    z >= minPoint[2]-0.3f  && z <= maxPoint[2]+0.3f ) {
                 return true;
             }
         }
@@ -772,7 +807,7 @@ public class GameActivity extends AppCompatActivity {
     void randomNum() {
         int random;
         for (int i = 0; i < MAX; i++) {
-            random = (int) (Math.random() * 45);
+            random = (int) (Math.random() * randomMax);
             ranNum[i] = random;
             for (int j = 0; j < i; j++) {
                 if (ranNum[j] == random) {
