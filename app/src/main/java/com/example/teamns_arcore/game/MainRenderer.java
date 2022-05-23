@@ -15,9 +15,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class MainRenderer implements GLSurfaceView.Renderer {
     CameraPreview mCamera;
-    //    PointCloudRenderer mPointCloud;
-    //   ObjRenderer mObj;
-//    PlaneRenderer mPlane;
     boolean mViewportChanged;
     int mViewportWidth, mViewportHeight;
     RenderCallback mRenderCallback;
@@ -34,7 +31,6 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         mCamera = new CameraPreview();
 
         for (int i = 0; i < MAX; i++) {
-//            arrayObj.add(new ObjRenderer(context, "andy.obj", "andy.png"));
             arrayObj.add(new ObjRenderer(context, "alphabet"+i+".obj", "alphabetcolor.jpg"));
         }
     }

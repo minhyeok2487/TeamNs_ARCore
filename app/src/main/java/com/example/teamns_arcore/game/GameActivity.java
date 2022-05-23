@@ -1,5 +1,7 @@
 package com.example.teamns_arcore.game;
 
+import static android.speech.tts.TextToSpeech.ERROR;
+
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -14,19 +16,16 @@ import android.opengl.Matrix;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
-import android.text.InputFilter;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,17 +35,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.teamns_arcore.DashboardActivity;
-import com.example.teamns_arcore.MainActivity;
 import com.example.teamns_arcore.R;
 import com.example.teamns_arcore.Record.ChartActivity;
-import com.example.teamns_arcore.Record.Model.RecordModel;
 import com.example.teamns_arcore.Record.RecordSQLiteHelper;
-import com.example.teamns_arcore.Record.TableActivity;
 import com.example.teamns_arcore.SQLiteHelper;
-import com.example.teamns_arcore.SelectLevel.Database.DatabaseHelper;
-import com.example.teamns_arcore.SelectLevel.Model.StractEn;
 import com.example.teamns_arcore.SelectLevel.SelectLevelActivity;
-import com.example.teamns_arcore.SelectLevel.SelectLevelMain;
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
 import com.google.ar.core.Config;
@@ -54,7 +47,6 @@ import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.LightEstimate;
 import com.google.ar.core.Plane;
-import com.google.ar.core.PointCloud;
 import com.google.ar.core.Pose;
 import com.google.ar.core.Session;
 import com.google.ar.core.Trackable;
@@ -62,25 +54,19 @@ import com.google.ar.core.TrackingState;
 import com.google.ar.core.exceptions.CameraNotAvailableException;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static android.speech.tts.TextToSpeech.ERROR;
 
 
 public class GameActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     int currentPosition;
 
-    TextView myTextView, myCatchView, questionTxtView, hintTxtView, correctTxtView_count, incorrectTxtView_count, timeOverTxtView_count;
+    TextView questionTxtView, hintTxtView, correctTxtView_count, incorrectTxtView_count, timeOverTxtView_count;
 
     ////타이머 관련 변수//////////
     private Chronometer chronometer;
@@ -94,8 +80,6 @@ public class GameActivity extends AppCompatActivity {
 
     String answerString = "";
     ArrayList<String> answerStringArr = new ArrayList<>();
-
-//    EditText answerTxtView;
 
     TextView answerTxtView;
 
@@ -113,11 +97,7 @@ public class GameActivity extends AppCompatActivity {
     //이동, 회전 이벤트 처리할 객체
     GestureDetector mGestureDetector;
 
-    DatabaseHelper databaseHelper;
-
     Button colorBtn, skipBtn, hintBtn, submitBtn, repeatBtn, returnRecordBtn, deleteBtn;
-
-    ArrayList<StractEn> seArrList;
 
     View hintDialogView, resultDialogView;
 
@@ -133,18 +113,11 @@ public class GameActivity extends AppCompatActivity {
     SQLiteDatabase database;
 
     LocalDate localDate = LocalDate.now();
-    LocalTime localTime = LocalTime.now();
 
-    //int hour = localTime.getHour();
-    //int min = localTime.getMinute();
-    //String currentTime = String.format("%s %d:%d", localDate, hour, min);
 
     String currentTime = String.format("%s", localDate); // -> data 날짜만 들어가게 변경
 
-    // userid 정보
-    SQLiteDatabase sqLiteDatabaseObj; // == private SQLiteDatabase db;
     SQLiteHelper sqLiteHelper;
-    public static final String UserEmail = "";
     public static final String UserId = "";
     String EmailHolder;
     //
@@ -162,68 +135,11 @@ public class GameActivity extends AppCompatActivity {
 
     final int MAX = 26;
 
-//    float [] modelMatrix = new float[16];
-
     float[][] modelArrayMatrix = new float[MAX][16];
 
 
-    float[][] pixedMatrix = new float[][]{
-            {-3.0f, 1.0f, -3.0f},
-            {-3.0f, 1.0f, 0.0f},
-            {-3.0f, 1.0f, 3.0f},
-            {-3.0f, 0.0f, -3.0f},
-            {-3.0f, 0.0f, 0.0f},
-            {-3.0f, 0.0f, 3.0f},
-            {-3.0f, 2.0f, -3.0f},
-            {-3.0f, 2.0f, 0.0f},
-            {-3.0f, 2.0f, 3.0f},
-            {-1.5f, 1.0f, -3.0f},
-            {-1.5f, 1.0f, 0.0f},
-            {-1.5f, 1.0f, 3.0f},
-            {-1.5f, 0.0f, -3.0f},
-            {-1.5f, 0.0f, 0.0f},
-            {-1.5f, 0.0f, 3.0f},
-            {-1.5f, 2.0f, -3.0f},
-            {-1.5f, 2.0f, 0.0f},
-            {-1.5f, 2.0f, 3.0f},
-            {-0.0f, 1.0f, -3.0f},
-            {-0.0f, 1.0f, 0.0f},
-            {-0.0f, 1.0f, 3.0f},
-            {-0.0f, 0.0f, -3.0f},
-            {-0.0f, 0.0f, 0.0f},
-            {-0.0f, 0.0f, 3.0f},
-            {-0.0f, 2.0f, -3.0f},
-            {-0.0f, 2.0f, 0.0f},
-            {-0.0f, 2.0f, 3.0f},
-            {3.0f, 1.0f, -3.0f},
-            {3.0f, 1.0f, 0.0f},
-            {3.0f, 1.0f, 3.0f},
-            {3.0f, 0.0f, -3.0f},
-            {3.0f, 0.0f, 0.0f},
-            {3.0f, 0.0f, 3.0f},
-            {3.0f, 2.0f, -3.0f},
-            {3.0f, 2.0f, 0.0f},
-            {3.0f, 2.0f, 3.0f},
-            {1.5f, 1.0f, -3.0f},
-            {1.5f, 1.0f, 0.0f},
-            {1.5f, 1.0f, 3.0f},
-            {1.5f, 0.0f, -3.0f},
-            {1.5f, 0.0f, 0.0f},
-            {1.5f, 0.0f, 3.0f},
-            {1.5f, 2.0f, -3.0f},
-            {1.5f, 2.0f, 0.0f},
-            {1.5f, 2.0f, 3.0f}
-    };
 
-    float[] picColor = new float[]{1.0f, 1.0f, 1.0f, 1.0f};
-
-    //    ArrayList<Integer> ranNum = new ArrayList<>();
     int[] ranNum = new int[MAX];
-
-    // 입력을 넣을 String
-    String insertText = "";
-
-    ArrayList<String> englishSplit = new ArrayList<>();
 
     float[][] pixedMatrix2;
     int randomMax, randomMax_x, randomMax_y, randomMax_z;
@@ -322,19 +238,13 @@ public class GameActivity extends AppCompatActivity {
                 mCatched = true;
                 mCatchX = event.getX();
                 mCatchY = event.getY();
-//
-//                Log.d("확인 한번", event.getX() + " , " + event.getY());
+
                 return true;
             }
 
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 if (isModelInit) {
-//                    splitEnglish();
-//                    for (int i = 0; i < gljaIndex.size(); i++) {
-//                        Matrix.rotateM(modelArrayMatrix[gljaIndex.get(i)], 0, -distanceX / 5, 0f, 1f, 0f);
-//                        Matrix.rotateM(modelArrayMatrix[gljaIndex.get(i)], 0, -distanceY / 5, 1f, 0f, 0f);
-//                    }
                     for (int i = 0; i < MAX; i++) {
                         Matrix.rotateM(modelArrayMatrix[i], 0, -distanceX / 5, 0f, 1f, 0f);
                         Matrix.rotateM(modelArrayMatrix[i], 0, -distanceY / 5, 1f, 0f, 0f);
@@ -397,7 +307,6 @@ public class GameActivity extends AppCompatActivity {
                 List<HitResult> results = frame.hitTest(mRenderer.mViewportWidth/2, mRenderer.mViewportHeight/2);
                 for (HitResult result : results) {
                     Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
-//                        float [] modelMatrix = new float[16];
 
                     if (!isModelInit && flag) {
                         isModelInit = true;
@@ -407,11 +316,6 @@ public class GameActivity extends AppCompatActivity {
                             pose.toMatrix(modelArrayMatrix[i], 0);
                             Matrix.translateM(modelArrayMatrix[i], 0,
                                     pixedMatrix2[ranNum[i]][0], pixedMatrix2[ranNum[i]][1], pixedMatrix2[ranNum[i]][2]);
-
-                            // 변경된 좌표를 알기 위한 변수
-//                            modelTransArrayMatrix[i][0] = pose.tx() + pixedMatrix[ranNum[i]][0];
-//                            modelTransArrayMatrix[i][1] = pose.ty() + pixedMatrix[ranNum[i]][1];
-//                            modelTransArrayMatrix[i][2] = pose.tz() + pixedMatrix[ranNum[i]][2];
                         }
                     }
                     LightEstimate estimate = frame.getLightEstimate();
@@ -424,32 +328,10 @@ public class GameActivity extends AppCompatActivity {
                         }
                     });
 
-                    // 증강 공간의 좌표에 객체 있는지 받아온다(Plane 이 걸려 있는지 확인)
-                    Trackable trackable = result.getTrackable();
-
-                    // 크기 변경(비율)
-//                        Matrix.scaleM(modelMatrix,0,1f,2f, 1f);
-//                    Log.d("모델 매트릭스", Arrays.toString(modelMatrix));
-
-                    // 이동(거리)
-//                        Matrix.translateM(modelMatrix, 0,0f,0.1f,0f);
-
-                    // 회전(각도)               옵셋,       각도,   축이 0 혹은 양수, 음수만 중요
-                    // 수치조절은 각도로 하기 때문에 축의 숫자는 큰 의미가 없다. 음수, 양수만 중요
-//                        Matrix.rotateM(modelMatrix,0,45,1f,0f,1f);
-//                    mRenderer.mObj.setModelMatrix(modelMatrix);
-
                     for (int i = 0; i < MAX; i++) {
                         mRenderer.arrayObj.get(i).setModelMatrix(modelArrayMatrix[i]);
                     }
                 }
-//                }
-
-
-//                    mTouched = false;
-
-                //Session으로부터 증강현실 속에서의 평면이나 점 객체를 얻을 수 있다.
-                //                                   Plane   Point
                 Collection<Plane> planes = mSession.getAllTrackables(Plane.class);
 
 
@@ -463,47 +345,16 @@ public class GameActivity extends AppCompatActivity {
                             plane.getSubsumedBy() == null) { // 다른 평면이 존재하는지
 
                         isPlaneDetected = true;
-
-                        //렌더링에서 plane 정보를 갱신하여 출력
-//                        mRenderer.mPlane.update(plane);
                     }
                 }
-                float[] originalPicColor = new float[4];
-
-//                if (mCatched) {
-//                    mCatched = false;
-//                    colorFlag = true;
-//
-//                    originalPicColor[0] = colorCorrections[i][0];
-//                    originalPicColor[1] = colorCorrections[i][1];
-//                    originalPicColor[2] = colorCorrections[i][2];
-//                    originalPicColor[3] = colorCorrections[i][3];
-//                    for (int i = 0; i < MAX; i++) {
-//                        mRenderer.picObjColor(originalPicColor, i);
-//                    }
-//                    splitEnglish();
-//
-//                    for (int i = 0; i < gljaIndex.size(); i++) {
-//                        mRenderer.picObjColor(picColor, gljaIndex.get(i));
-//                    }
-//
-//                }
 
                 if (mCatched) {
                     mCatched = false;
                     results = frame.hitTest(mCatchX, mCatchY);
 
-//                    String msg = "터키터키~";
-//                    answerTxtView.setText(msg);
-
                     for (HitResult result : results) {
                         Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
                         if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
-                            // 클릭확인용
-//                            float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
-//                            mRenderer.picObjColor(picColor, catchIDX);
-//                            insertText += String.valueOf(catchIDX);
-//                            answerTxtView.setText(insertText);
 
                             answerStringArr.add(alphabetArr[catchIDX]);
                             answerString = "";
@@ -542,11 +393,6 @@ public class GameActivity extends AppCompatActivity {
         sqLiteHelper = new SQLiteHelper(GameActivity.this);
         EmailHolder = intent.getStringExtra(SelectLevelActivity.UserId);
         System.out.println("GameActivity EmailHolder : " + EmailHolder);
-
-
-//        for (String eng : ranNumEng) {
-//            englishSplit.add(eng);
-//        }
 
         questionTxtView.setText(String.format("[ %s ]", ranNumKor[0]));
 
@@ -593,13 +439,9 @@ public class GameActivity extends AppCompatActivity {
 
                 String word = ranNumEng[count];
 
-                String mosaic = "*";
-
-                StringBuffer mosaicBuffer = new StringBuffer();
                 int num = (int) (Math.random()*word.length())+2;
                 int [] numaaa = new int[num];
                 for (int i = 0; i < num; i++) {
-                    //mosaicBuffer.append(mosaic);
                     numaaa[i] = (int) (Math.random()*word.length());
                 }
 
@@ -690,8 +532,6 @@ public class GameActivity extends AppCompatActivity {
                 0.5f
         };
 
-//        mRenderer.mObj.setColorCorrection(colorCorrection);
-
         for (int i = 0; i < MAX; i++) {
             mRenderer.arrayObj.get(i).setColorCorrection(colorCorrection);
         }
@@ -776,7 +616,6 @@ public class GameActivity extends AppCompatActivity {
         mGestureDetector.onTouchEvent(event);
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//            mTouched = true;
             mCurrentX = event.getX();
             mCurrentY = event.getY();
         }
@@ -820,8 +659,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     int i = 0;
-    int bigyoCount = -1;
-    boolean colorFlag = false;
 
     void setColorCorrection() {
         i++;
@@ -829,13 +666,6 @@ public class GameActivity extends AppCompatActivity {
         colorCorrection = colorCorrections[i];
 
         mRenderer.setColorCorrection(colorCorrection);
-//        if (colorFlag) {
-//            splitEnglish();
-//
-//            for (int i = 0; i < gljaIndex.size(); i++) {
-//                mRenderer.picObjColor(picColor, gljaIndex.get(i));
-//            }
-//        }
     }
 
     //타이머 변환 메서드
@@ -883,7 +713,6 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         out();
 
     }
@@ -914,8 +743,6 @@ public class GameActivity extends AppCompatActivity {
         pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
         timerValue = getSecondsFromDurationString(chronometer.getText().toString());
 
-//        englishSplit.clear();
-
         Toast.makeText(getApplicationContext(), "퀴즈를 모두 풀었어요.", Toast.LENGTH_SHORT).show();
         Log.d("답갯수 : ", (answerCount + incorrectCount) + "");
         resultDialogView = View.inflate(GameActivity.this, R.layout.activity_result_dialog, null);
@@ -943,9 +770,6 @@ public class GameActivity extends AppCompatActivity {
         repeatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(GameActivity.this, SelectLevelMain.class);
-//                intent.putExtra(UserEmail,EmailHolder);
-//                startActivity(intent);
                 finish();
             }
         });
@@ -976,31 +800,7 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
-    ArrayList<Integer> gljaIndex = new ArrayList<>();
-
-//    void splitEnglish() {
-//        if (gljaIndex != null) {
-//            gljaIndex.clear();
-//        }
-//
-//        String[] glja = englishSplit.get(count).split("");
-//
-//        HashSet<String> hashSet = new HashSet<>(Arrays.asList(glja));
-//
-//        String[] resultGlja = hashSet.toArray(new String[0]);
-//
-//        for (int i = 0; i < resultGlja.length; i++) {
-//            for (int j = 0; j < alphabetArr.length; j++) {
-//                if (resultGlja[i].equals(alphabetArr[j])) {
-//                    gljaIndex.add(j);
-//                    break;
-//                }
-//            }
-//        }
-//    }
-
     void submit() {
-//        if (ranNumEng[count].equals(answerTxtView.getText().toString())) {
         if (ranNumEng[count].equals(answerTxtView.getText().toString())) {
                 count++;
                 if (count < ranNumEng.length) {
