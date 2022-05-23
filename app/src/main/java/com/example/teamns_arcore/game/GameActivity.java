@@ -103,7 +103,7 @@ public class GameActivity extends AppCompatActivity {
     boolean mUserRequestedInstall = true, isModelInit = false, mCatched = false, flag = true;
 
     float mCurrentX, mCurrentY;
-//    float mCatchX, mCatchY;
+    float mCatchX, mCatchY;
 
     //이동, 회전 이벤트 처리할 객체
     GestureDetector mGestureDetector;
@@ -163,56 +163,51 @@ public class GameActivity extends AppCompatActivity {
 
 
     float[][] pixedMatrix = new float[][]{
-            {0.3f, 0.0f, 2.3f},
-            {0.4f, 0.1f, -3.1f},
-            {0.5f, 0.2f, 3.3f},
-            {0.7f, 0.3f, -0.3f},
-            {0.9f, 0.4f, 1.3f},
-            {1.1f, 0.5f, -1.6f},
-            {1.3f, 0.6f, 0.3f},
-            {1.5f, 0.7f, -2.4f},
-            {1.8f, 0.8f, 2.4f},
-            {1.9f, 0.9f, -2.9f},
-            {2.3f, 1.0f, 1.7f},
-            {2.4f, -0.1f, -0.4f},
-            {2.7f, -0.2f, 1.3f},
-            {2.8f, -0.3f, -0.7f},
-            {3.1f, -0.4f, 1.9f},
-            {3.3f, -0.5f, -2.5f},
-            {3.4f, -0.6f, 2.5f},
-            {3.6f, -0.7f, -2.7f},
-            {3.8f, -0.8f, 1.2f},
-            {3.9f, -0.9f, -3.2f},
-            {4.0f, -1.0f, 2.9f},
-            {4.3f, 0.1f, -0.7f},
-            {4.5f, 0.2f, 1.3f},
-            {4.7f, 0.3f, -3.1f},
-            {4.1f, 0.4f, 2.7f},
-            {-0.1f, 0.5f, -3.1f},
-            {-0.3f, 0.6f, 1.3f},
-            {-0.4f, 0.7f, -2.8f},
-            {-0.7f, 0.8f, 2.7f},
-            {-0.9f, 0.9f, -0.8f},
-            {-1.1f, 1.0f, 0.9f},
-            {-1.3f, -0.1f, -1.3f},
-            {-1.5f, -0.2f, 2.6f},
-            {-1.7f, -0.3f, -2.1f},
-            {-1.9f, -0.4f, 2.2f},
-            {-2.3f, -0.5f, -3.3f},
-            {-2.4f, -0.6f, 1.7f},
-            {-2.6f, -0.7f, -2.6f},
-            {-2.8f, -0.8f, 1.9f},
-            {-3.1f, -0.9f, -1.6f},
-            {-3.3f, -1.0f, 0.4f},
-            {-3.4f, 0.1f, -0.7f},
-            {-3.6f, 0.2f, 1.4f},
-            {-3.7f, 0.3f, -1.8f},
-            {-3.9f, 0.4f, 0.7f},
-            {-4.1f, 0.5f, -3.3f},
-            {-4.3f, 0.6f, 3.3f},
-            {-4.4f, 0.7f, -2.8f},
-            {-4.6f, 0.8f, 2.8f},
-            {-4.2f, 0.9f, -1.7f}
+            {-3.0f, 1.0f, -3.0f},
+            {-3.0f, 1.0f, 0.0f},
+            {-3.0f, 1.0f, 3.0f},
+            {-3.0f, 0.0f, -3.0f},
+            {-3.0f, 0.0f, 0.0f},
+            {-3.0f, 0.0f, 3.0f},
+            {-3.0f, 2.0f, -3.0f},
+            {-3.0f, 2.0f, 0.0f},
+            {-3.0f, 2.0f, 3.0f},
+            {-1.5f, 1.0f, -3.0f},
+            {-1.5f, 1.0f, 0.0f},
+            {-1.5f, 1.0f, 3.0f},
+            {-1.5f, 0.0f, -3.0f},
+            {-1.5f, 0.0f, 0.0f},
+            {-1.5f, 0.0f, 3.0f},
+            {-1.5f, 2.0f, -3.0f},
+            {-1.5f, 2.0f, 0.0f},
+            {-1.5f, 2.0f, 3.0f},
+            {-0.0f, 1.0f, -3.0f},
+            {-0.0f, 1.0f, 0.0f},
+            {-0.0f, 1.0f, 3.0f},
+            {-0.0f, 0.0f, -3.0f},
+            {-0.0f, 0.0f, 0.0f},
+            {-0.0f, 0.0f, 3.0f},
+            {-0.0f, 2.0f, -3.0f},
+            {-0.0f, 2.0f, 0.0f},
+            {-0.0f, 2.0f, 3.0f},
+            {3.0f, 1.0f, -3.0f},
+            {3.0f, 1.0f, 0.0f},
+            {3.0f, 1.0f, 3.0f},
+            {3.0f, 0.0f, -3.0f},
+            {3.0f, 0.0f, 0.0f},
+            {3.0f, 0.0f, 3.0f},
+            {3.0f, 2.0f, -3.0f},
+            {3.0f, 2.0f, 0.0f},
+            {3.0f, 2.0f, 3.0f},
+            {1.5f, 1.0f, -3.0f},
+            {1.5f, 1.0f, 0.0f},
+            {1.5f, 1.0f, 3.0f},
+            {1.5f, 0.0f, -3.0f},
+            {1.5f, 0.0f, 0.0f},
+            {1.5f, 0.0f, 3.0f},
+            {1.5f, 2.0f, -3.0f},
+            {1.5f, 2.0f, 0.0f},
+            {1.5f, 2.0f, 3.0f}
     };
 
     float[] picColor = new float[]{1.0f, 1.0f, 1.0f, 1.0f};
@@ -295,10 +290,14 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 if (isModelInit) {
-                    splitEnglish();
-                    for (int i = 0; i < gljaIndex.size(); i++) {
-                        Matrix.rotateM(modelArrayMatrix[gljaIndex.get(i)], 0, -distanceX / 5, 0f, 1f, 0f);
-                        Matrix.rotateM(modelArrayMatrix[gljaIndex.get(i)], 0, -distanceY / 5, 1f, 0f, 0f);
+//                    splitEnglish();
+//                    for (int i = 0; i < gljaIndex.size(); i++) {
+//                        Matrix.rotateM(modelArrayMatrix[gljaIndex.get(i)], 0, -distanceX / 5, 0f, 1f, 0f);
+//                        Matrix.rotateM(modelArrayMatrix[gljaIndex.get(i)], 0, -distanceY / 5, 1f, 0f, 0f);
+//                    }
+                    for (int i = 0; i < MAX; i++) {
+                        Matrix.rotateM(modelArrayMatrix[i], 0, -distanceX / 5, 0f, 1f, 0f);
+                        Matrix.rotateM(modelArrayMatrix[i], 0, -distanceY / 5, 1f, 0f, 0f);
                     }
                 }
                 return true;
@@ -355,7 +354,7 @@ public class GameActivity extends AppCompatActivity {
                 }
 
 
-                List<HitResult> results = frame.hitTest(200.0f, 200.0f);
+                List<HitResult> results = frame.hitTest(mRenderer.mViewportWidth/2, mRenderer.mViewportHeight/2);
                 for (HitResult result : results) {
                     Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
 //                        float [] modelMatrix = new float[16];
@@ -431,23 +430,46 @@ public class GameActivity extends AppCompatActivity {
                 }
                 float[] originalPicColor = new float[4];
 
+//                if (mCatched) {
+//                    mCatched = false;
+//                    colorFlag = true;
+//
+//                    originalPicColor[0] = colorCorrections[i][0];
+//                    originalPicColor[1] = colorCorrections[i][1];
+//                    originalPicColor[2] = colorCorrections[i][2];
+//                    originalPicColor[3] = colorCorrections[i][3];
+//                    for (int i = 0; i < MAX; i++) {
+//                        mRenderer.picObjColor(originalPicColor, i);
+//                    }
+//                    splitEnglish();
+//
+//                    for (int i = 0; i < gljaIndex.size(); i++) {
+//                        mRenderer.picObjColor(picColor, gljaIndex.get(i));
+//                    }
+//
+//                }
+
                 if (mCatched) {
                     mCatched = false;
-                    colorFlag = true;
+                    results = frame.hitTest(mCatchX, mCatchY);
 
-                    originalPicColor[0] = colorCorrections[i][0];
-                    originalPicColor[1] = colorCorrections[i][1];
-                    originalPicColor[2] = colorCorrections[i][2];
-                    originalPicColor[3] = colorCorrections[i][3];
-                    for (int i = 0; i < MAX; i++) {
-                        mRenderer.picObjColor(originalPicColor, i);
+//                    String msg = "터키터키~";
+//                    answerTxtView.setText(msg);
+
+                    for (HitResult result : results) {
+                        Pose pose = result.getHitPose(); // 증강 공간에서의 좌표
+                        if (catchCheck(pose.tx(), pose.ty(), pose.tz())) {
+                            // 클릭확인용
+//                            float[] picColor = new float[]{0.2f, 0.2f, 0.2f, 0.8f};
+//                            mRenderer.picObjColor(picColor, catchIDX);
+//                            insertText += String.valueOf(catchIDX);
+//                            answerTxtView.setText(insertText);
+
+                            hintTxtView.setText(alphabetArr[catchIDX]);
+                        } else {
+
+                        }
                     }
-                    splitEnglish();
-
-                    for (int i = 0; i < gljaIndex.size(); i++) {
-                        mRenderer.picObjColor(picColor, gljaIndex.get(i));
-                    }
-
                 }
 
 
@@ -476,11 +498,11 @@ public class GameActivity extends AppCompatActivity {
         sqLiteHelper = new SQLiteHelper(GameActivity.this);
         EmailHolder = intent.getStringExtra(SelectLevelActivity.UserId);
         System.out.println("GameActivity EmailHolder : " + EmailHolder);
-        //
 
-        for (String eng : ranNumEng) {
-            englishSplit.add(eng);
-        }
+
+//        for (String eng : ranNumEng) {
+//            englishSplit.add(eng);
+//        }
 
         questionTxtView.setText(String.format("[ %s ]", ranNumKor[0]));
 
@@ -695,32 +717,32 @@ public class GameActivity extends AppCompatActivity {
         return true;
     }
 
-//    int catchIDX;
+    int catchIDX;
 
 
-//    boolean catchCheck(float x, float y, float z) {
-//
-//        for (catchIDX = 0; catchIDX < MAX; catchIDX++) {
-//
-//            float[][] resAll = mRenderer.arrayObj.get(catchIDX).getMinMaxPoint();
-//            float[] minPoint = resAll[0];
-//            float[] maxPoint = resAll[1];
-//
-//            // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
-//            if (x >= minPoint[0] - 100.0f && x <= maxPoint[0] + 100.0f &&
-//                    y >= minPoint[1] - 100.0f && y <= maxPoint[1] + 100.0f &&
-//                    z >= minPoint[2] - 100.0f && z <= maxPoint[2] + 100.0f) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    boolean catchCheck(float x, float y, float z) {
+
+        for (catchIDX = 0; catchIDX < MAX; catchIDX++) {
+
+            float[][] resAll = mRenderer.arrayObj.get(catchIDX).getMinMaxPoint();
+            float[] minPoint = resAll[0];
+            float[] maxPoint = resAll[1];
+
+            // 범위가 좁으므로 범위를 강제로 넓혀준다(민감도를 떨어뜨린다)
+            if (x >= minPoint[0]-0.5f && x <= maxPoint[0]+0.5f  &&
+                    y >= minPoint[1]-0.5f && y <= maxPoint[1]+0.5f  &&
+                    z >= minPoint[2]-1.5f  && z <= maxPoint[2]+1.5f ) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     void randomNum() {
         int random;
         for (int i = 0; i < MAX; i++) {
-            random = (int) (Math.random() * 50);
+            random = (int) (Math.random() * 45);
             ranNum[i] = random;
             for (int j = 0; j < i; j++) {
                 if (ranNum[j] == random) {
@@ -741,13 +763,13 @@ public class GameActivity extends AppCompatActivity {
         colorCorrection = colorCorrections[i];
 
         mRenderer.setColorCorrection(colorCorrection);
-        if (colorFlag) {
-            splitEnglish();
-
-            for (int i = 0; i < gljaIndex.size(); i++) {
-                mRenderer.picObjColor(picColor, gljaIndex.get(i));
-            }
-        }
+//        if (colorFlag) {
+//            splitEnglish();
+//
+//            for (int i = 0; i < gljaIndex.size(); i++) {
+//                mRenderer.picObjColor(picColor, gljaIndex.get(i));
+//            }
+//        }
     }
 
     //타이머 변환 메서드
@@ -890,26 +912,26 @@ public class GameActivity extends AppCompatActivity {
 
     ArrayList<Integer> gljaIndex = new ArrayList<>();
 
-    void splitEnglish() {
-        if (gljaIndex != null) {
-            gljaIndex.clear();
-        }
-
-        String[] glja = englishSplit.get(count).split("");
-
-        HashSet<String> hashSet = new HashSet<>(Arrays.asList(glja));
-
-        String[] resultGlja = hashSet.toArray(new String[0]);
-
-        for (int i = 0; i < resultGlja.length; i++) {
-            for (int j = 0; j < alphabetArr.length; j++) {
-                if (resultGlja[i].equals(alphabetArr[j])) {
-                    gljaIndex.add(j);
-                    break;
-                }
-            }
-        }
-    }
+//    void splitEnglish() {
+//        if (gljaIndex != null) {
+//            gljaIndex.clear();
+//        }
+//
+//        String[] glja = englishSplit.get(count).split("");
+//
+//        HashSet<String> hashSet = new HashSet<>(Arrays.asList(glja));
+//
+//        String[] resultGlja = hashSet.toArray(new String[0]);
+//
+//        for (int i = 0; i < resultGlja.length; i++) {
+//            for (int j = 0; j < alphabetArr.length; j++) {
+//                if (resultGlja[i].equals(alphabetArr[j])) {
+//                    gljaIndex.add(j);
+//                    break;
+//                }
+//            }
+//        }
+//    }
 
     void submit() {
         if (ranNumEng[count].equals(answerTxtView.getText().toString())) {
