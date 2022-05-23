@@ -606,6 +606,8 @@ public class GameActivity extends AppCompatActivity {
                         answerString += word;
                     }
                     answerTxtView.setText(answerString);
+                }else{
+                    answerStringArr.clear();
                 }
             }
         });
