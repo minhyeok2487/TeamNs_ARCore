@@ -320,8 +320,8 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public boolean onSingleTapUp(MotionEvent event) {
                 mCatched = true;
-//                mCatchX = event.getX();
-//                mCatchY = event.getY();
+                mCatchX = event.getX();
+                mCatchY = event.getY();
 //
 //                Log.d("확인 한번", event.getX() + " , " + event.getY());
                 return true;
