@@ -249,11 +249,11 @@ public class GameActivity extends AppCompatActivity {
             pixedMatrix2[i+6][0] = 3.0f;
         }
         for(int i=0; i<randomMax;i = i+randomMax_y){
-            pixedMatrix2[i][1] = -0.5f;
-            pixedMatrix2[i+1][1] = -0.25f;
-            pixedMatrix2[i+2][1] = 0.0f;
-            pixedMatrix2[i+3][1] = 0.25f;
-            pixedMatrix2[i+4][1] = 0.5f;
+            pixedMatrix2[i][1] = 0.0f;
+            pixedMatrix2[i+1][1] = 0.25f;
+            pixedMatrix2[i+2][1] = 0.5f;
+            pixedMatrix2[i+3][1] = 0.75f;
+            pixedMatrix2[i+4][1] = 1.0f;
         }
         for(int i=0; i<randomMax;i =i+randomMax_z){
             pixedMatrix2[i][2] = -1.5f;
@@ -511,6 +511,7 @@ public class GameActivity extends AppCompatActivity {
                                 answerString += word;
                             }
                             answerTxtView.setText(answerString);
+                            break;
                         }
                     }
                 }
