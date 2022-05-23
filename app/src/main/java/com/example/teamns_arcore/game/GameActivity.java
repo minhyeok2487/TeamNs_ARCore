@@ -256,12 +256,12 @@ public class GameActivity extends AppCompatActivity {
             pixedMatrix2[i+4][1] = 1.0f;
         }
         for(int i=0; i<randomMax;i =i+randomMax_z){
-            pixedMatrix2[i][2] = -1.5f;
-            pixedMatrix2[i+1][2] = -1.0f;
-            pixedMatrix2[i+2][2] = -0.5f;
-            pixedMatrix2[i+3][2] = 0.5f;
-            pixedMatrix2[i+4][2] = 1.0f;
-            pixedMatrix2[i+5][2] = 1.5f;
+            pixedMatrix2[i][2] = -3.5f;
+            pixedMatrix2[i+1][2] = -2.0f;
+            pixedMatrix2[i+2][2] = -1.5f;
+            pixedMatrix2[i+3][2] = 1.5f;
+            pixedMatrix2[i+4][2] = 2.0f;
+            pixedMatrix2[i+5][2] = 3.5f;
         }
 
         //배경음악
