@@ -525,10 +525,14 @@ public class GameActivity extends AppCompatActivity {
                 if (count < ranNumKor.length) {
                     questionTxtView.setText(String.format("[ %s ]", ranNumKor[count]));
                     incorrectCount++;
+                    answerStringArr.clear();
+                    answerString = "";
                     Log.d("답틀림 : ", incorrectCount + "");
                     //                    Log.d("ranNumKor[count-1] : ", ranNumKor[count-1] + "");
                 } else if (count == 10) {
                     incorrectCount++;
+                    answerStringArr.clear();
+                    answerString = "";
                     gameResultDialog();
                 }
             }
