@@ -257,10 +257,10 @@ public class GameActivity extends AppCompatActivity {
         }
         for(int i=0; i<randomMax;i =i+randomMax_z){
             pixedMatrix2[i][2] = -2.5f;
-            pixedMatrix2[i+1][2] = -1.0f;
+            pixedMatrix2[i+1][2] = -1.5f;
             pixedMatrix2[i+2][2] = -0.5f;
             pixedMatrix2[i+3][2] = 0.5f;
-            pixedMatrix2[i+4][2] = 1.0f;
+            pixedMatrix2[i+4][2] = 1.5f;
             pixedMatrix2[i+5][2] = 2.5f;
         }
 
